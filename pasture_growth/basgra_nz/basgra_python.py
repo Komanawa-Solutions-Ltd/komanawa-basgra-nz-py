@@ -9,6 +9,7 @@ import ctypes as ct
 import numpy as np
 import pandas as pd
 from copy import deepcopy
+from pasture_growth.basgra_nz.input_output_keys import _param_keys, _out_cols, _days_harvest_keys, _matrix_weather_keys
 
 # note python 3.8 might break this and I may want to figure that our... or I could just freeze this at 3.6.
 # right now running on MRT environment, but really only numpy is needed
@@ -16,71 +17,89 @@ from copy import deepcopy
 # copiliation code: compile_basgra_gfortran.bat
 # loading this works!
 
-libpath = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA.DLL')
+# define the dll library path
+_libpath = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA.DLL')
 
 
-def run_basgra_nz(params, matrix_weather, days_harvest, ndays, nout=56):
+# define keys to dfs
+
+
+def run_basgra_nz(params, matrix_weather, days_harvest, ndays):
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
-    :param params: dictionary # todo, sort out
+    :param params: dictionary, see input_output_keys.py for more details
     :param matrix_weather: pandas dataframe of weather data
-    :param days_harvest:
-    :param ndays: number of days for the simulation, must match weather data
-    :param nout: number of output variables.  output variales are defined #todo what are these and should this be internal only?
+    :param days_harvest: days harvest dataframe columns = (
+                              year
+                              doy
+                              percent_harvest
+                        )
+                        the null values and assumed size system is managed internally
+    :param ndays: number of days for the simulation, must match weather data, todo can this be moved internnaly?
     :return:
     """
 
-    # define keys to dfs
-    param_keys = []  # todo fill
-    matrix_weather_keys = []  # todo
-    days_harvest_keys = []  # todo
+    # todo it may be worth passin Nmax days (e.g. for weather) and harvest dimensions to the basgra function
 
     # thouroughly test inputs
     assert isinstance(params, dict)
-    assert set(params.keys()) == set(param_keys), 'incorrect params keys'
+    assert set(params.keys()) == set(_param_keys), 'incorrect params keys'
 
     assert isinstance(matrix_weather, pd.DataFrame)
-    assert matrix_weather.shape == (ndays, len(matrix_weather_keys))
-    assert set(matrix_weather.keys()) == set(matrix_weather_keys), 'incorrect keys for matrix_weather'
+    assert matrix_weather.shape == (ndays, len(_matrix_weather_keys))
+    assert set(matrix_weather.keys()) == set(_matrix_weather_keys), 'incorrect keys for matrix_weather'
 
     assert isinstance(days_harvest, pd.DataFrame)
     assert issubclass(days_harvest.values.dtype.type, np.integer), 'days_harvest must be integers'
-    assert set(days_harvest.keys()) == days_harvest_keys, 'incorrect keys for days_harvest'
+    assert set(days_harvest.keys()) == _days_harvest_keys, 'incorrect keys for days_harvest'
+    # todo manage days_harvest size, currently cannot be greater than 100, could this be set as an unbounded array?  I don't know, otherwise we could make it excessivly large
 
     assert isinstance(ndays, int)
-    assert isinstance(nout, int)
+
+    nout = len(_out_cols)
 
     # define output indexs before data manipulation
-    out_index = matrix_weather.index
-    out_cols = [] # todo
+    out_index = matrix_weather.index  # todo this should maybe be defined a bit better...
 
     # copy everything
     params = deepcopy(params)
-    matrix_weather = deepcopy(matrix_weather)
-    days_harvest = deepcopy(days_harvest)
+    matrix_weather = deepcopy(matrix_weather[_matrix_weather_keys])
+    days_harvest = deepcopy(days_harvest[_days_harvest_keys])
     ndays = deepcopy(ndays)
     nout = deepcopy(nout)
 
     # get variables into right python types
-    params = np.array([params[e] for e in param_keys]).astype(float)
+    params = np.array([params[e] for e in _param_keys]).astype(float)
     matrix_weather = matrix_weather.values.astype(float)
     days_harvest = days_harvest.values
 
-    y = np.zeros((ndays, nout), float)  # todo can I set these to nan's or does that break fortran
+    y = np.zeros((ndays, nout), float)  # cannot set these to nan's or it breaks fortran
 
+    # make pointers
 
-    # make pointers #todo
+    # arrays # 99% sure this works
+    params_p = np.ctypeslib.as_ctypes(params)  # 1d array, float
+    matrix_weather_p = np.ctypeslib.as_ctypes(matrix_weather)  # 2d array, float
+    days_harvest_p = np.ctypeslib.as_ctypes(days_harvest)  # 2d array, int
+    y_p = np.ctypeslib.as_ctypes(y)  # 2d array, float
 
+    # integers
+    ndays_p = ct.pointer(ct.c_int(ndays))
+    nout_p = ct.pointer(ct.c_int(nout))
 
     # load DLL
-    for_basgra = ct.CDLL(libpath)
+    for_basgra = ct.CDLL(_libpath)
 
-    # run BASGRA #todo
-    for_basgra.BASGRA_()
+    # run BASGRA #todo test
+    for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, y_p)
 
-    # format results #todo
-    raise NotImplementedError()
+    # format results
+    y_p = np.ctypeslib.as_array(y_p)
+    y_p = pd.DataFrame(y_p, out_index,_out_cols)
+
+    return y_p
+
 
 if __name__ == '__main__':
     pass

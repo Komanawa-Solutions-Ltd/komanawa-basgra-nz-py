@@ -21,7 +21,7 @@ contains
 ! Simon plant processes are now calculated as if harvest did not happen
 Subroutine Harvest(CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                              GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
-                             HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV)
+                             HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV) ! todo I could add ndays_havest to this call, which would simplify everything
   integer :: doy,year
   integer, dimension(100,3) :: DAYS_HARVEST     ! Simon added third column (percent leaf removed)
   real    :: CLV, CRES, CST, CSTUB, CLVD, LAI, PHEN, TILG2, TILG1, TILV

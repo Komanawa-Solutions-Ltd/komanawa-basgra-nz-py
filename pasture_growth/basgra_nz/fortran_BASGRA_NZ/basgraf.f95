@@ -32,7 +32,7 @@ implicit none
 ! Define model inputs
 integer(kind = c_int), intent(in), value            :: NDAYS
 integer(kind = c_int), intent(in), value            :: NOUT
-integer(kind = c_int), intent(in), dimension(100,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested)
+integer(kind = c_int), intent(in), dimension(100,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) ! todo does this need to be extended??, yes also set in plant.f95
 integer, parameter                                  :: NPAR     = 108 ! NPAR also hardwired in set_params.f90
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
