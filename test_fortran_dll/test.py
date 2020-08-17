@@ -16,22 +16,26 @@ fortlib = ct.CDLL(r'C:\Users\Matt Hanson\python_projects\SLMACC_2020\test_fortra
 
 # setup the data
 print('int')
-N = 3
-nd = ct.pointer( ct.c_int(N) )          # setup the pointer
-pyarr = np.arange(1,N**2+1).reshape((N,N))
+N1 = 3
+N2 = 4
+nd1 = ct.pointer( ct.c_int(N1) )          # setup the pointer
+nd2 = ct.pointer( ct.c_int(N2) )          # setup the pointer
+pyarr = np.arange(1,N1*N2+1).reshape((N1,N2))
 print(pyarr)
 # call the function by passing the ctypes pointer using the numpy function:
-_ = fortlib.sqr_2d_arr_int(nd, np.ctypeslib.as_ctypes(pyarr))
+_ = fortlib.sqr_2d_arr_int(nd1, nd2, np.ctypeslib.as_ctypes(pyarr))
 
 print(np.ctypeslib.as_array(pyarr))
 
 print('real')
-N = 3
-nd = ct.pointer( ct.c_int(N) )          # setup the pointer
-pyarr2 = np.arange(1,N**2+1).reshape((N,N)).astype(float)
+N1 = 3
+N2 = 4
+nd1 = ct.pointer( ct.c_int(N1) )          # setup the pointer
+nd2 = ct.pointer( ct.c_int(N2) )          # setup the pointer
+pyarr2 = np.arange(1,N1*N2+1).reshape((N1,N2)).astype(float)
 print(pyarr2)
 # call the function by passing the ctypes pointer using the numpy function:
-_ = fortlib.sqr_2d_arr_real(nd, np.ctypeslib.as_ctypes(pyarr2))
+_ = fortlib.sqr_2d_arr_real(nd1,nd2, np.ctypeslib.as_ctypes(pyarr2))
 
 print(np.ctypeslib.as_array(pyarr2))
 pass

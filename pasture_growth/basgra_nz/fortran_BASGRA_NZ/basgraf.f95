@@ -30,8 +30,8 @@ use plant
 implicit none
 
 ! Define model inputs
-integer(kind = c_int), intent(in), value            :: NDAYS
-integer(kind = c_int), intent(in), value            :: NOUT
+integer(kind = c_int), intent(in)            :: NDAYS
+integer(kind = c_int), intent(in)            :: NOUT ! todo I removed value and it worked... look into this!
 integer(kind = c_int), intent(in), dimension(100,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) ! todo does this need to be extended??, yes also set in plant.f95
 integer, parameter                                  :: NPAR     = 108 ! NPAR also hardwired in set_params.f90
 ! BASGRA handles two types of weather files with different data columns
@@ -65,6 +65,14 @@ integer :: HARV
 ! Extra output variables (Simon)
 real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE
 
+print*, 'ndays', NDAYS
+print*, 'nout', NOUT
+print*, 'nweather', NWEATHER
+print*, 'days_harvest year', DAYS_HARVEST(:,1)
+print*, 'days_harvest doy', DAYS_HARVEST(:,2)
+print*, 'days_harvest %', DAYS_HARVEST(:,3)
+
+
 ! Extract calendar and weather data
 YEARI  = MATRIX_WEATHER(:,1)
 DOYI   = MATRIX_WEATHER(:,2)
@@ -80,6 +88,7 @@ TMMXI  = MATRIX_WEATHER(:,5)
   WNI   = MATRIX_WEATHER(:,8)
 #endif
 
+print*, 'matrix weather year;', YEARI ! todo this is not working perfectly I think, I should investigate
 ! Initialise harvest array index
 HARVI   = 1
 do while ( (DAYS_HARVEST(HARVI,1)<YEARI(1)) .or. ((DAYS_HARVEST(HARVI,1)==YEARI(1)).and.(DAYS_HARVEST(HARVI,2)<DOYI(1))) )
@@ -227,7 +236,7 @@ do day = 1, NDAYS
   DEBUG     = LAI/BASAL                          ! Output any variable as "DEBUG" for debugging purposes
 
   ! a script checks that these variable names match what is expected in output_names.tsv (Simon)
-
+  print*, 'saving for day', day
   y(day, 1) = Time
   y(day, 2) = year
   y(day, 3) = doy

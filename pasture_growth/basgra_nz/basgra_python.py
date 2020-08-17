@@ -18,66 +18,62 @@ from pasture_growth.basgra_nz.input_output_keys import _param_keys, _out_cols, _
 # loading this works!
 
 # define the dll library path
-_libpath = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA.DLL')
+_libpath = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA_WG.DLL')
 
 
 # define keys to dfs
 
 
-def run_basgra_nz(params, matrix_weather, days_harvest, ndays):
+def run_basgra_nz(params, matrix_weather, days_harvest):
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
+    runs the model for the period of the weather data
     :param params: dictionary, see input_output_keys.py for more details
-    :param matrix_weather: pandas dataframe of weather data
-    :param days_harvest: days harvest dataframe columns = (
+    :param matrix_weather: pandas dataframe of weather data, maximum 10000 entries
+    :param days_harvest: days harvest dataframe maximum 100 entries
+                        columns = (
                               year
                               doy
                               percent_harvest
                         )
                         the null values and assumed size system is managed internally
-    :param ndays: number of days for the simulation, must match weather data, todo can this be moved internnaly?
     :return:
     """
 
-    # todo it may be worth passin Nmax days (e.g. for weather) and harvest dimensions to the basgra function
-
-    # thouroughly test inputs
-    assert isinstance(params, dict)
-    assert set(params.keys()) == set(_param_keys), 'incorrect params keys'
-
-    assert isinstance(matrix_weather, pd.DataFrame)
-    assert matrix_weather.shape == (ndays, len(_matrix_weather_keys))
-    assert set(matrix_weather.keys()) == set(_matrix_weather_keys), 'incorrect keys for matrix_weather'
-
-    assert isinstance(days_harvest, pd.DataFrame)
-    assert issubclass(days_harvest.values.dtype.type, np.integer), 'days_harvest must be integers'
-    assert set(days_harvest.keys()) == _days_harvest_keys, 'incorrect keys for days_harvest'
-    # todo manage days_harvest size, currently cannot be greater than 100, could this be set as an unbounded array?  I don't know, otherwise we could make it excessivly large
-
-    assert isinstance(ndays, int)
+    _test_basgra_inputs(params, matrix_weather, days_harvest)
 
     nout = len(_out_cols)
+    ndays = len(matrix_weather)
 
     # define output indexs before data manipulation
     out_index = matrix_weather.index  # todo this should maybe be defined a bit better...
 
     # copy everything
     params = deepcopy(params)
-    matrix_weather = deepcopy(matrix_weather[_matrix_weather_keys])
-    days_harvest = deepcopy(days_harvest[_days_harvest_keys])
-    ndays = deepcopy(ndays)
-    nout = deepcopy(nout)
+    matrix_weather = deepcopy(matrix_weather.loc[:, _matrix_weather_keys])
+    days_harvest = deepcopy(days_harvest.loc[:, _days_harvest_keys])
 
     # get variables into right python types
     params = np.array([params[e] for e in _param_keys]).astype(float)
     matrix_weather = matrix_weather.values.astype(float)
     days_harvest = days_harvest.values
 
+    # manage days harvest size # todo try to move this interal to the fortran
+    harv_size = len(days_harvest)
+    if harv_size < 100:
+        temp = np.zeros((100 - harv_size,3), int) - 1
+        days_harvest = np.concatenate((days_harvest, temp), 0)
+
+    # manage weather size, # todo see if we can make this internal!
+    weather_size = len(matrix_weather)
+    if weather_size < 10000:
+        temp = np.zeros((10000 - weather_size, matrix_weather.shape[1]), float)
+        matrix_weather = np.concatenate((matrix_weather, temp), 0)
+
     y = np.zeros((ndays, nout), float)  # cannot set these to nan's or it breaks fortran
 
     # make pointers
-
     # arrays # 99% sure this works
     params_p = np.ctypeslib.as_ctypes(params)  # 1d array, float
     matrix_weather_p = np.ctypeslib.as_ctypes(matrix_weather)  # 2d array, float
@@ -96,9 +92,23 @@ def run_basgra_nz(params, matrix_weather, days_harvest, ndays):
 
     # format results
     y_p = np.ctypeslib.as_array(y_p)
-    y_p = pd.DataFrame(y_p, out_index,_out_cols)
+    y_p = pd.DataFrame(y_p, out_index, _out_cols)
 
     return y_p
+
+
+def _test_basgra_inputs(params, matrix_weather, days_harvest):
+    assert isinstance(params, dict)
+    assert set(params.keys()) == set(_param_keys), 'incorrect params keys'
+
+    assert isinstance(matrix_weather, pd.DataFrame)
+    assert set(matrix_weather.keys()) == set(_matrix_weather_keys), 'incorrect keys for matrix_weather'
+    assert len(matrix_weather) <= 10000, 'maximum run size is 10000 days'
+
+    assert isinstance(days_harvest, pd.DataFrame)
+    assert issubclass(days_harvest.values.dtype.type, np.integer), 'days_harvest must be integers'
+    assert set(days_harvest.keys()) == set(_days_harvest_keys), 'incorrect keys for days_harvest'
+    assert len(days_harvest) <= 100, 'currently only 100 harvest instances can be passed to the model'
 
 
 if __name__ == '__main__':

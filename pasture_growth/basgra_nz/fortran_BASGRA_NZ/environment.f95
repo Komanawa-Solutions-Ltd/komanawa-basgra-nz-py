@@ -18,7 +18,6 @@ real :: runOn,StayWet,WmaxStore,Wsupply
 #ifdef weathergen
 real :: PET
 #endif
-
 contains
 
 ! Set all time and weather variables for day
