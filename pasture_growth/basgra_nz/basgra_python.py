@@ -47,7 +47,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest):
     ndays = len(matrix_weather)
 
     # define output indexs before data manipulation
-    out_index = matrix_weather.index  # todo this should maybe be defined a bit better...
+    out_index = matrix_weather.index
 
     # copy everything
     params = deepcopy(params)
@@ -87,7 +87,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest):
     # load DLL
     for_basgra = ct.CDLL(_libpath)
 
-    # run BASGRA #todo test, I think it is working!
+    # run BASGRA
     for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, y_p)
 
     # format results

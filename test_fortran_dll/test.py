@@ -38,14 +38,14 @@ pyarr3 = np.arange(1,N1*N2+1).reshape((N1,N2), order='C').astype(float)
 print('fortran_array')
 print(pyarr2)
 
-pyarr2 = pyarr2.ctypes.data_as(ct.POINTER(ct.c_float)) #todo this works, but now I don't know how to get access to it
+pyarr2 = pyarr2.ctypes.data_as(ct.POINTER(ct.c_float)) #not ideal
 # call the function by passing the ctypes pointer using the numpy function:
 _ = fortlib.sqr_2d_arr_real(nd1,nd2, pyarr2)
 
-print('c array')
-pyarr3 = np.asfortranarray(pyarr3)# todo this works nicely, now I just need to get access to the outdata
+print('c array') # ideal solution
+pyarr3 = np.asfortranarray(pyarr3)#
 print(pyarr3)
-pyarr3 = pyarr3.ctypes.data_as(ct.POINTER(ct.c_double)) #todo this works, but now I don't know how to get access to it
+pyarr3 = pyarr3.ctypes.data_as(ct.POINTER(ct.c_double)) # this works, but now I don't know how to get access to it
 # call the function by passing the ctypes pointer using the numpy function:
 _ = fortlib.sqr_2d_arr_real(nd1,nd2, pyarr3)
 

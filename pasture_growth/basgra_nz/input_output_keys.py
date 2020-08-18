@@ -116,7 +116,7 @@ _param_keys = (  # 99.9% sure that this is in the correct order as defined by se
 
 )
 
-_matrix_weather_keys = (  # I am 99% sure of the correct order ,# todo check this is correct order
+_matrix_weather_keys = (  # I am 99% sure of the correct order
     'year',  # e.g. 2002
     'doy',  # day of year 1 - 356 (366?) todo figure out this
     'radn',  # daily solar radiation (MJ/m2)

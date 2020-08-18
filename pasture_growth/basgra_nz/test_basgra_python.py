@@ -13,7 +13,7 @@ test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 def establish_input():
     params = pd.read_csv(os.path.join(test_dir, 'BASGRA_parModes.txt'),
                          delim_whitespace=True, index_col=0).iloc[:,
-             1 + 8 * (1)]  # todo 99% sure this should fix the one index problem in R, check
+             1 + 8 * (1)]  # 99.9% sure this should fix the one index problem in R, check
     params = params.to_dict()
 
     matrix_weather = pd.read_csv(os.path.join(test_dir, 'weather_Scott.txt'),
@@ -52,14 +52,6 @@ def get_correct_values():  # todo
 def test_basgra_nz():
     params, matrix_weather, days_harvest = establish_input()
     out = run_basgra_nz(params, matrix_weather, days_harvest)
-
-    print(out) #todo delete after debug
-    # fixed:
-    # this is kinda working, I need to compare it to expected values and see what is going wrong
-    # I expect something is wrong with atleast the weather matrix, the print values are very strange
-    # it looks like there is some sort of transpose problem with the arrays or something as it's reading in a wierd order
-    # same problem in the example.f90... follow up here
-    # the output is very strange!
 
     correct_out = get_correct_values()
     # todo assert out size
