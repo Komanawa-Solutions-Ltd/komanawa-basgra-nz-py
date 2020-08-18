@@ -12,14 +12,15 @@ from copy import deepcopy
 from pasture_growth.basgra_nz.input_output_keys import _param_keys, _out_cols, _days_harvest_keys, _matrix_weather_keys
 
 # note python 3.8 might break this and I may want to figure that our... or I could just freeze this at 3.6.
-# right now running on MRT environment, but really only numpy is needed
+# right now running on MRT environment, but really only numpy and pandas is needed
 # compiled with gfortran 64, https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download
 # copiliation code: compile_basgra_gfortran.bat
-# loading this works!
 
 # define the dll library path
 _libpath = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA_WG.DLL')
-
+# this is the maximum number of weather days,
+# it is hard coded into fortran_BASGRA_NZ/environment.f95 line 9
+_max_weather_size = 36600
 
 # define keys to dfs
 
@@ -30,7 +31,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False):
     changes to the fortran code may require changes to this function
     runs the model for the period of the weather data
     :param params: dictionary, see input_output_keys.py for more details
-    :param matrix_weather: pandas dataframe of weather data, maximum 10000 entries
+    :param matrix_weather: pandas dataframe of weather data, maximum entries set in _max_weather_size in line 24
     :param days_harvest: days harvest dataframe no maximum entries
                         columns = (
                               year
@@ -60,10 +61,10 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False):
     matrix_weather = matrix_weather.values.astype(float)
     days_harvest = days_harvest.values
 
-    # manage weather size, # todo see if we can make this internal!
+    # manage weather size, # todo see if we can make this internal!, quite difficult
     weather_size = len(matrix_weather)
-    if weather_size < 10000:
-        temp = np.zeros((10000 - weather_size, matrix_weather.shape[1]), float)
+    if weather_size < _max_weather_size:
+        temp = np.zeros((_max_weather_size - weather_size, matrix_weather.shape[1]), float)
         matrix_weather = np.concatenate((matrix_weather, temp), 0)
 
     y = np.zeros((ndays, nout), float)  # cannot set these to nan's or it breaks fortran
@@ -102,7 +103,7 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose):
 
     assert isinstance(matrix_weather, pd.DataFrame)
     assert set(matrix_weather.keys()) == set(_matrix_weather_keys), 'incorrect keys for matrix_weather'
-    assert len(matrix_weather) <= 10000, 'maximum run size is 10000 days'
+    assert len(matrix_weather) <= _max_weather_size, 'maximum run size is {} days'.format(_max_weather_size)
 
     assert isinstance(days_harvest, pd.DataFrame)
     assert issubclass(days_harvest.values.dtype.type, np.integer), 'days_harvest must be integers'
