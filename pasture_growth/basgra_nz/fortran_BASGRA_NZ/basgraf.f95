@@ -7,7 +7,7 @@ module basgramodule
 
 contains
 
-subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y) bind(C, name = "BASGRA_")
+subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,NDHARV,VERBOSE) bind(C, name = "BASGRA_")
 !-------------------------------------------------------------------------------
 ! This is the BASic GRAss model originally written in MATLAB/Simulink by Marcel
 ! van Oijen, Mats Hoglind, Stig Morten Thorsen and Ad Schapendonk.
@@ -17,8 +17,19 @@ subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y) bind(C, name 
 ! 2014-04-03: Lower limit of temperature-driven leaf senescence no longer zero
 ! 2018-08-01: Modified by Simon Woodward for New Zealand ryegrass simulations
 ! 2019-06-09: Added C wrapper to allow model to be compiled into an R package
+! todo add whatever I end up doing
 !-------------------------------------------------------------------------------
+!INPUTS
+  !PARAMS:
+  !MATRIX_WEATHER:
+  !DAYS_HARVEST:
+  !NDAYS:
+  !NOUT:
+  !y:
+  !NDHARV:
+  !VERBOSE:
 
+ !-------------------------------------------------------------------------------
 ! Allows access to all public objects in the other modules
 use parameters_site
 use parameters_plant
@@ -30,9 +41,12 @@ use plant
 implicit none
 
 ! Define model inputs
+
+integer(kind = c_int), intent(in)            :: NDHARV
+logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT ! todo I removed value and it worked... look into this!
-integer(kind = c_int), intent(in), dimension(100,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) ! todo does this need to be extended??, yes also set in plant.f95
+integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) ! todo does this need to be extended??, yes also set in plant.f95
 integer, parameter                                  :: NPAR     = 108 ! NPAR also hardwired in set_params.f90
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
@@ -65,12 +79,6 @@ integer :: HARV
 ! Extra output variables (Simon)
 real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE
 
-print*, 'ndays', NDAYS
-print*, 'nout', NOUT
-print*, 'nweather', NWEATHER
-print*, 'days_harvest year', DAYS_HARVEST(:,1)
-print*, 'days_harvest doy', DAYS_HARVEST(:,2)
-print*, 'days_harvest %', DAYS_HARVEST(:,3)
 
 
 ! Extract calendar and weather data
@@ -88,7 +96,20 @@ TMMXI  = MATRIX_WEATHER(:,5)
   WNI   = MATRIX_WEATHER(:,8)
 #endif
 
-print*, 'matrix weather year;', YEARI ! todo this is not working perfectly I think, I should investigate
+if (VERBOSE) then
+  print*, 'following are a number of values to confirm correct read'
+  print*, 'number of days in run', NDAYS
+  print*, 'number of output parameters', NOUT
+  print*, 'weather mode (e.g. weather parameters)', NWEATHER
+  print*, 'days_harvest year', DAYS_HARVEST(:,1)
+  print*, 'days_harvest doy', DAYS_HARVEST(:,2)
+  print*, 'days_harvest %', DAYS_HARVEST(:,3)
+  print*, 'matrix weather year;', YEARI
+  print*, 'matrix weather doy;', DOYI
+  print*, 'matrix weather minimum temperature;', TMMNI
+endif
+
+
 ! Initialise harvest array index
 HARVI   = 1
 do while ( (DAYS_HARVEST(HARVI,1)<YEARI(1)) .or. ((DAYS_HARVEST(HARVI,1)==YEARI(1)).and.(DAYS_HARVEST(HARVI,2)<DOYI(1))) )
@@ -158,7 +179,7 @@ do day = 1, NDAYS
 
   call set_weather_day(day,DRYSTOR,                    year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
 
-  call Harvest        (CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
+  call Harvest        (NDHARV,CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                                                        GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
                                                        HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV)
   LAI     = LAI     - HARVLA * (1 + RDRHARV)
@@ -236,7 +257,10 @@ do day = 1, NDAYS
   DEBUG     = LAI/BASAL                          ! Output any variable as "DEBUG" for debugging purposes
 
   ! a script checks that these variable names match what is expected in output_names.tsv (Simon)
-  print*, 'saving for day', day
+  if ((VERBOSE).and.(mod(day,100).eq.0)) then
+    print*, 'saving for day', day
+  endif
+
   y(day, 1) = Time
   y(day, 2) = year
   y(day, 3) = doy

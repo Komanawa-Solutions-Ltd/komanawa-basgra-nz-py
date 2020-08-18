@@ -24,24 +24,25 @@ _libpath = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA_WG.
 # define keys to dfs
 
 
-def run_basgra_nz(params, matrix_weather, days_harvest):
+def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False):
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
     runs the model for the period of the weather data
     :param params: dictionary, see input_output_keys.py for more details
     :param matrix_weather: pandas dataframe of weather data, maximum 10000 entries
-    :param days_harvest: days harvest dataframe maximum 100 entries
+    :param days_harvest: days harvest dataframe no maximum entries
                         columns = (
                               year
                               doy
                               percent_harvest
                         )
-                        the null values and assumed size system is managed internally
+
+    :param verbose: boolean, if True the fortran function prints a number of statements for debugging purposes
     :return:
     """
 
-    _test_basgra_inputs(params, matrix_weather, days_harvest)
+    _test_basgra_inputs(params, matrix_weather, days_harvest, verbose)
 
     nout = len(_out_cols)
     ndays = len(matrix_weather)
@@ -58,12 +59,6 @@ def run_basgra_nz(params, matrix_weather, days_harvest):
     params = np.array([params[e] for e in _param_keys]).astype(float)
     matrix_weather = matrix_weather.values.astype(float)
     days_harvest = days_harvest.values
-
-    # manage days harvest size # todo try to move this interal to the fortran
-    harv_size = len(days_harvest)
-    if harv_size < 100:
-        temp = np.zeros((100 - harv_size,3), int) - 1
-        days_harvest = np.concatenate((days_harvest, temp), 0)
 
     # manage weather size, # todo see if we can make this internal!
     weather_size = len(matrix_weather)
@@ -83,12 +78,14 @@ def run_basgra_nz(params, matrix_weather, days_harvest):
     # integers
     ndays_p = ct.pointer(ct.c_int(ndays))
     nout_p = ct.pointer(ct.c_int(nout))
+    verb_p = ct.pointer(ct.c_bool(verbose))
+    ndharv_p = ct.pointer(ct.c_int(len(days_harvest)))
 
     # load DLL
     for_basgra = ct.CDLL(_libpath)
 
     # run BASGRA
-    for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, y_p)
+    for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, y_p, ndharv_p, verb_p)
 
     # format results
     y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
@@ -98,7 +95,8 @@ def run_basgra_nz(params, matrix_weather, days_harvest):
     return y_p
 
 
-def _test_basgra_inputs(params, matrix_weather, days_harvest):
+def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose):
+    assert isinstance(verbose, bool), 'verbose must be boolean'
     assert isinstance(params, dict)
     assert set(params.keys()) == set(_param_keys), 'incorrect params keys'
 
@@ -109,7 +107,6 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest):
     assert isinstance(days_harvest, pd.DataFrame)
     assert issubclass(days_harvest.values.dtype.type, np.integer), 'days_harvest must be integers'
     assert set(days_harvest.keys()) == set(_days_harvest_keys), 'incorrect keys for days_harvest'
-    assert len(days_harvest) <= 100, 'currently only 100 harvest instances can be passed to the model'
 
 
 if __name__ == '__main__':
