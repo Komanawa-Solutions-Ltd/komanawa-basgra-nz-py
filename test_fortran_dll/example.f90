@@ -22,9 +22,15 @@ contains
         real(kind = c_double), intent(inout) :: val(nd1, nd2)
         integer :: i, j
 
+
         print*, 'nd1', nd1
         print*, 'nd2', nd2
+        print*, 'val', val
         print*, 'val 1', val(:,1)
+        print*, 'val 1', val(1,:)
+        print*, 'val 2', val(:,2)
+        print*, 'val 3', val(:,3)
+
         do j = 1, nd2
             do i = 1, nd1
                 val(i, j) = val(i, j) * val(i,j)

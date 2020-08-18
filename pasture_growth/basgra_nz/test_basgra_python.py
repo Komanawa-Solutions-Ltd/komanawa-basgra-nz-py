@@ -53,12 +53,13 @@ def test_basgra_nz():
     params, matrix_weather, days_harvest = establish_input()
     out = run_basgra_nz(params, matrix_weather, days_harvest)
 
-    print(out)
-    # todo this is kinda working, I need to compare it to expected values and see what is going wrong
-    # todo I expect something is wrong with atleast the weather matrix, the print values are very strange
-    # todo it looks like there is some sort of transpose problem with the arrays or something as it's reading in a wierd order
-    # todo same problem in the example.f90... follow up here
-    # todo the output is very strange!
+    print(out) #todo delete after debug
+    # fixed:
+    # this is kinda working, I need to compare it to expected values and see what is going wrong
+    # I expect something is wrong with atleast the weather matrix, the print values are very strange
+    # it looks like there is some sort of transpose problem with the arrays or something as it's reading in a wierd order
+    # same problem in the example.f90... follow up here
+    # the output is very strange!
 
     correct_out = get_correct_values()
     # todo assert out size

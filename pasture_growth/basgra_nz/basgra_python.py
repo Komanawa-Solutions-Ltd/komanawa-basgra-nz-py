@@ -75,10 +75,10 @@ def run_basgra_nz(params, matrix_weather, days_harvest):
 
     # make pointers
     # arrays # 99% sure this works
-    params_p = np.ctypeslib.as_ctypes(params)  # 1d array, float
-    matrix_weather_p = np.ctypeslib.as_ctypes(matrix_weather)  # 2d array, float
-    days_harvest_p = np.ctypeslib.as_ctypes(days_harvest)  # 2d array, int
-    y_p = np.ctypeslib.as_ctypes(y)  # 2d array, float
+    params_p = np.asfortranarray(params).ctypes.data_as(ct.POINTER(ct.c_double))  # 1d array, float
+    matrix_weather_p = np.asfortranarray(matrix_weather).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
+    days_harvest_p = np.asfortranarray(days_harvest).ctypes.data_as(ct.POINTER(ct.c_long))  # 2d array, int
+    y_p = np.asfortranarray(y).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
 
     # integers
     ndays_p = ct.pointer(ct.c_int(ndays))
@@ -87,11 +87,12 @@ def run_basgra_nz(params, matrix_weather, days_harvest):
     # load DLL
     for_basgra = ct.CDLL(_libpath)
 
-    # run BASGRA #todo test
+    # run BASGRA #todo test, I think it is working!
     for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, y_p)
 
     # format results
-    y_p = np.ctypeslib.as_array(y_p)
+    y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
+    y_p = y_p.flatten(order='C').reshape((ndays,nout),order='F')
     y_p = pd.DataFrame(y_p, out_index, _out_cols)
 
     return y_p
