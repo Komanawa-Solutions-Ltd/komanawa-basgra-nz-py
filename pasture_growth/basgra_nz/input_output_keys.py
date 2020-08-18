@@ -118,7 +118,7 @@ _param_keys = (  # 99.9% sure that this is in the correct order as defined by se
 
 _matrix_weather_keys = (  # I am 99% sure of the correct order
     'year',  # e.g. 2002
-    'doy',  # day of year 1 - 356 (366?) todo figure out this
+    'doy',  # day of year 1 - 356 or 366 for leap years
     'radn',  # daily solar radiation (MJ/m2)
     'tmin',  # daily min (degrees C)
     'tmax',  # daily max (degrees C)

@@ -17,17 +17,45 @@ subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,NDHARV,VERBOSE
 ! 2014-04-03: Lower limit of temperature-driven leaf senescence no longer zero
 ! 2018-08-01: Modified by Simon Woodward for New Zealand ryegrass simulations
 ! 2019-06-09: Added C wrapper to allow model to be compiled into an R package
-! todo add whatever I end up doing
+! 2020-08-19: Modified by Matt Hanson to allow python use, added documentation, set maximum weather size to 36600
+!             and unlimited harvest dates.
 !-------------------------------------------------------------------------------
 !INPUTS
-  !PARAMS:
-  !MATRIX_WEATHER:
-  !DAYS_HARVEST:
-  !NDAYS:
-  !NOUT:
-  !y:
-  !NDHARV:
-  !VERBOSE:
+  !PARAMS: double, set of model parameters for details and order please see ./input_paramaters_decriptors.csv
+  !MATRIX_WEATHER: double, weather matrix with two formats:
+  !  1) internal calculation of PET size = (36,600 x 8) NDAYS rows must have valid data, null values set to 0
+  !     Columns:
+  !                  year  # day of the year (d)
+  !                  doy   # day of the year (d)
+  !                  RAIN  # precipitation (mm d-1)
+  !                  GR    # irradiation (MJ m-2 d-1)
+  !                  TMMN  # minimum (or average) temperature (degrees Celsius)
+  !                  TMMX  # maximum (or average) temperature (degrees Celsius)
+  !                  VP    # vapour pressure (kPa)
+  !                  WN    # mean wind speed (m s-1)
+
+
+  !  2) external calculations/measurment of PET size = (36,600 x 7)NDAYS rows must have valid data, null values set to 0
+  !     Columns:
+  !              year,  # e.g. 2002
+  !              doy,  # day of year 1 - 356 or 366 for leap years
+  !              radn,  # daily solar radiation (MJ/m2)
+  !              tmin,  # daily min (degrees C)
+  !              tmax,  # daily max (degrees C)
+  !              rain,  # sum daily rainfall (mm)
+  !              pet,  # Potential evapotransperation (mm), suggest priestly
+  !  switching between modes requires different compiliations, to set to mode 2, -Dweathergen, must be called while
+  !  compiling (e.g.gfortran -x f95-cpp-input -Dweathergen -O3 -c -fdefault-real-8 ....)
+
+  !DAYS_HARVEST: int, The harvest dates, size is (NDHARV,3) the columns are
+  !              1: year
+  !              2: the day of year(1-365 or 366(for leap years))
+  !              3: the percent harvest (e.g. 50 = 50%)
+  !NDAYS: int, the number of days to simulate, this should match the number of days of real data in MATRIX_WEATHER
+  !NOUT: int, the number of output variables, at present this should be 56
+  !y: double, the output array, initialised as zeros
+  !NDHARV: int, the number of harvest days
+  !VERBOSE: boolean, if True print a number of debugging information
 
  !-------------------------------------------------------------------------------
 ! Allows access to all public objects in the other modules

@@ -1,0 +1,11 @@
+Short list of known issues/to do
+
+Issues
+
+- bar plot width vanishing in some data docx reports
+- Northland soil moisture data is from different site than trial
+- botanical composition under sampling height is a very crude assumption
+- ROOTD and BASAL area dynamics are rather crude
+- generative tillers are immune to environmental death rates
+- pseudostem not modelled separately from leaf
+- Tiller dynamics not persistent enough. 
