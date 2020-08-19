@@ -1,0 +1,1 @@
+conda create --name basgranz python=3.8 numpy pandas

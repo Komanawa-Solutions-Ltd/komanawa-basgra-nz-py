@@ -285,7 +285,7 @@ do day = 1, NDAYS
   DEBUG     = LAI/BASAL                          ! Output any variable as "DEBUG" for debugging purposes
 
   ! a script checks that these variable names match what is expected in output_names.tsv (Simon)
-  if ((VERBOSE).and.(mod(day,100).eq.0)) then
+  if ((VERBOSE).and.(mod(day,365).eq.0)) then
     print*, 'saving for day', day
   endif
 

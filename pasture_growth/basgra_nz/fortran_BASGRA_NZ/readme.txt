@@ -16,6 +16,17 @@ general instructions to install fortran instructions here: https://www.youtube.c
 
 I suggest using compiling with gfortran 64:
    https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download
-compiliation code: compile_basgra_gfortran.bat, current DLL is 64 bit
+compiliation code: compile_basgra_gfortran.bat, current DLL is 64 bit, this uses weather option 2, where PET is passed to the model.
 
 # todo should I publish this packages, if so I need to make it python 3.8 compatible
+# todo put in public git, waiting on pierre
+# # todo set up requirements, just numpy and pandas
+# # todo set up on pipi/anaconda
+not very hard when you've got a template 😉
+   https://github.com/Evapotranspiration/ETo
+use this repo as a example
+   https://packaging.python.org/tutorials/packaging-projects/
+for pypi packaging
+it's needs to go onto pypi before anaconda
+once you get to the anaconda stage, talk to me and I'll work you through it...
+well...I can also work you through the pypi bit too 😉

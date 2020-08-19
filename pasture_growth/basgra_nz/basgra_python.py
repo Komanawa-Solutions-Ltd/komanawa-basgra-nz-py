@@ -11,10 +11,9 @@ import pandas as pd
 from copy import deepcopy
 from pasture_growth.basgra_nz.input_output_keys import _param_keys, _out_cols, _days_harvest_keys, _matrix_weather_keys
 
-# note python 3.8 might break this and I may want to figure that our... or I could just freeze this at 3.6.
-# right now running on MRT environment, but really only numpy and pandas is needed
-# compiled with gfortran 64, https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download
-# copiliation code: compile_basgra_gfortran.bat
+# compiled with gfortran 64,
+# https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download
+# compilation code: compile_basgra_gfortran.bat
 
 # define the dll library path
 _libpath = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA_WG.DLL')
@@ -22,10 +21,13 @@ _libpath = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA_WG.
 # it is hard coded into fortran_BASGRA_NZ/environment.f95 line 9
 _max_weather_size = 36600
 
+
+
 # define keys to dfs
 
 
-def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False):
+def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
+                  dll_path=_libpath):
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
@@ -40,6 +42,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False):
                         )
 
     :param verbose: boolean, if True the fortran function prints a number of statements for debugging purposes
+    :param dll_path: path to the compiled fortran DLL to use, default was made on windows 10 64 bit
     :return:
     """
 
@@ -61,7 +64,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False):
     matrix_weather = matrix_weather.values.astype(float)
     days_harvest = days_harvest.values
 
-    # manage weather size, # todo see if we can make this internal!, quite difficult
+    # manage weather size,
     weather_size = len(matrix_weather)
     if weather_size < _max_weather_size:
         temp = np.zeros((_max_weather_size - weather_size, matrix_weather.shape[1]), float)

@@ -6,7 +6,7 @@ use parameters_plant
 implicit none
 
 ! Environment variables
-integer, parameter :: NMAXDAYS = 36600 ! todo this is a limit on the maximum number of days, hard limit, it may be worth setting this as variables passed to BASGRA
+integer, parameter :: NMAXDAYS = 36600 ! Note this is a limit on the maximum number of days, hard limit
 real :: GR, TMMN, TMMX, VP, WN
 real :: YEARI(NMAXDAYS), DOYI(NMAXDAYS) , RAINI(NMAXDAYS), GRI(NMAXDAYS)
 real :: TMMNI(NMAXDAYS), TMMXI(NMAXDAYS), VPI(NMAXDAYS)  , WNI(NMAXDAYS)

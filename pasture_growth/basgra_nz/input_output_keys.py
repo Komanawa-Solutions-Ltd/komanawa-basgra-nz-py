@@ -126,10 +126,10 @@ _matrix_weather_keys = (  # I am 99% sure of the correct order
     'pet',  # Potential evapotransperation (mm), suggest priestly
 )
 
-_days_harvest_keys = (  # todo havest dates are set to 100 maximum harvests, this probably needs to be fixed.
+_days_harvest_keys = (
     # -1 for these seems to set as a null value, to account for the 100 max harvests days
     'year',  # e.g. 2002
-    'doy',  # day of year 1 - 356 (366?) todo figure out this
+    'doy',  # day of year 1 - 356 (366 for leap year)
     'percent_harvest',  # percent of harvest as an integer 0-100,
 
 )
@@ -196,4 +196,3 @@ _out_cols = (
     'FS',  # Site Filling, #  (till leaf-1)
 )
 
-# todo get above values as a function or functions??

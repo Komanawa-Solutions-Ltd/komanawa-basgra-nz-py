@@ -25,7 +25,7 @@ def establish_input():
                                         'tmax',
                                         'rain',
                                         'radn',
-                                        'pet'])  # todo
+                                        'pet'])
     # set start date as doy 121 2011
     idx = (matrix_weather.year > 2011) | ((matrix_weather.year == 2011) & (matrix_weather.doy >= 121))
     matrix_weather = matrix_weather.loc[idx].reset_index(drop=True)
