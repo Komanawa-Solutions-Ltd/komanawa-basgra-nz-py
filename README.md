@@ -1,4 +1,7 @@
 # BASGRA_NZ
+
+WARNING: this is an experimental library and no guarantee on quality or accuracy is made
+
 this model is modified from https://github.com/woodwards/basgra_nz/tree/master/model_package/src
 which is in turn modified from https://github.com/davcam/BASGRA
 
