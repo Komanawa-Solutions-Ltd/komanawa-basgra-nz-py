@@ -14,6 +14,12 @@ def establish_input():
     params = pd.read_csv(os.path.join(test_dir, 'BASGRA_parModes.txt'),
                          delim_whitespace=True, index_col=0).iloc[:,
              1 + 8 * (1)]  # 99.9% sure this should fix the one index problem in R, check
+
+    # add in my new values
+    params.loc['IRRIGF'] = 0
+    params.loc['doy_irr_start'] = 300
+    params.loc['doy_irr_end'] = 90
+
     params = params.to_dict()
 
     matrix_weather = pd.read_csv(os.path.join(test_dir, 'weather_Scott.txt'),
@@ -33,6 +39,8 @@ def establish_input():
     idx = (matrix_weather.year < 2017) | ((matrix_weather.year == 2017) & (matrix_weather.doy <= 120))
     matrix_weather = matrix_weather.loc[idx].reset_index(drop=True)
 
+    matrix_weather.loc[:, 'max_irr'] = 10.
+
     days_harvest = pd.read_csv(os.path.join(test_dir, 'harvest_Scott_0.txt'),
                                delim_whitespace=True,
                                names=['year', 'doy', 'percent_harvest']
@@ -47,6 +55,9 @@ def establish_input():
 def get_correct_values():
     sample_output_path = os.path.join(test_dir, 'sample_output.csv')
     sample_data = pd.read_csv(sample_output_path, index_col=0).astype(float)
+
+    # add in new features of data
+    sample_data.loc[:,'IRRIG'] = 0 # new data, check
     return sample_data
 
 
@@ -69,6 +80,8 @@ def test_basgra_nz():
     assert isclose.all(), asmess
 
     print('model passed tests')
+
+# todo test basgra irrigation
 
 
 if __name__ == '__main__':

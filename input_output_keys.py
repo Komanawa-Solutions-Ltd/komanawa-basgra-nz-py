@@ -113,6 +113,10 @@ _param_keys = (  # 99.9% sure that this is in the correct order as defined by se
     'TRANRFCR',  # TRANRFCR,  # -, # Critical water stress for tiller death
     'DELE',  # DELE,  # -, # Litter disappearance due to earthworms
     'DELD',  # DELD,  # -, # Litter disappearance due to decomposition
+    'IRRIGF',  # fraction # fraction of soil capacity to irrigate to!  Relative irrigation rate
+    'doy_irr_start', #doy>=doy_irr_start has irrigation applied if needed
+    'doy_irr_end',  #doy <= doy_irr_end has irrigation applied
+
 
 )
 
@@ -124,6 +128,7 @@ _matrix_weather_keys = (  # I am 99% sure of the correct order
     'tmax',  # daily max (degrees C)
     'rain',  # sum daily rainfall (mm)
     'pet',  # Potential evapotransperation (mm), suggest priestly
+    'max_irr',  # maximum irrigation available (mm/d)
 )
 
 _days_harvest_keys = (
@@ -194,5 +199,6 @@ _out_cols = (
     'GTILV',  # Till. Birth, #  (till m-2 d-1)
     'DTILV',  # Till. Death, #  (till m-2 d-1)
     'FS',  # Site Filling, #  (till leaf-1)
+    'IRRIG',  # mm d-1 Irrigation
 )
 

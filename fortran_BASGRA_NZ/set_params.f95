@@ -5,10 +5,10 @@ use parameters_plant
 
 implicit none
 
-real      :: pa(108) ! Note: NPAR is also hardwired in BASGRA.f90
+real      :: pa(111) ! Note: NPAR is also hardwired in BASGRA.f90
 
 ! a script checks that these variable names match what is expected in the parameter.txt file (Simon)
-
+!TODO ADD doy_irr_end, doy_irr_start, and IRRIGF
 ! Initial values
 LOG10CLVI  = pa(1)
 LOG10CRESI = pa(2)
@@ -122,6 +122,10 @@ DAYLGEMN     = pa(105)
 TRANRFCR     = pa(106)
 DELE         = pa(107)
 DELD         = pa(108)
+
+IRRIGF       = pa(109)
+doy_irr_start= pa(110)
+doy_irr_end  = pa(111)
 
 return
 end

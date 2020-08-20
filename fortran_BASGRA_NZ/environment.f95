@@ -10,10 +10,12 @@ integer, parameter :: NMAXDAYS = 36600 ! Note this is a limit on the maximum num
 real :: GR, TMMN, TMMX, VP, WN
 real :: YEARI(NMAXDAYS), DOYI(NMAXDAYS) , RAINI(NMAXDAYS), GRI(NMAXDAYS)
 real :: TMMNI(NMAXDAYS), TMMXI(NMAXDAYS), VPI(NMAXDAYS)  , WNI(NMAXDAYS)
+real :: MAX_IRRI(NMAXDAYS)
 #ifdef weathergen
 real :: PETI(NMAXDAYS)
 #endif
 real :: DAVTMP,DAYL,YDAYL,DAYLMX,DTR,PAR,PERMgas,PEVAP,poolRUNOFF,PTRAN,pWater,RAIN,RNINTC
+real :: MAX_IRR
 real :: runOn,StayWet,WmaxStore,Wsupply
 #ifdef weathergen
 real :: PET
@@ -35,6 +37,7 @@ contains
     DTR    = GR * exp(-KSNOW*DRYSTOR)  ! MJ GR m-2 d-1 Daily global radiation on leaves
     PAR    = 0.5*4.56*DTR              ! mol PAR m-2 d-1 Daily photosynthetically active radiation
     PET    = PETI(day)                 ! mm d-1 Daily potential evapotranspiration
+    MAX_IRR = MAX_IRRI(day)  ! maximum irrigation for the day mm d-1
   end Subroutine set_weather_day
 #else
   Subroutine set_weather_day(day,DRYSTOR, year,doy)
@@ -51,6 +54,7 @@ contains
     DAVTMP = (TMMN + TMMX)/2.0
     DTR    = GR * exp(-KSNOW*DRYSTOR)
     PAR    = 0.5*4.56*DTR
+    MAX_IRR = MAX_IRRI(day)  ! maximum irrigation for the day mm d-1
   end Subroutine set_weather_day
 #endif
 

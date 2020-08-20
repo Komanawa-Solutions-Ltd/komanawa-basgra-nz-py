@@ -75,12 +75,12 @@ logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT ! todo I removed value and it worked... look into this!
 integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) ! todo does this need to be extended??, yes also set in plant.f95
-integer, parameter                                  :: NPAR     = 108 ! NPAR also hardwired in set_params.f90
+integer, parameter                                  :: NPAR     = 111 ! NPAR also hardwired in set_params.f90
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
-  integer, parameter                                :: NWEATHER =  7
-#else
   integer, parameter                                :: NWEATHER =  8
+#else
+  integer, parameter                                :: NWEATHER =  9
 #endif
 real(kind = c_double), intent(in), dimension(NPAR)              :: PARAMS
 real(kind = c_double), intent(in), dimension(NMAXDAYS,NWEATHER) :: MATRIX_WEATHER
@@ -118,10 +118,12 @@ TMMXI  = MATRIX_WEATHER(:,5)
 #ifdef weathergen
   RAINI = MATRIX_WEATHER(:,6)
   PETI  = MATRIX_WEATHER(:,7)
+  MAX_IRRI = MATRIX_WEATHER(:,8)
 #else
   VPI   = MATRIX_WEATHER(:,6)
   RAINI = MATRIX_WEATHER(:,7)
   WNI   = MATRIX_WEATHER(:,8)
+  MAX_IRRI = MATRIX_WEATHER(:,9)
 #endif
 
 if (VERBOSE) then
@@ -245,7 +247,8 @@ do day = 1, NDAYS
   call EVAPTRTRF      (Fdepth,PEVAP,PTRAN,CRT,ROOTD,WAL,WCLM,WCL,EVAP,TRAN)! calculate EVAP,TRAN,TRANRF
 
   call FRDRUNIR       (EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
-                                                       DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
+                                                       DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS, &
+                       MAX_IRR, doy, doy_irr_start, doy_irr_end) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
   call O2status       (O2,ROOTD)                                 ! calculate FO2
 
   call Vernalisation  (DAYL,PHEN,YDAYL,TMMN,TMMX,DAVTMP,Tsurf,VERN,VERND,DVERND) ! Simon calculate VERN,VERND,DVERND
@@ -350,6 +353,7 @@ do day = 1, NDAYS
   y(day,54) = GTILV
   y(day,55) = DTILV
   y(day,56) = FS
+  y(day,57) = IRRIG
 
   ! Update state variables
   AGE     = AGE     + 1.0

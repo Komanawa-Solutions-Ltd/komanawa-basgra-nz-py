@@ -45,7 +45,7 @@ Subroutine Physics(DAVTMP,Fdepth,ROOTD,Sdepth,WAS, Frate)
 end Subroutine Physics
 
    ! Calculate Frate = m d-1 Rate of increase of frost layer depth
-   ! See equations in Thorsen et al Polar Research 29 2010 110–126
+   ! See equations in Thorsen et al Polar Research 29 2010 110ï¿½126
    Subroutine FrozenSoil(Fdepth,ROOTD,WAS, Frate)
      real :: Fdepth,ROOTD,WAS
      real :: Frate
@@ -78,9 +78,13 @@ end Subroutine Physics
 ! Calculate DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
 ! FIXME Why would ROOTD affect soil freezing? Uncouple Fdepth from ROOTD.
 Subroutine FRDRUNIR(EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
-                                               DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS)
+                                               DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS, &
+                    MAX_IRR, doy, doy_irr_start, doy_irr_end)
+
   real :: EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS
   real :: DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
+  real :: MAX_IRR
+  integer  :: doy, doy_irr_start, doy_irr_end
   real :: INFILTOT,WAFC,WAST
   WAFC   = 1000. * WCFC * max(0.,(ROOTDM-Fdepth))                      ! (mm) Field capacity, Simon modified to ROOTDM
   WAST   = 1000. * WCST * max(0.,(ROOTDM-Fdepth))                      ! (mm) Saturation, Simon modified to ROOTDM
@@ -100,8 +104,17 @@ Subroutine FRDRUNIR(EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
          (INFILTOT - EVAP - TRAN - FREEZEL + THAWS) ))                 ! = mm d-1 Drainage, drains to WAFC (max 50 mm d-1)
   RUNOFF = max(0.,            (WAL-WAST)/DELT + &
          (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN) )          ! = mm d-1 Runoff, runs off to WAST
-  IRRIG  = IRRIGF *  (        (WAFC-WAL)/DELT - &
-         (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation
+
+  if ((doy<=doy_irr_end).OR.(doy>=doy_irr_start)) then
+    IRRIG  = IRRIGF *  (        (WAFC-WAL)/DELT - &
+           (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation ! todo some if statements here and I should be able to add DOY irr start, DOY irr end, and water avalible for restrictions
+    if (IRRIG>MAX_IRR) then
+      IRRIG = MAX_IRR
+    end if
+
+  else
+    IRRIG = 0 ! if the day of year is not
+  end if
 end Subroutine FRDRUNIR
 
 ! Calculate FO2 = mol O2 mol-1 gas	Soil oxygen as a fraction of total gas
