@@ -81,7 +81,9 @@ def test_basgra_nz():
 
     print('model passed tests')
 
-# todo test basgra irrigation
+# todo test basgra irrigation, this will require data and thought, consider comparing loosely to david scott model.
+#todo make sure irrigation is documented
+# write a description in the readme file
 
 
 if __name__ == '__main__':
