@@ -5,7 +5,7 @@
 import os
 import numpy as np
 import pandas as pd
-from pasture_growth.basgra_nz.basgra_python import run_basgra_nz
+from basgra_python import run_basgra_nz
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 

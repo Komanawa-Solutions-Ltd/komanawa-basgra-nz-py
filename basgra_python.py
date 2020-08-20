@@ -9,7 +9,7 @@ import ctypes as ct
 import numpy as np
 import pandas as pd
 from copy import deepcopy
-from pasture_growth.basgra_nz.input_output_keys import _param_keys, _out_cols, _days_harvest_keys, _matrix_weather_keys
+from input_output_keys import _param_keys, _out_cols, _days_harvest_keys, _matrix_weather_keys
 
 # compiled with gfortran 64,
 # https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download
