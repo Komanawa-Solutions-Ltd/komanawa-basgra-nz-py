@@ -13,7 +13,7 @@ test_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'test_data')
 
 
 def get_woodward_weather():
-    matrix_weather = pd.read_csv(os.path.join(test_dir, 'weather_Scott.txt'),
+    matrix_weather = pd.read_csv(os.path.join(test_dir, 'weather_Lincoln.txt'),
                                  delim_whitespace=True, index_col=0,
                                  header=0,
                                  names=['year',
@@ -23,6 +23,8 @@ def get_woodward_weather():
                                         'rain',
                                         'radn',
                                         'pet'])
+    matrix_weather = matrix_weather.loc[matrix_weather.year >= 2010]
+    matrix_weather = matrix_weather.loc[matrix_weather.year < 2018]
     return matrix_weather
 
 
@@ -46,7 +48,7 @@ def get_lincoln_broadfield():
 
     keep_cols = np.array(['pet', 'rain', 'rain_def', 'rain_runoff', 'tmax', 'tmin', 'radn'])
 
-    temp = pd.date_range('01-01-2010', '01-01-2018', freq='D')
+    temp = pd.date_range('01-01-2010', '31-12-2017', freq='D')
     year = temp.year.values
     doy = temp.dayofyear.values
     outdata = pd.DataFrame({'year': year, 'doy': doy}, )
@@ -63,7 +65,18 @@ def get_lincoln_broadfield():
 
     outdata = outdata.reset_index()
     outdata.loc[:,'tmax'] = pd.to_numeric(outdata.loc[:,'tmax'],errors='coerce')
+    outdata.fillna(method='ffill', inplace=True)
     return outdata
+
+def merge_data(outpath):
+    woodward = get_woodward_weather()
+    strs = ['{}-{:03d}'.format(e,f) for e,f in woodward[['year','doy']].itertuples(False, None)]
+    woodward.loc[:,'date'] = pd.to_datetime(strs,format='%Y-%j')
+    niwa = get_lincoln_broadfield()
+    strs = ['{}-{:03d}'.format(e,f) for e,f in niwa[['year','doy']].itertuples(False, None)]
+    niwa.loc[:,'date'] = pd.to_datetime(strs,format='%Y-%j')
+    joined = pd.merge(woodward,niwa,suffixes=['_wood','_niwa'],on='date')
+    joined.to_csv(outpath)
 
 def plot_woodward_v_niwa():
     woodward = get_woodward_weather()
@@ -94,4 +107,5 @@ def plot_woodward_v_niwa():
 
 
 if __name__ == '__main__':
+    merge_data(r"C:\matt_modelling_unbackedup\SLMACC_2020\niwa_woodward_data.csv")
     plot_woodward_v_niwa()
