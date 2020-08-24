@@ -95,6 +95,10 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
     y_p = y_p.flatten(order='C').reshape((ndays,nout),order='F')
     y_p = pd.DataFrame(y_p, out_index, _out_cols)
+    strs = ['{}-{:03d}'.format(int(e),int(f)) for e,f in y_p[['year','doy']].itertuples(False, None)]
+    y_p.loc[:,'date'] = pd.to_datetime(strs,format='%Y-%j')
+    y_p.set_index('date',inplace=True)
+
 
     return y_p
 
@@ -103,14 +107,17 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose):
     assert isinstance(verbose, bool), 'verbose must be boolean'
     assert isinstance(params, dict)
     assert set(params.keys()) == set(_param_keys), 'incorrect params keys'
+    assert not any([np.isnan(e) for e in params.values()]), 'params cannot have na data'
 
     assert isinstance(matrix_weather, pd.DataFrame)
     assert set(matrix_weather.keys()) == set(_matrix_weather_keys), 'incorrect keys for matrix_weather'
     assert len(matrix_weather) <= _max_weather_size, 'maximum run size is {} days'.format(_max_weather_size)
+    assert not matrix_weather.isna().any().any(), 'matrix_weather cannot have na values'
 
     assert isinstance(days_harvest, pd.DataFrame)
     assert issubclass(days_harvest.values.dtype.type, np.integer), 'days_harvest must be integers'
     assert set(days_harvest.keys()) == set(_days_harvest_keys), 'incorrect keys for days_harvest'
+    assert not days_harvest.isna().any().any(), 'days_harvest cannot have na data'
 
 
 if __name__ == '__main__':
