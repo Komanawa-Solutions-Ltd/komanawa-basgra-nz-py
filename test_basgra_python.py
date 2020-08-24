@@ -10,10 +10,19 @@ from basgra_python import run_basgra_nz
 test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 
 
-def establish_input():
+def establish_input(site='scott'):
+    if site == 'scott':
+        harvest_nm= 'harvest_Scott_0.txt'
+        weather_nm='weather_Scott.txt'
+        col=  1 + 8 * (1)
+    elif site == 'lincoln':
+        harvest_nm='harvest_Lincoln_0.txt'
+        weather_nm='weather_Lincoln.txt'
+        col=1 + 8*(3-1) # 99% sure this is lincoln
+    else:
+        raise ValueError('unexpected site')
     params = pd.read_csv(os.path.join(test_dir, 'BASGRA_parModes.txt'),
-                         delim_whitespace=True, index_col=0).iloc[:,
-             1 + 8 * (1)]  # 99.9% sure this should fix the one index problem in R, check
+                         delim_whitespace=True, index_col=0).iloc[:, col]  # 99.9% sure this should fix the one index problem in R, check
 
     # add in my new values
     params.loc['IRRIGF'] = 0
@@ -22,7 +31,7 @@ def establish_input():
 
     params = params.to_dict()
 
-    matrix_weather = pd.read_csv(os.path.join(test_dir, 'weather_Scott.txt'),
+    matrix_weather = pd.read_csv(os.path.join(test_dir, weather_nm),
                                  delim_whitespace=True, index_col=0,
                                  header=0,
                                  names=['year',
@@ -41,7 +50,7 @@ def establish_input():
 
     matrix_weather.loc[:, 'max_irr'] = 10.
 
-    days_harvest = pd.read_csv(os.path.join(test_dir, 'harvest_Scott_0.txt'),
+    days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,
                                names=['year', 'doy', 'percent_harvest']
                                ).astype(int)  # floor matches what simon did.
