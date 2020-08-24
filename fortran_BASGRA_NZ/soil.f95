@@ -103,13 +103,17 @@ Subroutine FRDRUNIR(EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
   DRAIN  = max(0.,min( DRATE, (WAL-WAFC)/DELT + &
          (INFILTOT - EVAP - TRAN - FREEZEL + THAWS) ))                 ! = mm d-1 Drainage, drains to WAFC (max 50 mm d-1)
   RUNOFF = max(0.,            (WAL-WAST)/DELT + &
-         (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN) )          ! = mm d-1 Runoff, runs off to WAST
+         (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN) )          ! = mm d-1 Runoff, runs off to WAST !todo why is this always zero
 
   if ((doy<=doy_irr_end).OR.(doy>=doy_irr_start)) then
     IRRIG  = IRRIGF *  (        (WAFC-WAL)/DELT - &
            (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation ! todo some if statements here and I should be able to add DOY irr start, DOY irr end, and water avalible for restrictions
     if (IRRIG>MAX_IRR) then
       IRRIG = MAX_IRR
+    end if
+
+    if (IRRIG<0) then
+      IRRIG = 0
     end if
 
   else
