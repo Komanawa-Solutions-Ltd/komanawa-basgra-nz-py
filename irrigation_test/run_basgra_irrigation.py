@@ -5,7 +5,7 @@
 from basgra_python import run_basgra_nz
 from test_basgra_python import establish_input
 from irrigation_test.get_weather_data import get_lincoln_broadfield, get_woodward_weather
-from input_output_keys import _matrix_weather_keys
+from input_output_keys import _matrix_weather_keys, _out_cols
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
@@ -176,8 +176,8 @@ if __name__ == '__main__':
             # this is because water content at saturation is set to 55%, and field capacity is set to 70%, which leaves a full WCLM as 38.5% or so
 
     # todo investigate
-    # what is happening in dry matter at the end of 2017, why is this shooting off, particularyly on the irrigation data???
     # for some reason runoff is always 0... I wonder if runoff is always negative?, this could be a key flaw
     # is it actually fill to n percent of field capacity, no it is N% of the amount of water required to fill to field capacity, is this a bug?, it would be more useful as a trigger value? this could be a new property...
-    # look through all outputs, it would be rather instructive on how this model works, using this set of data.
+    # what is happening in dry matter at the end of 2017, why is this shooting off, particularyly on the irrigation data???, CRES (reserve carbon also shoots up)
     # think about making a irrigation time series from the rain data from woodward
+    # create irrigation triggers as a parameter
