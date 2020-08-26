@@ -79,11 +79,11 @@ end Subroutine Physics
 ! FIXME Why would ROOTD affect soil freezing? Uncouple Fdepth from ROOTD.
 Subroutine FRDRUNIR(EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
                                                DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS, &
-                    MAX_IRR, doy, doy_irr_start, doy_irr_end)
+                    MAX_IRR, doy, doy_irr_start, doy_irr_end, irr_trig, WAFC)
 
   real :: EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS
   real :: DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
-  real :: MAX_IRR
+  real :: MAX_IRR, irr_trig
   integer  :: doy, doy_irr_start, doy_irr_end
   real :: INFILTOT,WAFC,WAST
   WAFC   = 1000. * WCFC * max(0.,(ROOTDM-Fdepth))                      ! (mm) Field capacity, Simon modified to ROOTDM
@@ -106,14 +106,22 @@ Subroutine FRDRUNIR(EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
          (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN) )          ! = mm d-1 Runoff, runs off to WAST !todo why is this always zero
 
   if ((doy<=doy_irr_end).OR.(doy>=doy_irr_start)) then
-    IRRIG  = IRRIGF *  (        (WAFC-WAL)/DELT - &
-           (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation ! todo some if statements here and I should be able to add DOY irr start, DOY irr end, and water avalible for restrictions
-    if (IRRIG>MAX_IRR) then
-      IRRIG = MAX_IRR
-    end if
 
-    if (IRRIG<0) then
-      IRRIG = 0
+    ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
+    if (((WAL+(INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF)*DELT)/WAFC) < irr_trig) then
+
+      IRRIG  = IRRIGF *  (        (WAFC-WAL)/DELT - &
+             (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation
+      if (IRRIG>MAX_IRR) then
+        IRRIG = MAX_IRR
+      end if
+
+      if (IRRIG<0) then
+        IRRIG = 0
+      end if
+
+    else
+      IRRIG=0
     end if
 
   else

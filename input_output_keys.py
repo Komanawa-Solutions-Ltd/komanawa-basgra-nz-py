@@ -113,9 +113,12 @@ _param_keys = (  # 99.9% sure that this is in the correct order as defined by se
     'TRANRFCR',  # TRANRFCR,  # -, # Critical water stress for tiller death
     'DELE',  # DELE,  # -, # Litter disappearance due to earthworms
     'DELD',  # DELD,  # -, # Litter disappearance due to decomposition
-    'IRRIGF',  # fraction # fraction of soil capacity to irrigate to!  Relative irrigation rate
+    'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
     'doy_irr_start', #doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  #doy <= doy_irr_end has irrigation applied
+    'irr_trig',  # fraction # fraction of field capacity at or below which irrigation is triggered
+                            # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
+                            # field capacity (e.g. water holding capacity)
 
 
 )
@@ -199,6 +202,7 @@ _out_cols = (
     'GTILV',  # Till. Birth, #  (till m-2 d-1)
     'DTILV',  # Till. Death, #  (till m-2 d-1)
     'FS',  # Site Filling, #  (till leaf-1)
-    'IRRIG',  # mm d-1 Irrigation
+    'IRRIG',  # mm d-1 Irrigation,
+    'WAFC', #mm # Water in non-frozen root zone at field capacity
 )
 

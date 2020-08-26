@@ -75,7 +75,7 @@ logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT ! todo I removed value and it worked... look into this!
 integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) ! todo does this need to be extended??, yes also set in plant.f95
-integer, parameter                                  :: NPAR     = 111 ! NPAR also hardwired in set_params.f90
+integer, parameter                                  :: NPAR     = 112 ! NPAR also hardwired in set_params.f90
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
   integer, parameter                                :: NWEATHER =  8
@@ -91,7 +91,7 @@ integer               :: day, doy, i, year
 
 ! Define state variables
 real :: CLV, CLVD, YIELD, CRES, CRT, CST, CSTUB, DRYSTOR, Fdepth, LAI, LT50, O2, PHEN, AGE
-real :: ROOTD, Sdepth, TILG1, TILG2, TILV, TANAER, WAL, WAPL, WAPS, WAS, WETSTOR
+real :: ROOTD, Sdepth, TILG1, TILG2, TILV, TANAER, WAL, WAPL, WAPS, WAS, WETSTOR, WAFC
 !integer :: VERN
 real :: VERN                                  ! Simon made VERN a continuous function of VERND
 real :: VERND, DVERND, WALS, BASAL
@@ -248,7 +248,7 @@ do day = 1, NDAYS
 
   call FRDRUNIR       (EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
                                                        DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS, &
-                       MAX_IRR, doy, doy_irr_start, doy_irr_end) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
+                       MAX_IRR, doy, doy_irr_start, doy_irr_end, irr_trig, WAFC) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
   call O2status       (O2,ROOTD)                                 ! calculate FO2
 
   call Vernalisation  (DAYL,PHEN,YDAYL,TMMN,TMMX,DAVTMP,Tsurf,VERN,VERND,DVERND) ! Simon calculate VERN,VERND,DVERND
@@ -354,6 +354,7 @@ do day = 1, NDAYS
   y(day,55) = DTILV
   y(day,56) = FS
   y(day,57) = IRRIG
+  y(day,58) = WAFC
 
   ! Update state variables
   AGE     = AGE     + 1.0
