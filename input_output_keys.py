@@ -130,7 +130,7 @@ _matrix_weather_keys = (  # I am 99% sure of the correct order
     'tmin',  # daily min (degrees C)
     'tmax',  # daily max (degrees C)
     'rain',  # sum daily rainfall (mm)
-    'pet',  # Potential evapotransperation (mm), suggest priestly
+    'pet',  # priestly evapotransperation (mm)
     'max_irr',  # maximum irrigation available (mm/d)
 )
 
