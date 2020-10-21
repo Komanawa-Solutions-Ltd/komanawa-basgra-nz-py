@@ -24,7 +24,7 @@ _outvars = (
 )
 
 
-def plot_multiple_results(data, outdir=None, out_vars=_outvars):
+def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10,8)):
     """
     plot multiple basgra results against eachother
     :param data: dictionary of key: outputs of run_basgra()
@@ -47,7 +47,7 @@ def plot_multiple_results(data, outdir=None, out_vars=_outvars):
     figs = {}
 
     for v in out_vars:
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=fig_size)
         fig.autofmt_xdate()
         ax.set_title(v)
         figs[v] = ax
