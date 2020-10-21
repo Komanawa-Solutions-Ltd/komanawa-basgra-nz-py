@@ -27,7 +27,7 @@ _max_weather_size = 36600
 
 
 def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
-                  dll_path=_libpath):
+                  dll_path=_libpath): #todo add both modes of weather data, and a kwarg here
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
@@ -62,7 +62,8 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     # get variables into right python types
     params = np.array([params[e] for e in _param_keys]).astype(float)
     matrix_weather = matrix_weather.values.astype(float)
-    days_harvest = days_harvest.values
+    days_harvest = days_harvest.values.astype(np.int32)
+
 
     # manage weather size,
     weather_size = len(matrix_weather)
