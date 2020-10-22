@@ -8,6 +8,40 @@ import numpy as np
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 
+def establish_peyman_input():
+    # use the scott farm so that it doesn't need irrigation
+    # time period [2010 - 2013)
+
+    # load weather data
+    #todo pulled data from niwa: "M:\Shared drives\SLMACC_2020\pasture_growth_modelling\hamilton_ruakura_ews2010-2013.csv"
+    #todo need to format this correctly and calculate averages
+
+    # load harvest data from Simon woodward's paper
+    harvest_nm = 'harvest_Scott_0.txt'
+    col=  1 + 8 * (1)
+
+    days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
+                               delim_whitespace=True,
+                               names=['year', 'doy', 'percent_harvest']
+                               ).astype(int)  # floor matches what simon did.
+
+    days_harvest = days_harvest.loc[(days_harvest.year >= 2010) & (days_harvest.year < 2013)]
+
+    # load parameters from simon woodward's paper
+    params = pd.read_csv(os.path.join(test_dir, 'BASGRA_parModes.txt'),
+                         delim_whitespace=True, index_col=0).iloc[:, col]
+
+    # add in my new values
+    params.loc['IRRIGF'] = 0
+    params.loc['doy_irr_start'] = 300
+    params.loc['doy_irr_end'] = 90
+    params.loc['irr_trig'] = 0
+
+    params = params.to_dict()
+    raise NotImplementedError
+
+    return params, matrix_weather, days_harvest
+
 
 def establish_org_input(site='scott'):
     if site == 'scott':
