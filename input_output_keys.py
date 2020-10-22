@@ -3,7 +3,7 @@
  Created: 14/08/2020 8:53 AM
  """
 
-_param_keys = (  # 99.9% sure that this is in the correct order as defined by set_params.f95
+_param_keys = (
     # PARAMETER   # Name,  # units   #  Description
     'LOG10CLVI',  # CLVI,  # gC m-2, # Initial value of leaves
     'LOG10CRESI',  # CRESI,  # gC m-2, # Initial value of reserves
@@ -126,7 +126,8 @@ _param_keys = (  # 99.9% sure that this is in the correct order as defined by se
 
 )
 
-_matrix_weather_keys = (  # I am 99% sure of the correct order
+
+_matrix_weather_keys_pet = (
     'year',  # e.g. 2002
     'doy',  # day of year 1 - 356 or 366 for leap years
     'radn',  # daily solar radiation (MJ/m2)
@@ -134,6 +135,18 @@ _matrix_weather_keys = (  # I am 99% sure of the correct order
     'tmax',  # daily max (degrees C)
     'rain',  # sum daily rainfall (mm)
     'pet',  # priestly evapotransperation (mm)
+    'max_irr',  # maximum irrigation available (mm/d)
+)
+
+_matrix_weather_keys_peyman = (
+    'year',  # e.g. 2002
+    'doy',   # day of year 1 - 356 or 366 for leap years
+    'radn',  # daily solar radiation (MJ/m2)
+    'tmin',  # daily min (degrees C)
+    'tmax',  # daily max (degrees C)
+    'vpa',   # vapour pressure (kPa)
+    'rain',  # sum daily rainfall (mm/day)
+    'wind',  # mean wind speed m/s at 2m
     'max_irr',  # maximum irrigation available (mm/d)
 )
 
@@ -241,7 +254,7 @@ _site_param_keys = (
     # field capacity (e.g. water holding capacity)
 
 )
-_plant_param_keys = (  # 99.9% sure that this is in the correct order as defined by set_params.f95
+_plant_param_keys = (
     # PARAMETER   # Name,  # units   #  Description
     'LOG10CLVI',  # CLVI,  # gC m-2, # Initial value of leaves
     'LOG10CRESI',  # CRESI,  # gC m-2, # Initial value of reserves

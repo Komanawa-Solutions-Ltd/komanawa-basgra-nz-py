@@ -8,7 +8,6 @@ implicit none
 real      :: pa(112) ! Note: NPAR is also hardwired in BASGRA.f90
 
 ! a script checks that these variable names match what is expected in the parameter.txt file (Simon)
-!TODO ADD doy_irr_end, doy_irr_start, and IRRIGF
 ! Initial values
 LOG10CLVI  = pa(1)
 LOG10CRESI = pa(2)

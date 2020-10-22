@@ -5,7 +5,7 @@
 from basgra_python import run_basgra_nz
 from check_basgra_python.support_for_tests import establish_org_input
 from check_basgra_python.support_for_tests import get_lincoln_broadfield, get_woodward_weather
-from input_output_keys import _matrix_weather_keys, _out_cols
+from input_output_keys import _matrix_weather_keys_pet, _out_cols
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
@@ -51,7 +51,7 @@ def run_nonirr_lincoln():
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = 0  # no irrigation
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -67,7 +67,7 @@ def run_nonirr_lincoln_low_basil(IBASAL):
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = 0  # no irrigation
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -86,7 +86,7 @@ def run_irr_lincoln():
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 50
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1  # irrigation to 100% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -103,7 +103,7 @@ def run_irr_lincoln_half_fc():
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 15
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1  # irrigation to 100% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -121,7 +121,7 @@ def run_irr60_lincoln():
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = .60  # irrigation of 60% of what is needed to get to field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -137,8 +137,8 @@ def run_irr_lincoln_water_short():
     params, matrix_weather, days_harvest = establish_org_input('lincoln')
 
     matrix_weather = get_lincoln_broadfield()
-    matrix_weather.loc[:, 'max_irr'] = 5  # todo is this a good amount?
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather.loc[:, 'max_irr'] = 5  # is this a good amount?
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = .90  # irrigation to 90% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -155,7 +155,7 @@ def run_irr_lincoln_day_short():
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = .90  # irrigation to 90% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -235,5 +235,4 @@ if __name__ == '__main__':
           # this happens because the field trial was essentially over, there was no more irrigation in woodwards time series in summer of 2017-2018
           # and no harvest dates after sept 2017.
 
-    # todo investigate
     # for some reason runoff is always 0... I wonder if runoff is always negative?, this could be a key flaw, or do we prefer this as it is more likely to be pooling....

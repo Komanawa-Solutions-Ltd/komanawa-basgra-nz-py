@@ -73,8 +73,8 @@ implicit none
 integer(kind = c_int), intent(in)            :: NDHARV
 logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
-integer(kind = c_int), intent(in)            :: NOUT ! todo I removed value and it worked... look into this!
-integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) ! todo does this need to be extended??, yes also set in plant.f95
+integer(kind = c_int), intent(in)            :: NOUT
+integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) Matt H added ndharv to make it undefined by size
 integer, parameter                                  :: NPAR     = 112 ! NPAR also hardwired in set_params.f90
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen

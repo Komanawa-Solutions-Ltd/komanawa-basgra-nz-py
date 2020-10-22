@@ -52,4 +52,6 @@ Irrigation modelling was developed to answer questions about pasture growth rate
         * irrigation is applied at a rate = max(IRRIGF* amount of water needed to fill to field capacity, max_irr on the day)  
     
 To run the model in the original (no irrigation fashion) set both max_irr and irr_trig to zero.
-This modification includes bug fixes that allowed irrigation to be negative.    
+This modification includes bug fixes that allowed irrigation to be negative.
+
+#todo write up full description of changes here    

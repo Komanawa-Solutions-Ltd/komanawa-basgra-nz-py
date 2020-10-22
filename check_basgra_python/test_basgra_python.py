@@ -6,7 +6,7 @@ import os
 import numpy as np
 import pandas as pd
 from basgra_python import run_basgra_nz
-from input_output_keys import _matrix_weather_keys
+from input_output_keys import _matrix_weather_keys_pet, _matrix_weather_keys_peyman
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
     test_dir
 
@@ -44,7 +44,7 @@ def test_irrigation_trigger():
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 15
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1  # irrigation to 100% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -63,7 +63,7 @@ def test_irrigation_fraction():
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = .60  # irrigation of 60% of what is needed to get to field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -82,7 +82,7 @@ def test_water_short():
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 5
     matrix_weather.loc[matrix_weather.index > '2015-08-01', 'max_irr'] = 15
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = .90  # irrigation to 90% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -101,7 +101,7 @@ def test_short_season():
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys]
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
 
     params['IRRIGF'] = .90  # irrigation to 90% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -114,7 +114,8 @@ def test_short_season():
     _output_checks(out, correct_out)
 
 
-# todo make sure irrigation is documented
+#todo write a test for the peyman equation weather
+
 # write a description in the readme file
 
 
