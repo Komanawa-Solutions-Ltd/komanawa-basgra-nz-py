@@ -75,12 +75,12 @@ logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT
 integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) Matt H added ndharv to make it undefined by size
-integer, parameter                                  :: NPAR     = 112 ! NPAR also hardwired in set_params.f90
+integer, parameter                                  :: NPAR     = 111 ! NPAR also hardwired in set_params.f90
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
-  integer, parameter                                :: NWEATHER =  8
+  integer, parameter                                :: NWEATHER =  10
 #else
-  integer, parameter                                :: NWEATHER =  9
+  integer, parameter                                :: NWEATHER =  11
 #endif
 real(kind = c_double), intent(in), dimension(NPAR)              :: PARAMS
 real(kind = c_double), intent(in), dimension(NMAXDAYS,NWEATHER) :: MATRIX_WEATHER
@@ -99,7 +99,7 @@ real :: VERND, DVERND, WALS, BASAL
 ! Define intermediate and rate variables
 real :: DeHardRate, DLAI, DLV, DLVD, DPHEN, DRAIN, DRT, DSTUB, dTANAER, DTILV, EVAP, EXPLOR
 real :: Frate, FREEZEL, FREEZEPL, GLAI, GLV, GPHEN, GRES, GRT, GST, GSTUB, GTILV, HardRate
-real :: HARVFR, HARVFRIN, HARVLA, HARVLV, HARVLVD, HARVPH, HARVRE, HARVST, HARVTILG2, INFIL, IRRIG, O2IN
+real :: HARVFR, HARVFRIN, HARVLA, HARVLV, HARVLVD, HARVPH, HARVRE, HARVST, HARVTILG2, INFIL, IRRIG, IRRIG_DEM, O2IN
 real :: O2OUT, PackMelt, poolDrain, poolInfil, Psnow, reFreeze, RGRTV, RDRHARV
 real :: RGRTVG1, RROOTD, RUNOFF, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN, Wremain, SP
 integer :: HARV
@@ -119,11 +119,15 @@ TMMXI  = MATRIX_WEATHER(:,5)
   RAINI = MATRIX_WEATHER(:,6)
   PETI  = MATRIX_WEATHER(:,7)
   MAX_IRRI = MATRIX_WEATHER(:,8)
+  IRR_TRIGI = MATRIX_WEATHER(:,9)
+  IRR_TARGI = MATRIX_WEATHER(:,10)
 #else
   VPI   = MATRIX_WEATHER(:,6)
   RAINI = MATRIX_WEATHER(:,7)
   WNI   = MATRIX_WEATHER(:,8)
   MAX_IRRI = MATRIX_WEATHER(:,9)
+  IRR_TRIGI = MATRIX_WEATHER(:,10)
+  IRR_TARGI = MATRIX_WEATHER(:,11)
 #endif
 
 if (VERBOSE) then
@@ -247,8 +251,9 @@ do day = 1, NDAYS
   call EVAPTRTRF      (Fdepth,PEVAP,PTRAN,CRT,ROOTD,WAL,WCLM,WCL,EVAP,TRAN)! calculate EVAP,TRAN,TRANRF
 
   call FRDRUNIR       (EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
-                                                       DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS, &
-                       MAX_IRR, doy, doy_irr_start, doy_irr_end, irr_trig, WAFC) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
+                                                       DRAIN,FREEZEL,IRRIG, IRRIG_DEM, RUNOFF,THAWS, &
+                       MAX_IRR, doy, doy_irr_start, doy_irr_end, IRR_TRIG, IRR_TARG, &
+                       WAFC) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
   call O2status       (O2,ROOTD)                                 ! calculate FO2
 
   call Vernalisation  (DAYL,PHEN,YDAYL,TMMN,TMMX,DAVTMP,Tsurf,VERN,VERND,DVERND) ! Simon calculate VERN,VERND,DVERND
@@ -355,6 +360,9 @@ do day = 1, NDAYS
   y(day,56) = FS
   y(day,57) = IRRIG
   y(day,58) = WAFC
+  y(day,59) = IRR_TARG
+  y(day,60) = IRR_TRIG
+  y(day,61) = IRRIG_DEM
 
   ! Update state variables
   AGE     = AGE     + 1.0

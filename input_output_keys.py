@@ -120,12 +120,8 @@ _param_keys = (
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
-    'irr_trig',  # fraction # fraction of field capacity at or below which irrigation is triggered
-    # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
-    # field capacity (e.g. water holding capacity)
 
 )
-
 
 _matrix_weather_keys_pet = (
     'year',  # e.g. 2002
@@ -136,18 +132,26 @@ _matrix_weather_keys_pet = (
     'rain',  # sum daily rainfall (mm)
     'pet',  # priestly evapotransperation (mm)
     'max_irr',  # maximum irrigation available (mm/d)
+    'irr_trig',  # fraction of field capacity at or below which irrigation is triggered (fraction 0-1)
+    # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
+    # field capacity (e.g. water holding capacity)
+    'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
 )
 
 _matrix_weather_keys_peyman = (
     'year',  # e.g. 2002
-    'doy',   # day of year 1 - 356 or 366 for leap years
+    'doy',  # day of year 1 - 356 or 366 for leap years
     'radn',  # daily solar radiation (MJ/m2)
     'tmin',  # daily min (degrees C)
     'tmax',  # daily max (degrees C)
-    'vpa',   # vapour pressure (kPa)
+    'vpa',  # vapour pressure (kPa)
     'rain',  # sum daily rainfall (mm/day)
     'wind',  # mean wind speed m/s at 2m
     'max_irr',  # maximum irrigation available (mm/d)
+    'irr_trig',  # fraction of field capacity at or below which irrigation is triggered (fraction 0-1)
+    # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
+    # field capacity (e.g. water holding capacity)
+    'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
 )
 
 _days_harvest_keys = (
@@ -157,7 +161,6 @@ _days_harvest_keys = (
     'percent_harvest',  # percent of harvest as an integer 0-100,
 
 )
-
 
 _out_cols = (
     # varname, # shortname, # units
@@ -221,6 +224,9 @@ _out_cols = (
     'FS',  # Site Filling, #  (till leaf-1)
     'IRRIG',  # mm d-1 Irrigation,
     'WAFC',  # mm # Water in non-frozen root zone at field capacity
+    'IRR_TARG',  # irrigation Target (fraction of field capacity) to fill to, also an input variable
+    'IRR_TRIG',  # irrigation trigger (fraction of field capacity at which to start irrigating
+    'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
 )
 
 _site_param_keys = (
@@ -249,9 +255,6 @@ _site_param_keys = (
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
-    'irr_trig',  # fraction # fraction of field capacity at or below which irrigation is triggered
-    # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
-    # field capacity (e.g. water holding capacity)
 
 )
 _plant_param_keys = (

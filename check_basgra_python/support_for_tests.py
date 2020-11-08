@@ -61,7 +61,6 @@ def establish_org_input(site='scott'):
     params.loc['IRRIGF'] = 0
     params.loc['doy_irr_start'] = 300
     params.loc['doy_irr_end'] = 90
-    params.loc['irr_trig'] = 0
 
     params = params.to_dict()
 
@@ -83,6 +82,9 @@ def establish_org_input(site='scott'):
     matrix_weather = matrix_weather.loc[idx].reset_index(drop=True)
 
     matrix_weather.loc[:, 'max_irr'] = 10.
+    matrix_weather.loc[:, 'irr_trig'] = 0
+    matrix_weather.loc[:, 'irr_targ'] = 1
+
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,

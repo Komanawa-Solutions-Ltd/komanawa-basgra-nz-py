@@ -45,7 +45,8 @@ implicit none
   real       :: IRRIGF                   ! Relative irrigation rate
   integer    :: doy_irr_start            !doy>=doy_irr_start has irrigation applied if needed
   integer    :: doy_irr_end              ! doy <= doy_irr_end has irrigation applied
-  real       :: irr_trig ! fraction of soil water holding capcity below which irrigation is triggered
+  real       :: IRR_TRIG ! irrigation trigger, fraction of field capacity to start irrigating at
+  real       :: IRR_TARG ! irrigation target, fraction of field capacity to fill to
 
 ! Mathematical constants
   real, parameter       :: pi   = 3.141592653589793
