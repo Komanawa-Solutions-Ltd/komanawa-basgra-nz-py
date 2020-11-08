@@ -151,13 +151,16 @@ def test_pet_calculation():
     print('testing pet calculation')
     params, matrix_weather, days_harvest = establish_peyman_input()
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=False)
-    correct_out = None  # todo create, check against scott farm run, and then include here
+    correct_out = pd.read_csv(os.path.join(test_dir, ''),
+                              index_col=0)  # todo check against scott farm run, and then include here
+    _output_checks(out, correct_out)
 
 
 # todo write a description in the readme file
 
 
 if __name__ == '__main__':
+    test_pet_calculation()
     test_org_basgra_nz()
     test_irrigation_trigger()
     test_irrigation_fraction()
@@ -165,4 +168,4 @@ if __name__ == '__main__':
     test_short_season()
     test_variable_irr_trig_targ()
 
-    print('all tests passed')
+    print('\n\nall tests passed')

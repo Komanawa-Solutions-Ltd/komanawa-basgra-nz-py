@@ -5,20 +5,66 @@
 import pandas as pd
 import os
 import numpy as np
+from supporting_functions.conversions import convert_RH_vpa
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
+
 
 def establish_peyman_input():
     # use the scott farm so that it doesn't need irrigation
     # time period [2010 - 2013)
 
     # load weather data
-    #todo pulled data from niwa: "M:\Shared drives\SLMACC_2020\pasture_growth_modelling\hamilton_ruakura_ews2010-2013.csv"
-    #todo need to format this correctly and calculate averages
+    # todo confirm the pet is being calculated reasonably correctly!
+    weather_path = os.path.join(test_dir, 'hamilton_ruakura_ews2010-2013_{}.csv')
+
+    rain = pd.read_csv(weather_path.format('rain')).loc[:, ['year',
+                                                                  'doy',
+                                                                  'rain']].set_index(['year', 'doy'])
+
+    temp = pd.read_csv(weather_path.format('temp')).loc[:, ['year',
+                                                                  'doy',
+                                                                  'tmax', 'tmin']].set_index(['year', 'doy'])
+
+    rad = pd.read_csv(weather_path.format('rad')).loc[:, ['year',
+                                                                'doy',
+                                                                'radn']].set_index(['year', 'doy'])
+
+    wind = pd.read_csv(weather_path.format('wind')).loc[:, ['year',
+                                                                  'doy',
+                                                                  'wind']].set_index(['year', 'doy'])
+
+    rh = pd.read_csv(weather_path.format('rh')).loc[:, ['year',
+                                                              'doy',
+                                                              'rh']]
+    rh.loc[:, 'rh'] = pd.to_numeric(rh.rh, errors='coerce')
+    rh = rh.groupby(['year', 'doy']).mean()
+
+    dates = pd.Series(pd.date_range('2010-01-01', '2012-12-31'))
+    matrix_weather = pd.DataFrame({'year': dates.dt.year,
+                                   'doy': dates.dt.dayofyear,
+                                   'to_delete': 1}).set_index(['year', 'doy'])
+
+    matrix_weather = pd.merge(matrix_weather, temp, how='outer', left_index=True, right_index=True)
+    matrix_weather = pd.merge(matrix_weather, rain, how='outer', left_index=True, right_index=True)
+    matrix_weather = pd.merge(matrix_weather, rad, how='outer', left_index=True, right_index=True)
+    matrix_weather = pd.merge(matrix_weather, rh, how='outer', left_index=True, right_index=True)
+    matrix_weather = pd.merge(matrix_weather, wind, how='outer', left_index=True, right_index=True)
+    matrix_weather.loc[:, 'vpa'] = convert_RH_vpa(matrix_weather.loc[:, 'rh'],
+                                                  matrix_weather.loc[:, 'tmin'],
+                                                  matrix_weather.loc[:, 'tmax'])
+
+    matrix_weather.drop(columns=['rh', 'to_delete'], inplace=True)
+    matrix_weather = matrix_weather.fillna(method='ffill')
+    matrix_weather.loc[:, 'max_irr'] = 10.
+    matrix_weather.loc[:, 'irr_trig'] = 0
+    matrix_weather.loc[:, 'irr_targ'] = 1
+    matrix_weather.reset_index(inplace=True)
+
 
     # load harvest data from Simon woodward's paper
     harvest_nm = 'harvest_Scott_0.txt'
-    col=  1 + 8 * (1)
+    col = 1 + 8 * (1)
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,
@@ -35,27 +81,25 @@ def establish_peyman_input():
     params.loc['IRRIGF'] = 0
     params.loc['doy_irr_start'] = 300
     params.loc['doy_irr_end'] = 90
-    params.loc['irr_trig'] = 0
 
     params = params.to_dict()
-    raise NotImplementedError
 
     return params, matrix_weather, days_harvest
 
 
 def establish_org_input(site='scott'):
     if site == 'scott':
-        harvest_nm= 'harvest_Scott_0.txt'
-        weather_nm='weather_Scott.txt'
-        col=  1 + 8 * (1)
+        harvest_nm = 'harvest_Scott_0.txt'
+        weather_nm = 'weather_Scott.txt'
+        col = 1 + 8 * (1)
     elif site == 'lincoln':
-        harvest_nm='harvest_Lincoln_0.txt'
-        weather_nm='weather_Lincoln.txt'
-        col=1 + 8*(3-1) # 99% sure this is lincoln
+        harvest_nm = 'harvest_Lincoln_0.txt'
+        weather_nm = 'weather_Lincoln.txt'
+        col = 1 + 8 * (3 - 1)
     else:
         raise ValueError('unexpected site')
     params = pd.read_csv(os.path.join(test_dir, 'BASGRA_parModes.txt'),
-                         delim_whitespace=True, index_col=0).iloc[:, col]  # 99.9% sure this should fix the one index problem in R, check
+                         delim_whitespace=True, index_col=0).iloc[:, col]
 
     # add in my new values
     params.loc['IRRIGF'] = 0
@@ -85,7 +129,6 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
 
-
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,
                                names=['year', 'doy', 'percent_harvest']
@@ -102,8 +145,9 @@ def get_org_correct_values():
     sample_data = pd.read_csv(sample_output_path, index_col=0).astype(float)
 
     # add in new features of data
-    sample_data.loc[:,'IRRIG'] = 0 # new data, check
+    sample_data.loc[:, 'IRRIG'] = 0  # new data, check
     return sample_data
+
 
 def get_woodward_weather():
     matrix_weather = pd.read_csv(os.path.join(test_dir, 'weather_Lincoln.txt'),
@@ -118,9 +162,9 @@ def get_woodward_weather():
                                         'pet'])
     matrix_weather = matrix_weather.loc[matrix_weather.year >= 2010]
     matrix_weather = matrix_weather.loc[matrix_weather.year < 2018]
-    strs = ['{}-{:03d}'.format(e,f) for e,f in matrix_weather[['year','doy']].itertuples(False, None)]
-    matrix_weather.loc[:,'date'] = pd.to_datetime(strs,format='%Y-%j')
-    matrix_weather.set_index('date',inplace=True)
+    strs = ['{}-{:03d}'.format(e, f) for e, f in matrix_weather[['year', 'doy']].itertuples(False, None)]
+    matrix_weather.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
+    matrix_weather.set_index('date', inplace=True)
     matrix_weather = matrix_weather.loc[matrix_weather.index > '2011-08-01']
     return matrix_weather
 
@@ -149,24 +193,27 @@ def get_lincoln_broadfield():
     year = temp.year.values
     doy = temp.dayofyear.values
     outdata = pd.DataFrame({'year': year, 'doy': doy}, )
-    outdata.set_index(['year','doy'],inplace=True)
+    outdata.set_index(['year', 'doy'], inplace=True)
 
     for k, (start, stop) in line_breaks.items():
-        temp = pd.read_csv(path, names=cols[k], skiprows=start - 1, nrows=stop - start+1)
-        temp.loc[:,'year'] = temp.year.astype(int)
-        temp.loc[:,'doy'] = temp.doy.astype(int)
-        temp.set_index(['year','doy'],inplace=True)
-        tkeep = keep_cols[np.in1d(keep_cols,temp.keys())]
+        temp = pd.read_csv(path, names=cols[k], skiprows=start - 1, nrows=stop - start + 1)
+        temp.loc[:, 'year'] = temp.year.astype(int)
+        temp.loc[:, 'doy'] = temp.doy.astype(int)
+        temp.set_index(['year', 'doy'], inplace=True)
+        tkeep = keep_cols[np.in1d(keep_cols, temp.keys())]
         for k2 in tkeep:
-            outdata.loc[temp.index,k2] = temp.loc[:,k2]
+            outdata.loc[temp.index, k2] = temp.loc[:, k2]
 
     outdata = outdata.reset_index()
-    outdata.loc[:,'tmax'] = pd.to_numeric(outdata.loc[:,'tmax'],errors='coerce')
+    outdata.loc[:, 'tmax'] = pd.to_numeric(outdata.loc[:, 'tmax'], errors='coerce')
     outdata.fillna(method='ffill', inplace=True)
-    strs = ['{}-{:03d}'.format(e,f) for e,f in outdata[['year','doy']].itertuples(False, None)]
-    outdata.loc[:,'date'] = pd.to_datetime(strs,format='%Y-%j')
-    outdata.set_index('date',inplace=True)
+    strs = ['{}-{:03d}'.format(e, f) for e, f in outdata[['year', 'doy']].itertuples(False, None)]
+    outdata.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
+    outdata.set_index('date', inplace=True)
     outdata = outdata.loc[outdata.index > '2011-08-01']
 
     return outdata
 
+
+if __name__ == '__main__':
+    establish_peyman_input()
