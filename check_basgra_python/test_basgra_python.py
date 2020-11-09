@@ -12,7 +12,8 @@ from check_basgra_python.support_for_tests import establish_org_input, get_org_c
 
 verbose = False
 
-#todo reset_tests for harvest data, currenlty these will all fall over
+
+# todo reset_tests for harvest data, currenlty these will all fall over
 
 def _output_checks(out, correct_out):
     # check shapes
@@ -150,17 +151,19 @@ def test_variable_irr_trig_targ():
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_variable_irr_trig_targ.csv'), index_col=0)
     _output_checks(out, correct_out)
 
+
 def _compair_pet():
     """just to compaire the pet and peyman results, the are slightly differnt,
     but I think that is due to different methods of calculating PET,"""
     params, matrix_weather, days_harvest = establish_peyman_input(False)
-    peyman_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=False)
+    peyman_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default',
+                               supply_pet=False)
 
     params, matrix_weather, days_harvest = establish_peyman_input(True)
     pet_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=True)
 
     from supporting_functions.plotting import plot_multiple_results
-    plot_multiple_results({'pet':pet_out, 'peyman': peyman_out})
+    plot_multiple_results({'pet': pet_out, 'peyman': peyman_out})
 
 
 def test_pet_calculation():
@@ -168,9 +171,11 @@ def test_pet_calculation():
     params, matrix_weather, days_harvest = establish_peyman_input()
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=False)
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_pet_calculation.csv'),
-                              index_col=0)  # todo check against scott farm run, and then include here
+                              index_col=0)
     _output_checks(out, correct_out)
 
+
+# todo write a test/tests around harvesting
 
 # todo write a description in the readme file
 
