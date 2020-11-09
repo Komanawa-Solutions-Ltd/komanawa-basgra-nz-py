@@ -27,5 +27,31 @@ required packages:
 * pandas
 * numpy.
 
-upcoming plans:
-* include irrigation modelling?
+# new features implemented
+
+## irrigation triggering and demand modelling
+
+a number of inputs have been added to parameters:
+* 'IRRIGF',  # fraction # fraction of irrigation to apply to bring water content up to field capacity
+* 'doy_irr_start', #doy>=doy_irr_start has irrigation applied if needed
+* 'doy_irr_end',  #doy <= doy_irr_end has irrigation applied
+* 'irr_trig',  # fraction # fraction of field capacity at or below which irrigation is triggered e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 field capacity (e.g. water holding capacity)
+
+one new column has been added to matrix_weather:
+* 'max_irr',  # maximum irrigation available (mm/d)
+
+two outputs have been added:
+
+* 'IRRIG':  # mm d-1 Irrigation,
+* 'WAFC': #mm # Water in non-frozen root zone at field capacity
+
+Irrigation modelling was developed to answer questions about pasture growth rates in the face of possible irrigation water restribtions; therefore the irrigation has been implmeented as follows:
+
+* if the day of year is within the irrigation season
+    * if the fraction of soil water (e.g. WAL/WAFC) including the timestep modification to the soil water content (e.g. transpriation, rainfall, etc) are BELOW the threashold
+        * irrigation is applied at a rate = max(IRRIGF* amount of water needed to fill to field capacity, max_irr on the day)  
+    
+To run the model in the original (no irrigation fashion) set both max_irr and irr_trig to zero.
+This modification includes bug fixes that allowed irrigation to be negative.
+
+#todo write up full description of changes here    
