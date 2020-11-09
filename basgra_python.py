@@ -26,32 +26,36 @@ _bat_path = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ\\compile_
 _max_weather_size = 36600
 
 
-# define keys to dfs
-
-
 def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
-                  dll_path='default', supply_pet=True):
+                  dll_path='default', supply_pet=True, auto_harvest=False):
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
     runs the model for the period of the weather data
     :param params: dictionary, see input_output_keys.py for more details
     :param matrix_weather: pandas dataframe of weather data, maximum entries set in _max_weather_size in line 24
-    :param days_harvest: days harvest dataframe no maximum entries
+    :param days_harvest: days harvest dataframe must be same length as matrix_weather entries
                         columns = (
-                              year
-                              doy
-                              percent_harvest
+                        'year',
+                        'doy',
+                        'frac_harv',
+                        'harv_trig',
+                        'harv_targ',
+                        'weed_dm_frac',
                         )
 
     :param verbose: boolean, if True the fortran function prints a number of statements for debugging purposes
     :param dll_path: path to the compiled fortran DLL to use, default was made on windows 10 64 bit
     :param supply_pet: boolean, if True BASGRA expects pet to be supplied, if False the parameters required to
                        calculate pet from the peyman equation are expected
+    :param auto_harvest: boolean, if True then assumes data is formated correctly for auto harvesting, if False, then
+                         assumes data is formatted for manual harvesting (e.g. previous version) and re-formats
+                         internally
     :return:
     """
 
     assert isinstance(supply_pet, bool), 'supply_pet param must be boolean'
+    assert isinstance(auto_harvest, bool), 'auto_harvest param must be boolean'
 
     # define DLL library path
     use_default_lib = False
@@ -68,7 +72,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
         if use_default_lib:
             # try to run the bat file
             print('dll not found, trying to run bat to create DLL:\n{}'.format(_bat_path))
-            p = Popen(os.path.basename(_bat_path), cwd=os.path.dirname(_bat_path),shell=True)
+            p = Popen(os.path.basename(_bat_path), cwd=os.path.dirname(_bat_path), shell=True)
             stdout, stderr = p.communicate()
             print('output of bat:\n{}\n{}'.format(stdout, stderr))
             if not os.path.exists(dll_path):
@@ -85,7 +89,11 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     else:
         _matrix_weather_keys = _matrix_weather_keys_peyman
 
-    _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys)
+    # test the input variables
+    _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
+                        auto_harvest)
+
+
 
     nout = len(_out_cols)
     ndays = len(matrix_weather)
@@ -98,10 +106,14 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     matrix_weather = deepcopy(matrix_weather.loc[:, _matrix_weather_keys])
     days_harvest = deepcopy(days_harvest.loc[:, _days_harvest_keys])
 
+    # translate manual harvest inputs into fortran format
+    if not auto_harvest:
+        days_harvest = _trans_manual_harv(days_harvest, matrix_weather)
+
     # get variables into right python types
     params = np.array([params[e] for e in _param_keys]).astype(float)
     matrix_weather = matrix_weather.values.astype(float)
-    days_harvest = days_harvest.values.astype(np.int32)
+    days_harvest = days_harvest.values.astype(float)
 
     # manage weather size,
     weather_size = len(matrix_weather)
@@ -115,7 +127,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     # arrays # 99% sure this works
     params_p = np.asfortranarray(params).ctypes.data_as(ct.POINTER(ct.c_double))  # 1d array, float
     matrix_weather_p = np.asfortranarray(matrix_weather).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
-    days_harvest_p = np.asfortranarray(days_harvest).ctypes.data_as(ct.POINTER(ct.c_long))  # 2d array, int
+    days_harvest_p = np.asfortranarray(days_harvest).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
     y_p = np.asfortranarray(y).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
 
     # integers
@@ -141,7 +153,16 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     return y_p
 
 
-def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys):
+def _trans_manual_harv(days_harvest, matrix_weather): #todo implement
+    """
+    translates manual harvest data to the format expected by fortran, check the details of the data in here.
+    :return:
+    """
+    raise NotImplementedError
+
+
+def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
+                        auto_harvest, org_auto):
     assert isinstance(verbose, bool), 'verbose must be boolean'
     assert isinstance(params, dict)
     assert set(params.keys()) == set(_param_keys), 'incorrect params keys'
@@ -152,10 +173,18 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert len(matrix_weather) <= _max_weather_size, 'maximum run size is {} days'.format(_max_weather_size)
     assert not matrix_weather.isna().any().any(), 'matrix_weather cannot have na values'
 
-    assert isinstance(days_harvest, pd.DataFrame)
-    assert issubclass(days_harvest.values.dtype.type, np.integer), 'days_harvest must be integers'
-    assert set(days_harvest.keys()) == set(_days_harvest_keys), 'incorrect keys for days_harvest'
-    assert not days_harvest.isna().any().any(), 'days_harvest cannot have na data'
+    if auto_harvest:
+        assert isinstance(days_harvest, pd.DataFrame)
+        assert set(days_harvest.keys()) == set(_days_harvest_keys), 'incorrect keys for days_harvest'
+        assert not days_harvest.isna().any().any(), 'days_harvest cannot have na data'
+        assert len(matrix_weather) == len(
+            days_harvest), 'days_harvest and matrix_weather must be the same length(ndays)'
+    else:
+        raise NotImplementedError
+        #todo set checks for manual harvest inputs, just data length and quantity. checks for making
+        # sense will happend in translate function
+
+
 
 
 if __name__ == '__main__':

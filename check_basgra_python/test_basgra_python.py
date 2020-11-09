@@ -12,6 +12,7 @@ from check_basgra_python.support_for_tests import establish_org_input, get_org_c
 
 verbose = False
 
+#todo reset_tests for harvest data, currenlty these will all fall over
 
 def _output_checks(out, correct_out):
     # check shapes

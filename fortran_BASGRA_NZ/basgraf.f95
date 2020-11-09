@@ -7,7 +7,7 @@ module basgramodule
 
 contains
 
-subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,NDHARV,VERBOSE) bind(C, name = "BASGRA_")
+subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,NDHARV,VERBOSE) bind(C, name = "BASGRA_") ! todo remove ndharv as it is will be equal to ndays
 !-------------------------------------------------------------------------------
 ! This is the BASic GRAss model originally written in MATLAB/Simulink by Marcel
 ! van Oijen, Mats Hoglind, Stig Morten Thorsen and Ad Schapendonk.
@@ -74,8 +74,8 @@ integer(kind = c_int), intent(in)            :: NDHARV
 logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT
-integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) Matt H added ndharv to make it undefined by size
-integer, parameter                                  :: NPAR     = 111 ! NPAR also hardwired in set_params.f90
+integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) Matt H added ndharv to make it undefined by size ! todo major re-jig
+integer, parameter                                  :: NPAR     = 111 ! NPAR also hardwired in set_params.f90 !todo fix for new number of parametesr
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
   integer, parameter                                :: NWEATHER =  10
@@ -144,7 +144,7 @@ if (VERBOSE) then
 endif
 
 
-! Initialise harvest array index
+! Initialise harvest array index !todo
 HARVI   = 1
 do while ( (DAYS_HARVEST(HARVI,1)<YEARI(1)) .or. ((DAYS_HARVEST(HARVI,1)==YEARI(1)).and.(DAYS_HARVEST(HARVI,2)<DOYI(1))) )
   HARVI = HARVI + 1
@@ -211,11 +211,11 @@ do day = 1, NDAYS
   ! Calculate intermediate and rate variables (many variable and parameters are passed implicitly)
   !    SUBROUTINE      INPUTS                          OUTPUTS
 
-  call set_weather_day(day,DRYSTOR,                    year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
-
+  call set_weather_day(day,DRYSTOR, year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
+  !todo create set_harvest_day
   call Harvest        (NDHARV,CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                                                        GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
-                                                       HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV)
+                                                       HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV) !todo modify
   LAI     = LAI     - HARVLA * (1 + RDRHARV)
   CLV     = CLV     - HARVLV * (1 + RDRHARV)
   CLVD    = CLVD    - HARVLVD     + (HARVLV + HARVRE) * RDRHARV
@@ -363,6 +363,7 @@ do day = 1, NDAYS
   y(day,59) = IRR_TARG
   y(day,60) = IRR_TRIG
   y(day,61) = IRRIG_DEM
+  !todo add new output variables
 
   ! Update state variables
   AGE     = AGE     + 1.0

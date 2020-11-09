@@ -18,7 +18,7 @@ real :: ALLOSH, ALLORT, ALLOLV, ALLOST, FS, ALLOFRAC
 contains
 
 ! Calculate Harvest GSTUB,HARVLA,HARVLV,HARVPH,HARVRE,HARVST,HARVTILG2,HARVFR
-! Simon plant processes are now calculated as if harvest did not happen
+! Simon plant processes are now calculated as if harvest did not happen !todo modify
 Subroutine Harvest(NDHARV, CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                              GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
                              HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV)

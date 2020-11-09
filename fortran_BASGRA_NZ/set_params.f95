@@ -122,8 +122,16 @@ TRANRFCR     = pa(106)
 DELE         = pa(107)
 DELD         = pa(108)
 
+! previous site parameters brough out of the model
 IRRIGF       = pa(109)
+!todo bring out parameters in parameters_site
+
+! new irrigation parameters
 doy_irr_start= pa(110)
 doy_irr_end  = pa(111)
+
+! new harvest parameters
+! todo fill out here
+
 return
 end

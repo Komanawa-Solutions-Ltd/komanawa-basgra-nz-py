@@ -117,11 +117,32 @@ _param_keys = (
     'TRANRFCR',  # TRANRFCR,  # -, # Critical water stress for tiller death
     'DELE',  # DELE,  # -, # Litter disappearance due to earthworms
     'DELD',  # DELD,  # -, # Litter disappearance due to decomposition
+
+    # new for irrigation
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
 
+    # new for harvest, certainly parameters
+    'fixed_removal',  # todo  #sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
+
 )
+
+_days_harvest_keys = (  # todo convert to float and completely re-structure
+    'year',  # e.g. 2002
+    'doy',  # day of year 1 - 356 (366 for leap year)
+    'frac_harv', # fraction (0-1) of material above target to harvest to maintain 'backward capabilities' with v2.0.0 # todo re-jigged, not implmented
+    'harv_trig',  # dm above which to initiate harvest #todo new and not implmented
+    'harv_targ',  # dm to harvest to or to remove depending on 'fixed_removal' #todo new and not implmented
+    'weed_dm_frac',  # fraction of dm of ryegrass to attribute to weeds #todo new and not implmented
+
+)
+
+#todo list:
+# bring new parameters into fortran
+# bring modified _days_harvest into fortran
+# modify the harvest process to do what I want
+# define new outputs and bring the new outputs out of fortran
 
 _matrix_weather_keys_pet = (
     'year',  # e.g. 2002
@@ -152,14 +173,6 @@ _matrix_weather_keys_peyman = (
     # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
     # field capacity (e.g. water holding capacity)
     'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
-)
-
-_days_harvest_keys = (
-    # -1 for these seems to set as a null value, to account for the 100 max harvests days
-    'year',  # e.g. 2002
-    'doy',  # day of year 1 - 356 (366 for leap year)
-    'percent_harvest',  # percent of harvest as an integer 0-100,
-
 )
 
 _out_cols = (
@@ -227,7 +240,13 @@ _out_cols = (
     'IRR_TARG',  # irrigation Target (fraction of field capacity) to fill to, also an input variable
     'IRR_TRIG',  # irrigation trigger (fraction of field capacity at which to start irrigating
     'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
+    'RYE_YIELD',  # todo output rye yield NOT IMPLEMENTED
+    'WEED_YIELD',  # todo output weed yeild where yeild = rye yeild + weed yield NOT IMPLEMENTED
+
 )
+
+# todo create correct output order, so that I can re-order the data
+# todo write the memory requirements for size of a maximum run and the size of a minimum run
 
 _site_param_keys = (
     'LAT',  # LAT,  # degN, # Latitude
