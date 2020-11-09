@@ -32,24 +32,28 @@ required packages:
 ## irrigation triggering and demand modelling
 
 a number of inputs have been added to parameters:
-* 'IRRIGF',  # fraction # fraction of irrigation to apply to bring water content up to field capacity
-* 'doy_irr_start', #doy>=doy_irr_start has irrigation applied if needed
+* 'IRRIGF',  # fraction # fraction of irrigation to apply to bring water content up to field capacity, this was previously set within the fortran code
+* 'doy_irr_start', #doy >= doy_irr_start has irrigation applied if needed
 * 'doy_irr_end',  #doy <= doy_irr_end has irrigation applied
-* 'irr_trig',  # fraction # fraction of field capacity at or below which irrigation is triggered e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 field capacity (e.g. water holding capacity)
 
-one new column has been added to matrix_weather:
+new columns has been added to matrix_weather:
 * 'max_irr',  # maximum irrigation available (mm/d)
+* 'irr_trig',  # fraction of field capacity at or below which irrigation is triggered (fraction 0-1) e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 field capacity (e.g. water holding capacity)
+* 'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
 
-two outputs have been added:
+New outputs have been added:
 
 * 'IRRIG':  # mm d-1 Irrigation,
 * 'WAFC': #mm # Water in non-frozen root zone at field capacity
+* 'IRR_TARG',  # irrigation Target (fraction of field capacity) to fill to, also an input variable
+* 'IRR_TRIG',  # irrigation trigger (fraction of field capacity at which to start irrigating
+* 'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
 
 Irrigation modelling was developed to answer questions about pasture growth rates in the face of possible irrigation water restribtions; therefore the irrigation has been implmeented as follows:
 
 * if the day of year is within the irrigation season
-    * if the fraction of soil water (e.g. WAL/WAFC) including the timestep modification to the soil water content (e.g. transpriation, rainfall, etc) are BELOW the threashold
-        * irrigation is applied at a rate = max(IRRIGF* amount of water needed to fill to field capacity, max_irr on the day)  
+    * if the fraction of soil water (e.g. WAL/WAFC) including the timestep modification to the soil water content (e.g. transpriation, rainfall, etc) are BELOW the trigger for that day
+        * irrigation is applied at a rate = max(IRRIGF* amount of water needed to fill to irrigation target * field capacity, max_irr on the day)  
     
 To run the model in the original (no irrigation fashion) set both max_irr and irr_trig to zero.
 This modification includes bug fixes that allowed irrigation to be negative.
