@@ -10,7 +10,7 @@ from supporting_functions.conversions import convert_RH_vpa
 test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 
 
-def establish_peyman_input():
+def establish_peyman_input(return_pet=False):
     # use the scott farm so that it doesn't need irrigation
     # time period [2010 - 2013)
 
@@ -34,6 +34,10 @@ def establish_peyman_input():
                                                                   'doy',
                                                                   'wind']].set_index(['year', 'doy'])
 
+    pet = pd.read_csv(weather_path.format('pet')).loc[:, ['year',
+                                                                  'doy',
+                                                                  'pet']].set_index(['year', 'doy'])
+
     rh = pd.read_csv(weather_path.format('rh')).loc[:, ['year',
                                                               'doy',
                                                               'rh']]
@@ -50,16 +54,22 @@ def establish_peyman_input():
     matrix_weather = pd.merge(matrix_weather, rad, how='outer', left_index=True, right_index=True)
     matrix_weather = pd.merge(matrix_weather, rh, how='outer', left_index=True, right_index=True)
     matrix_weather = pd.merge(matrix_weather, wind, how='outer', left_index=True, right_index=True)
+    matrix_weather = pd.merge(matrix_weather, pet, how='outer', left_index=True, right_index=True)
     matrix_weather.loc[:, 'vpa'] = convert_RH_vpa(matrix_weather.loc[:, 'rh'],
                                                   matrix_weather.loc[:, 'tmin'],
                                                   matrix_weather.loc[:, 'tmax'])
 
-    matrix_weather.drop(columns=['rh', 'to_delete'], inplace=True)
+    if return_pet:
+        matrix_weather.drop(columns=['rh', 'to_delete', 'wind', 'vpa'], inplace=True)
+    else:
+        matrix_weather.drop(columns=['rh', 'to_delete', 'pet'], inplace=True)
     matrix_weather = matrix_weather.fillna(method='ffill')
     matrix_weather.loc[:, 'max_irr'] = 10.
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
     matrix_weather.reset_index(inplace=True)
+
+
 
 
     # load harvest data from Simon woodward's paper

@@ -1,4 +1,4 @@
-﻿Station,Date(NZST),doy,time,Amount,Period(Hrs),Type
+﻿Station,year,doy,time,pet,Period(Hrs),Type
 26117,2010,1,8,5.1,24,T
 26117,2010,2,8,5.7,24,T
 26117,2010,3,8,5.6,24,T

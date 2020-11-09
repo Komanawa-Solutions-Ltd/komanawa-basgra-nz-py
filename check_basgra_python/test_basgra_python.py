@@ -20,8 +20,12 @@ def _output_checks(out, correct_out):
     # check datatypes
     assert issubclass(out.values.dtype.type, np.float), 'outputs of the model should all be floats'
 
+    out = out.values
+    correct_out = correct_out
+    out[np.isnan(out)] = -9999.99999
+    correct_out[np.isnan(correct_out)] = -9999.99999
     # check values match for sample run
-    isclose = np.isclose(out.values, correct_out.values)
+    isclose = np.isclose(out, correct_out)
     asmess = '{} values do not match between the output and correct output with rtol=1e-05, atol=1e-08'.format(
         isclose.sum())
     assert isclose.all(), asmess
@@ -145,13 +149,24 @@ def test_variable_irr_trig_targ():
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_variable_irr_trig_targ.csv'), index_col=0)
     _output_checks(out, correct_out)
 
+def _compair_pet():
+    """just to compaire the pet and peyman results, the are slightly differnt,
+    but I think that is due to different methods of calculating PET,"""
+    params, matrix_weather, days_harvest = establish_peyman_input(False)
+    peyman_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=False)
+
+    params, matrix_weather, days_harvest = establish_peyman_input(True)
+    pet_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=True)
+
+    from supporting_functions.plotting import plot_multiple_results
+    plot_multiple_results({'pet':pet_out, 'peyman': peyman_out})
+
 
 def test_pet_calculation():
-    # todo write a test for the peyman equation weather
     print('testing pet calculation')
     params, matrix_weather, days_harvest = establish_peyman_input()
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=False)
-    correct_out = pd.read_csv(os.path.join(test_dir, ''),
+    correct_out = pd.read_csv(os.path.join(test_dir, 'test_pet_calculation.csv'),
                               index_col=0)  # todo check against scott farm run, and then include here
     _output_checks(out, correct_out)
 
