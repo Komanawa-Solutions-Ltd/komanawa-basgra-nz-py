@@ -54,6 +54,10 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     :return:
     """
     #todo make check to ensure that matrix_weather and days_harvest (post processing do not have gaps)
+    # todo make sure that fixed harvest target is greater than the trigger
+    # todo maker sure that the Harvest fracion is <=1
+    # todo create warning if weed DMFract is higher than 1?
+
     assert isinstance(supply_pet, bool), 'supply_pet param must be boolean'
     assert isinstance(auto_harvest, bool), 'auto_harvest param must be boolean'
 

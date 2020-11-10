@@ -129,7 +129,7 @@ _param_keys = (
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
 
     # new for harvest, certainly parameters
-    'fixed_removal',  #sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
+    'fixed_removal',  # sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
 
 )
 
@@ -144,11 +144,7 @@ _days_harvest_keys = (
 
 )
 
-# todo list:
-# bring new parameters into fortran
-# bring modified _days_harvest into fortran
-# modify the harvest process to do what I want
-# define new outputs and bring the new outputs out of fortran
+# todo check harvest implementation:
 
 _matrix_weather_keys_pet = (
     'year',  # e.g. 2002
@@ -236,7 +232,7 @@ _out_cols = (
     'WCL',  # Eff. Soil Moisture, #  (%)
     'HARVFRIN',  # Harvest Data, #  (-)
     'SLANEW',  # New SLA, #  (m2 gC-1)
-    'YIELD',  # PRG Yield, #  (tDM ha-1)
+    'YIELD',  # PRG Yield, #  (tDM ha-1) sum of YIELD_RYE and YIELD_WEED
     'BASAL',  # Basal Area, #  (%)
     'GTILV',  # Till. Birth, #  (till m-2 d-1)
     'DTILV',  # Till. Death, #  (till m-2 d-1)
@@ -246,8 +242,10 @@ _out_cols = (
     'IRR_TARG',  # irrigation Target (fraction of field capacity) to fill to, also an input variable
     'IRR_TRIG',  # irrigation trigger (fraction of field capacity at which to start irrigating
     'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
-    'RYE_YIELD',  # todo output rye yield NOT IMPLEMENTED
-    'WEED_YIELD',  # todo output weed yeild where yeild = rye yeild + weed yield NOT IMPLEMENTED
+    'RYE_YIELD',  # PRG Yield from rye grass species, #  (tDM ha-1)
+    'WEED_YIELD',  # PRG Yield from weed (other) species, #  (tDM ha-1)
+    'DM_RYE_RM',  # dry matter of Rye species harvested in this time step (kg DM ha-1)
+    'DM_WEED_RM',  # dry matter of weed species harvested in this time step (kg DM ha-1)
 
 )
 
