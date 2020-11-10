@@ -9,10 +9,10 @@ implicit none
   real                  :: LAT            ! Latitude in degrees north
 
 ! Atmospheric conditions
-  real, parameter       :: CO2A   = 350   ! CO2 concentration in atmosphere (ppm) !todo bring out
+  real                  :: CO2A
 
 ! Soil
-  real, parameter       :: DRATE  =  50   ! mm d-1 Maximum soil drainage rate !todo bring out
+  real                  :: DRATE
   real                  :: WCI
   real                  :: FWCAD, FWCWP, FWCFC, FWCWET, WCST, BD
   real                  ::  WCAD,  WCWP,  WCFC,  WCWET
@@ -22,7 +22,7 @@ implicit none
   real, parameter       :: LAMBDAice      = 1.9354e+005  ! J m-1 K-1 d-1 Thermal conductivity of ice
   real                  :: LAMBDAsoil
   real, parameter       :: LatentHeat     = 335000.      ! J kg-1 Latent heat of water fusion
-  real, parameter       :: poolInfilLimit =      0.2     ! m Soil frost depth limit for water infiltration !todo bring out
+  real                  :: poolInfilLimit    ! m Soil frost depth limit for water infiltration
   real                  :: RHOnewSnow, RHOpack
   real, parameter       :: RHOwater       =   1000.      ! kg m-3	Density of water
   real                  :: SWret, SWrf, TmeltFreeze, TrainSnow
@@ -39,15 +39,14 @@ implicit none
   real, parameter       :: WETSTORI = 0.
 
 ! Management: irrigation
-  integer, dimension(3) :: doyHA !todo does this have any usages, if not remove
   real       :: IRRIGF                   ! Relative irrigation rate
   integer    :: doy_irr_start            !doy>=doy_irr_start has irrigation applied if needed
   integer    :: doy_irr_end              ! doy <= doy_irr_end has irrigation applied
   real       :: IRR_TRIG ! irrigation trigger, fraction of field capacity to start irrigating at
   real       :: IRR_TARG ! irrigation target, fraction of field capacity to fill to
 
-! Management: irrigation harvest
-  !todo add the hargest parameters here
+! Management: harvest
+  logical    :: FIXED_REMOVAL
 
 ! Mathematical constants
   real, parameter       :: pi   = 3.141592653589793

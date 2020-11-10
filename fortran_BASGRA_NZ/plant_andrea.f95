@@ -7,7 +7,7 @@ use environment
 implicit none
 
 ! Plant variables
-integer :: NOHARV,HARVI !todo what are these, HARVI can be removed after rejig, Simon removed the NOHARV switch...
+integer :: NOHARV,HARVI
 real :: CRESMX,DAYLGE,FRACTV,GLVSI,GSTSI,LERG,LERV,LUEMXQ,NELLVG,PHENRF,PHOT,RESMOB
 real :: RDLVD, ALLOTOT,GRESSI,GSHSI,GLAISI,SOURCE,SINK1T,CSTAV,TGE
 real :: RDRFROST,RDRT,RDRL,RDRTOX,RESPGRT,RESPGSH,RESPHARD,RESPHARDSI,RESNOR,RLEAF,RplantAer,SLANEW
@@ -18,41 +18,26 @@ real :: ALLOSH, ALLORT, ALLOLV, ALLOST, FS, ALLOFRAC
 contains
 
 ! Calculate Harvest GSTUB,HARVLA,HARVLV,HARVPH,HARVRE,HARVST,HARVTILG2,HARVFR
-! Simon plant processes are now calculated as if harvest did not happen !todo modify and clear commented code
-Subroutine Harvest(day, NDAYS, CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
+! Simon plant processes are now calculated as if harvest did not happen
+Subroutine Harvest(BASAL, CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                              GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
-                             HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, FIXED_REMOVAL)
-  integer :: day
-  integer :: NDAYS
-  integer :: doy,year !todo I think I can delete this if I pass day instead yep
-  integer, dimension(NDAYS,3) :: DAYS_HARVEST     ! Simon added third column (percent leaf removed)
-  real    :: CLV, CRES, CST, CSTUB, CLVD, LAI, PHEN, TILG2, TILG1, TILV
+                             HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV)
+  integer :: doy,year
+  integer, dimension(100,3) :: DAYS_HARVEST     ! Simon added third column (percent leaf removed)
+  real    :: BASAL, CLV, CRES, CST, CSTUB, CLVD, LAI, PHEN, TILG2, TILG1, TILV
   real    :: GSTUB, HARVLV, HARVLVD, HARVLA, HARVRE, HARVTILG2, HARVST, HARVPH
-  real    :: CLAI, HARVFR, TV1, HARVFRIN, RDRHARV, HARVFRST, DIESFRST
-  integer :: HARV
+  real    :: CLAI, HARVFR, TV1, HARVFRIN, RDRHARV, HARVFRST, DIESFRST, DMH
+  integer :: HARV, SAWS
 !  integer :: i
-
-  logical    :: FIXED_REMOVAL
-  real ::  FRAC_HARV
-  real ::  HARV_TRIG
-  real ::  HARV_TARG
-  real ::  WEED_DM_FRAC
-
-  ! set parameters from days_harvest
-  FRAC_HARV = DAYS_HARVEST(day, 3)
-  HARV_TRIG = DAYS_HARVEST(day, 4)
-  HARV_TARG = DAYS_HARVEST(day, 5)
-  WEED_DM_FRAC = DAYS_HARVEST(day, 6)
-
-  !todo modify proces
-  ! todo add output
 
   HARV   = 0
   NOHARV = 1
   HARVFR = 0.0
+  DMH        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40 + CLVD/0.45) * 10.0 / BASAL ! Andrea - calculate total dry matter (rye grass + other cultivars/weeds) to determine whether to perform automated harvest
+
 !  do i=1,100 !
 !    if ( (year==DAYS_HARVEST(i,1)) .and. (doy==DAYS_HARVEST(i,2)) ) then
-    if ( (year==DAYS_HARVEST(HARVI,1)) .and. (doy==DAYS_HARVEST(HARVI,2)) ) then
+      if ( (year==DAYS_HARVEST(HARVI,1)) .and. (doy==DAYS_HARVEST(HARVI,2)) ) then
       HARV   = 1
       NOHARV = 0
       HARVFRIN = DAYS_HARVEST(HARVI,3) / 100.0  ! Simon read in fraction of mass harvested
@@ -66,6 +51,45 @@ Subroutine Harvest(day, NDAYS, CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI
       HARVI  = HARVI + 1 ! advance harvest array index to next event
 	end if
 !  end do
+
+! Andrea - determine season (SAWS - Summer (1), Autumn (2), Winter (3), early Spring (4), late Spring (5))
+if ((doy .ge. 305) .or. (doy < 32)) then
+  SAWS = 1                                        ! Summer
+else if ((doy .ge. 32) .and. (doy < 121)) then
+  SAWS = 2                                        ! Autumn
+else if ((doy .ge. 121) .and. (doy < 182)) then
+  SAWS = 3                                        ! Winter
+else if ((doy .ge. 182) .and. (doy < 244)) then
+  SAWS = 4                                        ! early Spring
+else if ((doy .ge. 244) .and. (doy < 305)) then
+  SAWS = 5                                        ! late Spring
+end if
+
+  if (DAYS_HARVEST(1,1)==-1) then ! Andrea - check harvesting to be automated
+    if ((SAWS == 1) .and. (DMH .ge. 2850)) then ! check season (Summer) and DMH (dry mater for harvest) amount
+      HARV   = 1
+      NOHARV = 0
+      HARVFRIN =(DMH-1500) / DMH ! Andrea - set harvest fraction to remove down to 1500kg DM
+      else if ((SAWS == 2) .and. (DMH .ge. 2850)) then ! Autumn
+        HARV   = 1
+        NOHARV = 0
+        HARVFRIN =(DMH-1500) / DMH
+      else if ((SAWS == 3) .and. (DMH .ge. 2850)) then ! Winter
+        HARV   = 1
+        NOHARV = 0
+        HARVFRIN =(DMH-1500) / DMH
+      else if ((SAWS == 4) .and. (DMH .ge. 2850)) then ! early Spring
+        HARV   = 1
+        NOHARV = 0
+        HARVFRIN =(DMH-1500) / DMH
+      else if ((SAWS == 5) .and. (DMH .ge. 2850)) then ! late Spring
+        HARV   = 1
+        NOHARV = 0
+        HARVFRIN =(DMH-1500) / DMH
+      end if
+    HARVFR = HARVFRIN  ! Simon just use entered fraction for leaf. Otherwise dead can have too much effect.
+      HARVI  = HARVI + 1
+	end if
 
   FRACTV = (TILV + TILG1)/(TILG2 + TILG1 + TILV) ! Fraction of non-elongating tillers (Simon included TILG1)
   ! (1-FRACTV) * CLAI = LAI on elongating tillers, assumed to all be harvested
@@ -106,6 +130,7 @@ Subroutine Harvest(day, NDAYS, CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI
 !  HARVTILG1   = 0.
   HARVTILG2 = (HARV   * TILG2       ) / DELT           ! TILG2 zeroed after each harvest
 end Subroutine Harvest
+
 
 ! Calculate RESNOR (relative amount of CRES)
 Subroutine Biomass(AGE,CLV,CRES,CST,CSTUB)

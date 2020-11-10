@@ -53,7 +53,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
                          internally
     :return:
     """
-
+    #todo make check to ensure that matrix_weather and days_harvest (post processing do not have gaps)
     assert isinstance(supply_pet, bool), 'supply_pet param must be boolean'
     assert isinstance(auto_harvest, bool), 'auto_harvest param must be boolean'
 

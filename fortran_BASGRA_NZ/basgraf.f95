@@ -7,7 +7,7 @@ module basgramodule
 
 contains
 
-subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,NDHARV,VERBOSE) bind(C, name = "BASGRA_") ! todo remove ndharv as it is will be equal to ndays
+subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,VERBOSE) bind(C, name = "BASGRA_")
 !-------------------------------------------------------------------------------
 ! This is the BASic GRAss model originally written in MATLAB/Simulink by Marcel
 ! van Oijen, Mats Hoglind, Stig Morten Thorsen and Ad Schapendonk.
@@ -47,14 +47,13 @@ subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,NDHARV,VERBOSE
   !  switching between modes requires different compiliations, to set to mode 2, -Dweathergen, must be called while
   !  compiling (e.g.gfortran -x f95-cpp-input -Dweathergen -O3 -c -fdefault-real-8 ....)
 
-  !DAYS_HARVEST: int, The harvest dates, size is (NDHARV,3) the columns are
+  !DAYS_HARVEST: int, The harvest dates, size is (NDHARV,3) the columns are !todo update this documentation
   !              1: year
   !              2: the day of year(1-365 or 366(for leap years))
   !              3: the percent harvest (e.g. 50 = 50%)
   !NDAYS: int, the number of days to simulate, this should match the number of days of real data in MATRIX_WEATHER
   !NOUT: int, the number of output variables, at present this should be 56
   !y: double, the output array, initialised as zeros
-  !NDHARV: int, the number of harvest days
   !VERBOSE: boolean, if True print a number of debugging information
 
  !-------------------------------------------------------------------------------
@@ -70,12 +69,11 @@ implicit none
 
 ! Define model inputs
 
-integer(kind = c_int), intent(in)            :: NDHARV
 logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT
-integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) Matt H added ndharv to make it undefined by size ! todo major re-jig
-integer, parameter                                  :: NPAR     = 111 ! NPAR also hardwired in set_params.f90 !todo fix for new number of parametesr
+real(kind = c_double), intent(in), dimension(NDAYS,6) :: DAYS_HARVEST
+integer, parameter                                  :: NPAR     = 115 ! NPAR also hardwired in set_params.f90
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
   integer, parameter                                :: NWEATHER =  10
@@ -130,7 +128,7 @@ TMMXI  = MATRIX_WEATHER(:,5)
   IRR_TARGI = MATRIX_WEATHER(:,11)
 #endif
 
-if (VERBOSE) then
+if (VERBOSE) then !todo these checks may not make sence any more
   print*, 'following are a number of values to confirm correct read'
   print*, 'number of days in run', NDAYS
   print*, 'number of output parameters', NOUT
@@ -144,7 +142,7 @@ if (VERBOSE) then
 endif
 
 
-! Initialise harvest array index !todo
+! Initialise harvest array index !todo I think I can just delete this
 HARVI   = 1
 do while ( (DAYS_HARVEST(HARVI,1)<YEARI(1)) .or. ((DAYS_HARVEST(HARVI,1)==YEARI(1)).and.(DAYS_HARVEST(HARVI,2)<DOYI(1))) )
   HARVI = HARVI + 1
@@ -212,10 +210,11 @@ do day = 1, NDAYS
   !    SUBROUTINE      INPUTS                          OUTPUTS
 
   call set_weather_day(day,DRYSTOR, year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
-  !todo create set_harvest_day
-  call Harvest        (NDHARV,CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
+  call Harvest (day, NDAYS,CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                                                        GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
-                                                       HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV) !todo modify
+                                                       HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, FIXED_REMOVAL) !todo modify
+
+
   LAI     = LAI     - HARVLA * (1 + RDRHARV)
   CLV     = CLV     - HARVLV * (1 + RDRHARV)
   CLVD    = CLVD    - HARVLVD     + (HARVLV + HARVRE) * RDRHARV

@@ -118,27 +118,33 @@ _param_keys = (
     'DELE',  # DELE,  # -, # Litter disappearance due to earthworms
     'DELD',  # DELD,  # -, # Litter disappearance due to decomposition
 
-    # new for irrigation
+    # site parameters brought out
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
+    'DRATE',  # woodward set to 50   ! mm d-1 Maximum soil drainage rate !
+    'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
+    'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
+
+    # new for irrigation
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
 
     # new for harvest, certainly parameters
-    'fixed_removal',  # todo  #sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
+    'fixed_removal',  #sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
 
 )
 
-_days_harvest_keys = (  # todo convert to float and completely re-structure
+_days_harvest_keys = (
     'year',  # e.g. 2002
     'doy',  # day of year 1 - 356 (366 for leap year)
-    'frac_harv', # fraction (0-1) of material above target to harvest to maintain 'backward capabilities' with v2.0.0 # todo re-jigged, not implmented
-    'harv_trig',  # dm above which to initiate harvest #todo new and not implmented
-    'harv_targ',  # dm to harvest to or to remove depending on 'fixed_removal' #todo new and not implmented
-    'weed_dm_frac',  # fraction of dm of ryegrass to attribute to weeds #todo new and not implmented
+    'frac_harv',
+    # fraction (0-1) of material above target to harvest to maintain 'backward capabilities' with v2.0.0
+    'harv_trig',  # dm above which to initiate harvest
+    'harv_targ',  # dm to harvest to or to remove depending on 'fixed_removal'
+    'weed_dm_frac',  # fraction of dm of ryegrass to attribute to weeds
 
 )
 
-#todo list:
+# todo list:
 # bring new parameters into fortran
 # bring modified _days_harvest into fortran
 # modify the harvest process to do what I want
