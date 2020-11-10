@@ -15,7 +15,6 @@ def establish_peyman_input(return_pet=False):
     # time period [2010 - 2013)
 
     # load weather data
-    # todo confirm the pet is being calculated reasonably correctly!
     weather_path = os.path.join(test_dir, 'hamilton_ruakura_ews2010-2013_{}.csv')
 
     rain = pd.read_csv(weather_path.format('rain')).loc[:, ['year',
