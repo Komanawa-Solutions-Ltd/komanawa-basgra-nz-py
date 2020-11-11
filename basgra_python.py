@@ -132,13 +132,12 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     ndays_p = ct.pointer(ct.c_int(ndays))
     nout_p = ct.pointer(ct.c_int(nout))
     verb_p = ct.pointer(ct.c_bool(verbose))
-    ndharv_p = ct.pointer(ct.c_int(len(days_harvest)))
 
     # load DLL
     for_basgra = ct.CDLL(dll_path)
 
     # run BASGRA
-    for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, y_p, ndharv_p, verb_p)
+    for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, y_p, verb_p)
 
     # format results
     y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
@@ -199,8 +198,8 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
 
     expected_days = pd.Series(pd.date_range(start=pd.to_datetime('{}-{}'.format(start_year, start_day), format='%Y-%j'),
                                             end=pd.to_datetime('{}-{}'.format(stop_year, stop_day), format='%Y-%j')))
-    check = (matrix_weather['year'] == expected_days.dt.year).all() and (
-            matrix_weather['doy'] == expected_days.dt.dayofyear).all()
+    check = (matrix_weather['year'].values == expected_days.dt.year.values).all() and (
+            matrix_weather['doy'].values == expected_days.dt.dayofyear.values).all()
     assert check, 'the date range of matrix_weather contains missing or duplicate days'
 
     # check harvest data
@@ -218,8 +217,8 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
         assert len(matrix_weather) == len(
             days_harvest), 'days_harvest and matrix_weather must be the same length(ndays)'
 
-        check = (days_harvest['year'] == expected_days.dt.year).all() and (
-                days_harvest['doy'] == expected_days.dt.dayofyear).all()
+        check = (days_harvest['year'].values == expected_days.dt.year.values).all() and (
+                days_harvest['doy'].values == expected_days.dt.dayofyear.values).all()
         assert check, 'the date range of matrix_weather contains missing or duplicate days'
     else:
         start_year_harv = days_harvest.year.min()

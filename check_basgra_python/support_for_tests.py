@@ -147,20 +147,11 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
 
-    start_year = matrix_weather['year'].min()
-    start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
-
-    stop_year = matrix_weather['year'].max()
-    stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,
                                names=['year', 'doy', 'percent_harvest']
                                ).astype(int)  # floor matches what simon did.
-
-    days_harvest.loc[(days_harvest.year == stop_year) & (days_harvest.doy > stop_day),
-                     'year'] = -1  # cull harvest after end of weather data
-    days_harvest = days_harvest.loc[days_harvest.year > 0]  # the size matching is handled internally
 
     days_harvest.loc[:, 'frac_harv'] = days_harvest.loc[:, 'percent_harvest'] / 100
     days_harvest.loc[:, 'harv_trig'] = 0
@@ -170,6 +161,18 @@ def establish_org_input(site='scott'):
 
     ndays = matrix_weather.shape[0]
     return params, matrix_weather, days_harvest
+
+def _clean_harvest(matrix_weather, days_harvest):
+    start_year = matrix_weather['year'].min()
+    start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
+
+    stop_year = matrix_weather['year'].max()
+    stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
+    days_harvest.loc[(days_harvest.year == stop_year) & (days_harvest.doy > stop_day),
+                     'year'] = -1  # cull harvest after end of weather data
+    days_harvest = days_harvest.loc[days_harvest.year > 0]  # the size matching is handled internally
+
+    return days_harvest
 
 
 def get_org_correct_values():

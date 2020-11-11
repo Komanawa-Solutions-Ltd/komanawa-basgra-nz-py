@@ -29,7 +29,7 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
   real    :: BASAL, CLV, CRES, CST, CSTUB, CLVD, LAI, PHEN, TILG2, TILG1, TILV
   real    :: GSTUB, HARVLV, HARVLVD, HARVLA, HARVRE, HARVTILG2, HARVST, HARVPH
   real    :: CLAI, HARVFR, TV1, HARVFRIN, RDRHARV, HARVFRST, DIESFRST, DMH_RYE, DMH_WEED
-  real :: HARVFRN, WEED_HARV_FR ! fraction of harvest yeild from weed species, outputs to calc weed yeild
+  real    :: WEED_HARV_FR ! fraction of harvest yeild from weed species, outputs to calc weed yeild
   integer :: HARV
 !  integer :: i
 
@@ -60,7 +60,7 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
 
           DM_RYE_RM = DM_RM * (DMH_RYE/(DMH_RYE+DMH_WEED)) ! amount of rye to harvest
           DM_WEED_RM = DM_RM * (DMH_WEED/(DMH_RYE+DMH_WEED)) ! amount of weed to harvest
-          HARVFRN = DM_RYE_RM/DMH_RYE
+          HARVFRIN = DM_RYE_RM/DMH_RYE
 
           WEED_HARV_FR = DM_WEED_RM/DM_RYE_RM
       else
@@ -70,7 +70,7 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
 
           DM_RYE_RM = DM_RM * (DMH_RYE/(DMH_RYE+DMH_WEED)) ! amount of rye to harvest
           DM_WEED_RM = DM_RM * (DMH_WEED/(DMH_RYE+DMH_WEED)) ! amount of weed to harvest
-          HARVFRN = DM_RYE_RM/DMH_RYE
+          HARVFRIN = DM_RYE_RM/DMH_RYE
 
           WEED_HARV_FR = DM_WEED_RM/DM_RYE_RM
       end if
@@ -78,11 +78,11 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
   else
       ! do not harvest
       HARV = 0
-      HARVFRN = 0.0 ! no harvest
+      HARVFRIN = 0.0 ! no harvest
       WEED_HARV_FR = 0.0
       DM_RYE_RM = 0 ! amount of rye to harvest
       DM_WEED_RM = 0 ! amount of weed to harvest
-      ! difference between HARVFRN and HARVFR is unclear, but I belive that HARVFR is simply a legacy variable
+      ! difference between HARVFRIN and HARVFR is unclear, but I belive that HARVFR is simply a legacy variable
   end if
 
 

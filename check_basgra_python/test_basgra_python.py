@@ -8,7 +8,7 @@ import pandas as pd
 from basgra_python import run_basgra_nz, _trans_manual_harv
 from input_output_keys import _matrix_weather_keys_pet, _matrix_weather_keys_peyman
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
-    test_dir, establish_peyman_input
+    test_dir, establish_peyman_input, _clean_harvest
 
 verbose = False
 
@@ -50,6 +50,7 @@ def _output_checks(out, correct_out):
 def test_org_basgra_nz():
     print('testing original basgra_nz')
     params, matrix_weather, days_harvest = establish_org_input()
+    days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
     out.drop(columns=['WAFC', 'IRR_TARG', 'IRR_TRIG',
                       'IRRIG_DEM'], inplace=True)  # drop a newly added parameter
@@ -73,6 +74,7 @@ def test_irrigation_trigger():
     params['doy_irr_start'] = 305  # start irrigating in Nov
     params['doy_irr_end'] = 90  # finish at end of march
 
+    days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
 
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_irrigation_trigger_output.csv'), index_col=0)
@@ -93,6 +95,7 @@ def test_irrigation_fraction():
     params['doy_irr_start'] = 305  # start irrigating in Nov
     params['doy_irr_end'] = 90  # finish at end of march
 
+    days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_irrigation_fraction_output.csv'), index_col=0)
     _output_checks(out, correct_out)
@@ -114,6 +117,7 @@ def test_water_short():
     params['doy_irr_start'] = 305  # start irrigating in Nov
     params['doy_irr_end'] = 90  # finish at end of march
 
+    days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
 
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_water_short_output.csv'), index_col=0)
@@ -134,6 +138,7 @@ def test_short_season():
     params['doy_irr_start'] = 305  # start irrigating in Nov
     params['doy_irr_end'] = 60  # finish at end of feb
 
+    days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
 
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_short_season_output.csv'), index_col=0)
@@ -159,6 +164,7 @@ def test_variable_irr_trig_targ():
     params['doy_irr_start'] = 305  # start irrigating in Nov
     params['doy_irr_end'] = 60  # finish at end of feb
 
+    days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_variable_irr_trig_targ.csv'), index_col=0)
     _output_checks(out, correct_out)
@@ -181,6 +187,7 @@ def _compair_pet():
 def test_pet_calculation():
     print('testing pet calculation')
     params, matrix_weather, days_harvest = establish_peyman_input()
+    days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=False)
     correct_out = pd.read_csv(os.path.join(test_dir, 'test_pet_calculation.csv'),
                               index_col=0)
@@ -193,12 +200,12 @@ def test_pet_calculation():
 
 
 if __name__ == '__main__':
-    test_pet_calculation()
     test_org_basgra_nz()
     test_irrigation_trigger()
     test_irrigation_fraction()
     test_water_short()
     test_short_season()
     test_variable_irr_trig_targ()
+    test_pet_calculation()
 
     print('\n\nall tests passed')
