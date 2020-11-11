@@ -12,3 +12,4 @@ gfortran -x f95-cpp-input -O3 -c -fdefault-real-8 parameters_site.f95 parameters
 gfortran -shared -o BASGRA_peyman.DLL parameters_site.o parameters_plant.o environment.o resources.o soil.o plant.o set_params.o basgraf.o
 del *.o
 del *.mod
+pause

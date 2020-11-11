@@ -25,11 +25,11 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
                     DM_RYE_RM, DM_WEED_RM)
   integer :: day
   integer :: NDAYS, NHARVCOL
-  integer, dimension(NDAYS, NHARVCOL) :: DAYS_HARVEST     ! major re-structure by Matt Hanson
+  real, dimension(NDAYS, NHARVCOL) :: DAYS_HARVEST     ! major re-structure by Matt Hanson
   real    :: BASAL, CLV, CRES, CST, CSTUB, CLVD, LAI, PHEN, TILG2, TILG1, TILV
   real    :: GSTUB, HARVLV, HARVLVD, HARVLA, HARVRE, HARVTILG2, HARVST, HARVPH
   real    :: CLAI, HARVFR, TV1, HARVFRIN, RDRHARV, HARVFRST, DIESFRST, DMH_RYE, DMH_WEED
-  real :: WEED_HARV_FR ! fraction of harvest yeild from weed species, outputs to calc weed yeild
+  real :: HARVFRN, WEED_HARV_FR ! fraction of harvest yeild from weed species, outputs to calc weed yeild
   integer :: HARV
 !  integer :: i
 

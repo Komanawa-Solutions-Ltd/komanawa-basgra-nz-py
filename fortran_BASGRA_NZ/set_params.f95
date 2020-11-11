@@ -135,9 +135,9 @@ doy_irr_end  = pa(114)
 ! new harvest parameters
 
 if (pa(115) < 0.9) then ! sudo boolean as float, expects 1 or 0
-    FIXED_REMOVAL = FALSE
+    FIXED_REMOVAL = .FALSE.
 else
-    FIXED_REMOVAL = TRUE
+    FIXED_REMOVAL = .TRUE.
 end if
 
 
