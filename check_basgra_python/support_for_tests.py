@@ -18,28 +18,28 @@ def establish_peyman_input(return_pet=False):
     weather_path = os.path.join(test_dir, 'hamilton_ruakura_ews2010-2013_{}.csv')
 
     rain = pd.read_csv(weather_path.format('rain')).loc[:, ['year',
-                                                                  'doy',
-                                                                  'rain']].set_index(['year', 'doy'])
+                                                            'doy',
+                                                            'rain']].set_index(['year', 'doy'])
 
     temp = pd.read_csv(weather_path.format('temp')).loc[:, ['year',
-                                                                  'doy',
-                                                                  'tmax', 'tmin']].set_index(['year', 'doy'])
+                                                            'doy',
+                                                            'tmax', 'tmin']].set_index(['year', 'doy'])
 
     rad = pd.read_csv(weather_path.format('rad')).loc[:, ['year',
-                                                                'doy',
-                                                                'radn']].set_index(['year', 'doy'])
+                                                          'doy',
+                                                          'radn']].set_index(['year', 'doy'])
 
     wind = pd.read_csv(weather_path.format('wind')).loc[:, ['year',
-                                                                  'doy',
-                                                                  'wind']].set_index(['year', 'doy'])
+                                                            'doy',
+                                                            'wind']].set_index(['year', 'doy'])
 
     pet = pd.read_csv(weather_path.format('pet')).loc[:, ['year',
-                                                                  'doy',
-                                                                  'pet']].set_index(['year', 'doy'])
+                                                          'doy',
+                                                          'pet']].set_index(['year', 'doy'])
 
     rh = pd.read_csv(weather_path.format('rh')).loc[:, ['year',
-                                                              'doy',
-                                                              'rh']]
+                                                        'doy',
+                                                        'rh']]
     rh.loc[:, 'rh'] = pd.to_numeric(rh.rh, errors='coerce')
     rh = rh.groupby(['year', 'doy']).mean()
 
@@ -68,9 +68,6 @@ def establish_peyman_input(return_pet=False):
     matrix_weather.loc[:, 'irr_targ'] = 1
     matrix_weather.reset_index(inplace=True)
 
-
-
-
     # load harvest data from Simon woodward's paper
     harvest_nm = 'harvest_Scott_0.txt'
     col = 1 + 8 * (1)
@@ -81,6 +78,11 @@ def establish_peyman_input(return_pet=False):
                                ).astype(int)  # floor matches what simon did.
 
     days_harvest = days_harvest.loc[(days_harvest.year >= 2010) & (days_harvest.year < 2013)]
+    days_harvest.loc[:, 'frac_harv'] = days_harvest.loc[:, 'percent_harvest'] / 100
+    days_harvest.loc[:, 'harv_trig'] = 0
+    days_harvest.loc[:, 'harv_targ'] = 0
+    days_harvest.loc[:, 'weed_dm_frac'] = 0
+    days_harvest.drop(columns=['percent_harvest'], inplace=True)
 
     # load parameters from simon woodward's paper
     params = pd.read_csv(os.path.join(test_dir, 'BASGRA_parModes.txt'),
@@ -90,7 +92,10 @@ def establish_peyman_input(return_pet=False):
     params.loc['IRRIGF'] = 0
     params.loc['doy_irr_start'] = 300
     params.loc['doy_irr_end'] = 90
-
+    params.loc['fixed_removal'] = 0
+    params.loc['DRATE'] = 50  # used to be set inside fortran
+    params.loc['CO2A'] = 350  # used to be set inside fortran
+    params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
     params = params.to_dict()
 
     return params, matrix_weather, days_harvest
@@ -114,6 +119,10 @@ def establish_org_input(site='scott'):
     params.loc['IRRIGF'] = 0
     params.loc['doy_irr_start'] = 300
     params.loc['doy_irr_end'] = 90
+    params.loc['fixed_removal'] = 0
+    params.loc['DRATE'] = 50  # used to be set inside fortran
+    params.loc['CO2A'] = 350  # used to be set inside fortran
+    params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
 
     params = params.to_dict()
 
@@ -138,12 +147,26 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
 
+    start_year = matrix_weather['year'].min()
+    start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
+
+    stop_year = matrix_weather['year'].max()
+    stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
+
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,
                                names=['year', 'doy', 'percent_harvest']
                                ).astype(int)  # floor matches what simon did.
 
+    days_harvest.loc[(days_harvest.year == stop_year) & (days_harvest.doy > stop_day),
+                     'year'] = -1  # cull harvest after end of weather data
     days_harvest = days_harvest.loc[days_harvest.year > 0]  # the size matching is handled internally
+
+    days_harvest.loc[:, 'frac_harv'] = days_harvest.loc[:, 'percent_harvest'] / 100
+    days_harvest.loc[:, 'harv_trig'] = 0
+    days_harvest.loc[:, 'harv_targ'] = 0
+    days_harvest.loc[:, 'weed_dm_frac'] = 0
+    days_harvest.drop(columns=['percent_harvest'], inplace=True)
 
     ndays = matrix_weather.shape[0]
     return params, matrix_weather, days_harvest

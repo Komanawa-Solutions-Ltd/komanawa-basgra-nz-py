@@ -5,7 +5,7 @@
 import os
 import numpy as np
 import pandas as pd
-from basgra_python import run_basgra_nz
+from basgra_python import run_basgra_nz, _trans_manual_harv
 from input_output_keys import _matrix_weather_keys_pet, _matrix_weather_keys_peyman
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
     test_dir, establish_peyman_input
@@ -13,9 +13,21 @@ from check_basgra_python.support_for_tests import establish_org_input, get_org_c
 verbose = False
 
 
-# todo reset_tests for harvest data, currenlty these will all fall over
+# todo reset_tests for harvest data, currenlty these will all fall over, should have sorted
+
+def test_trans_manual_harv():
+    # todo write a test for this
+    raise NotImplementedError
 
 def _output_checks(out, correct_out):
+    # todo dadb remove new output columns
+    drop_keys = [
+        'RYE_YIELD',
+        'WEED_YIELD',
+        'DM_RYE_RM',
+        'DM_WEED_RM']
+
+    out.drop(columns=drop_keys, inplace=True)
     # check shapes
     assert out.shape == correct_out.shape, 'something is wrong with the output shapes'
 

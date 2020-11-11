@@ -138,7 +138,7 @@ _days_harvest_keys = (
     'doy',  # day of year 1 - 356 (366 for leap year)
     'frac_harv',
     # fraction (0-1) of material above target to harvest to maintain 'backward capabilities' with v2.0.0
-    'harv_trig',  # dm above which to initiate harvest
+    'harv_trig',  # dm above which to initiate harvest, if trigger is less than zero no harvest will take place
     'harv_targ',  # dm to harvest to or to remove depending on 'fixed_removal'
     'weed_dm_frac',  # fraction of dm of ryegrass to attribute to weeds
 
@@ -278,6 +278,11 @@ _site_param_keys = (
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
+    'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
+    'DRATE',  # woodward set to 50   ! mm d-1 Maximum soil drainage rate !
+    'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
+    'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
+    'fixed_removal',  # sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
 
 )
 _plant_param_keys = (

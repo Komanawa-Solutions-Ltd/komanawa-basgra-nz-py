@@ -53,10 +53,6 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
                          internally
     :return:
     """
-    #todo make check to ensure that matrix_weather and days_harvest (post processing do not have gaps)
-    # todo make sure that fixed harvest target is greater than the trigger
-    # todo maker sure that the Harvest fracion is <=1
-    # todo create warning if weed DMFract is higher than 1?
 
     assert isinstance(supply_pet, bool), 'supply_pet param must be boolean'
     assert isinstance(auto_harvest, bool), 'auto_harvest param must be boolean'
@@ -97,15 +93,13 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
                         auto_harvest)
 
-
-
     nout = len(_out_cols)
     ndays = len(matrix_weather)
 
-    # define output indexs before data manipulation
+    # define output indexes before data manipulation
     out_index = matrix_weather.index
 
-    # copy everything
+    # copy everything and ensure order is correct
     params = deepcopy(params)
     matrix_weather = deepcopy(matrix_weather.loc[:, _matrix_weather_keys])
     days_harvest = deepcopy(days_harvest.loc[:, _days_harvest_keys])
@@ -157,38 +151,85 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     return y_p
 
 
-def _trans_manual_harv(days_harvest, matrix_weather): #todo implement
+def _trans_manual_harv(days_harvest, matrix_weather):
     """
     translates manual harvest data to the format expected by fortran, check the details of the data in here.
-    :return:
+    :param days_harvest: manual harvest data
+    :param matrix_weather: weather data, mostly to get the right size
+    :return: days_harvest (correct format for fortran code)
     """
-    raise NotImplementedError
+    days_harvest = days_harvest.set_index(['year', 'doy'])
+    days_harvest_out = pd.DataFrame({'year': matrix_weather.loc[:, 'year'],
+                                     'doy': matrix_weather.loc[:, 'doy'],
+                                     'frac_harv': np.zeros(len(matrix_weather)),  # set filler values
+                                     'harv_trig': np.zeros(len(matrix_weather)) - 1,  # set flag to not harvest
+                                     'harv_targ': np.zeros(len(matrix_weather)),  # set filler values
+                                     'weed_dm_frac': np.zeros(len(matrix_weather)),  # set filler values
+                                     })
+    days_harvest_out = days_harvest_out.set_index(['year', 'doy'])
+    for k in ['frac_harv', 'harv_trig', 'harv_targ', 'weed_dm_frac']:
+        days_harvest_out.loc[days_harvest.index, k] = days_harvest.loc[:, k]
+
+    days_harvest_out = days_harvest_out.reset_index()
+    return days_harvest_out
 
 
 def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
-                        auto_harvest, org_auto):
+                        auto_harvest):
+    # check parameters
     assert isinstance(verbose, bool), 'verbose must be boolean'
     assert isinstance(params, dict)
     assert set(params.keys()) == set(_param_keys), 'incorrect params keys'
     assert not any([np.isnan(e) for e in params.values()]), 'params cannot have na data'
 
+    # check matrix weather
     assert isinstance(matrix_weather, pd.DataFrame)
     assert set(matrix_weather.keys()) == set(_matrix_weather_keys), 'incorrect keys for matrix_weather'
+    assert pd.api.types.is_integer_dtype(matrix_weather.doy), 'doy must be an integer datatype in matrix_weather'
+    assert pd.api.types.is_integer_dtype(matrix_weather.year), 'year must be an integer datatype in matrix_weather'
     assert len(matrix_weather) <= _max_weather_size, 'maximum run size is {} days'.format(_max_weather_size)
     assert not matrix_weather.isna().any().any(), 'matrix_weather cannot have na values'
 
+    # check to make sure there are no missing days in matrix_weather
+    start_year = matrix_weather['year'].min()
+    start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
+
+    stop_year = matrix_weather['year'].max()
+    stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
+
+    expected_days = pd.Series(pd.date_range(start=pd.to_datetime('{}-{}'.format(start_year, start_day), format='%Y-%j'),
+                                            end=pd.to_datetime('{}-{}'.format(stop_year, stop_day), format='%Y-%j')))
+    check = (matrix_weather['year'] == expected_days.dt.year).all() and (
+            matrix_weather['doy'] == expected_days.dt.dayofyear).all()
+    assert check, 'the date range of matrix_weather contains missing or duplicate days'
+
+    # check harvest data
+    assert isinstance(days_harvest, pd.DataFrame)
+    assert set(days_harvest.keys()) == set(_days_harvest_keys), 'incorrect keys for days_harvest'
+    assert pd.api.types.is_integer_dtype(days_harvest.doy), 'doy must be an integer datatype in days_harvest'
+    assert pd.api.types.is_integer_dtype(days_harvest.year), 'year must be an integer datatype in days_harvest'
+    assert not days_harvest.isna().any().any(), 'days_harvest cannot have na data'
+    assert (days_harvest['frac_harv'] <= 1).all(), 'frac_harv cannot be greater than 1'
+    if params['fixed_removal'] > 0.9:
+        assert (days_harvest['harv_trig'] >=
+                days_harvest['harv_targ']).all(), 'when using fixed harvest mode the harv_trig>=harv_targ'
+
     if auto_harvest:
-        assert isinstance(days_harvest, pd.DataFrame)
-        assert set(days_harvest.keys()) == set(_days_harvest_keys), 'incorrect keys for days_harvest'
-        assert not days_harvest.isna().any().any(), 'days_harvest cannot have na data'
         assert len(matrix_weather) == len(
             days_harvest), 'days_harvest and matrix_weather must be the same length(ndays)'
+
+        check = (days_harvest['year'] == expected_days.dt.year).all() and (
+                days_harvest['doy'] == expected_days.dt.dayofyear).all()
+        assert check, 'the date range of matrix_weather contains missing or duplicate days'
     else:
-        raise NotImplementedError
-        #todo set checks for manual harvest inputs, just data length and quantity. checks for making
-        # sense will happend in translate function
-
-
+        start_year_harv = days_harvest.year.min()
+        stop_year_harv = days_harvest.year.max()
+        start_doy_harv = days_harvest.loc[days_harvest.year == start_year_harv, 'doy'].min()
+        stop_doy_harv = days_harvest.loc[days_harvest.year == stop_year_harv, 'doy'].max()
+        assert (start_year_harv >= start_year) and (
+                    start_doy_harv >= start_day), 'days_harvest must start at or after first day of simulation'
+        assert (stop_year_harv <= stop_year) and (
+                    stop_doy_harv <= stop_day), 'days_harvest must stop at or before last day of simulation'
 
 
 if __name__ == '__main__':
