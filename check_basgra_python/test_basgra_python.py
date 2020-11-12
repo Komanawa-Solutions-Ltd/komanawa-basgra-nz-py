@@ -8,7 +8,7 @@ import pandas as pd
 from basgra_python import run_basgra_nz, _trans_manual_harv
 from input_output_keys import _matrix_weather_keys_pet, _matrix_weather_keys_peyman
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
-    test_dir, establish_peyman_input, _clean_harvest
+    test_dir, establish_peyman_input, _clean_harvest, base_auto_harvest_data, base_manual_harvest_data
 
 verbose = False
 
@@ -19,8 +19,9 @@ def test_trans_manual_harv():
     # todo write a test for this
     raise NotImplementedError
 
+
 def _output_checks(out, correct_out):
-    # todo dadb remove new output columns
+    # todo dadb remove new output columns, once I am happy that all tests have passed, re-save the 'correct' out with these values
     drop_keys = [
         'RYE_YIELD',
         'WEED_YIELD',
@@ -52,11 +53,18 @@ def test_org_basgra_nz():
     params, matrix_weather, days_harvest = establish_org_input()
     days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+
+    # test against my saved version (simply to have all columns #todo
+    correct_out = pd.read_csv(os.path.join(test_dir, ''), index_col=0)
+    _output_checks(out, correct_out)
+
+    # test to the original data provided by Simon Woodward
     out.drop(columns=['WAFC', 'IRR_TARG', 'IRR_TRIG',
                       'IRRIG_DEM'], inplace=True)  # drop a newly added parameter
 
-    correct_out = get_org_correct_values()
-    _output_checks(out, correct_out)
+    correct_out2 = get_org_correct_values()
+    _output_checks(out, correct_out2)
+
 
 
 def test_irrigation_trigger():
@@ -193,8 +201,65 @@ def test_pet_calculation():
                               index_col=0)
     _output_checks(out, correct_out)
 
+# Manual Harvest tests
 
-# todo write a test/tests around harvesting
+def test_fixed_harvest_man():
+    params, matrix_weather, days_harvest = establish_org_input()
+    days_harvest = base_manual_harvest_data(matrix_weather)
+    days_harvest = None #todo, set up
+
+    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    correct_out = pd.read_csv(os.path.join(test_dir, ''), #todo once I am happy save to the test folder
+                              index_col=0)
+    _output_checks(out, correct_out)
+
+    raise NotImplementedError
+
+
+def test_harv_trig_man(): #todo
+    # test manaual harvesting dates with a set trigger, weed fraction set to zero
+    raise NotImplementedError
+
+
+def test_harv_targ_man(): #todo
+    # test manaual harvesting dates with a set target, weed fraction set to zero
+    raise NotImplementedError
+
+def test_weed_fraction_man(): #todo
+    # test manual harvesting trig set to zero +- target with weed fraction above 0
+    raise NotImplementedError
+
+# automatic harvesting tests
+
+def test_auto_harv_trig(): #todo
+    # test auto harvesting dates with a set trigger, weed fraction set to zero
+    params, matrix_weather, days_harvest = establish_org_input()
+    days_harvest = base_auto_harvest_data(matrix_weather)
+    days_harvest = None  # todo, pertibate
+
+    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, auto_harvest=True)
+    correct_out = pd.read_csv(os.path.join(test_dir, ''),  # todo once I am happy save to the test folder
+                              index_col=0)
+    _output_checks(out, correct_out)
+
+    raise NotImplementedError
+
+
+def test_auto_harv_targ(): #todo
+    # test auto harvesting dates with a set target, weed fraction set to zero
+    raise NotImplementedError
+
+
+def test_weed_fraction_auto(): #todo
+    # test auto harvesting trig set +- target with weed fraction above 0
+    raise NotImplementedError
+
+
+def test_weed_fixed_harv(): #todo
+    # test auto fixed harvesting trig set +- target with weed fraction above 0
+    raise NotImplementedError
+
+
 
 # todo write a description in the readme file
 

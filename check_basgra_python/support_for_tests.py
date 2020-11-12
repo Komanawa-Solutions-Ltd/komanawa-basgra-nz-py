@@ -249,6 +249,12 @@ def get_lincoln_broadfield():
 
     return outdata
 
+def base_manual_harvest_data(matrix_weather):
+    raise NotImplementedError #todo
+
+def base_auto_harvest_data(matrix_weather):
+    raise NotImplementedError #todo
+
 
 if __name__ == '__main__':
     establish_peyman_input()
