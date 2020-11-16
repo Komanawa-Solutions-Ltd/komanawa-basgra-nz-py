@@ -248,15 +248,19 @@ _out_cols = (
     'IRR_TARG',  # irrigation Target (fraction of field capacity) to fill to, also an input variable
     'IRR_TRIG',  # irrigation trigger (fraction of field capacity at which to start irrigating
     'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
-    'RYE_YIELD',  # PRG Yield from rye grass species, #  (tDM ha-1)
-    'WEED_YIELD',  # PRG Yield from weed (other) species, #  (tDM ha-1)
-    'DM_RYE_RM',  # dry matter of Rye species harvested in this time step (kg DM ha-1)
+    'RYE_YIELD',  # PRG Yield from rye grass species, #  (tDM ha-1)  note that this is the actual amount of
+                  # material that has been removed
+    'WEED_YIELD',  # PRG Yield from weed (other) species, #  (tDM ha-1)  note that this is the actual amount
+                   # of material that has been removed
+    'DM_RYE_RM',  # dry matter of Rye species harvested in this time step (kg DM ha-1) Note that this is the
+                  # calculated removal but if 'opt_harvfrin' = False then it may be significantly different to the
+                  # actual removal, which is show by the appropriate yeild variable
     'DM_WEED_RM',  # dry matter of weed species harvested in this time step (kg DM ha-1)
-    'HARVLV',
-    'HARVLVD',
-    'HARVST',
-    'HARVRE',
-    'DM_nCLVD',  # dry matter excluding CLVD or dead leaves, used for harvesting
+                   # Note that this is the calculated removal but if 'opt_harvfrin' = False then it may be
+                   # significantly different to the actual removal, which is show by the appropriate yeild variable
+    'DMH_RYE',  # harvestable dry matter of # species, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
+    'DMH_WEED',  # harvestable dry matter of # specie, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
+    'DMH',  # harvestable dry matter = DMH_RYE + DMH_WEED  (kg DM ha-1)
 
 )
 

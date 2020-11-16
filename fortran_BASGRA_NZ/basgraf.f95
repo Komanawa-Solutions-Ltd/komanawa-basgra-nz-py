@@ -99,7 +99,7 @@ real :: VERND, DVERND, WALS, BASAL
 real :: DeHardRate, DLAI, DLV, DLVD, DPHEN, DRAIN, DRT, DSTUB, dTANAER, DTILV, EVAP, EXPLOR
 real :: Frate, FREEZEL, FREEZEPL, GLAI, GLV, GPHEN, GRES, GRT, GST, GSTUB, GTILV, HardRate
 real :: HARVFR, HARVFRIN, HARVLA, HARVLV, HARVLVD, HARVPH, HARVRE, HARVST, HARVTILG2, INFIL, IRRIG, IRRIG_DEM, O2IN
-real :: WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM, DM_nCLVD
+real :: WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM, DMH_RYE, DMH_WEED
 real :: O2OUT, PackMelt, poolDrain, poolInfil, Psnow, reFreeze, RGRTV, RDRHARV
 real :: RGRTVG1, RROOTD, RUNOFF, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN, Wremain, SP
 integer :: HARV
@@ -211,7 +211,7 @@ do day = 1, NDAYS
   call Harvest (day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                 GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
                 HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, &
-                WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM)
+                WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM, DMH_RYE, DMH_WEED)
 
 
   LAI     = LAI     - HARVLA * (1 + RDRHARV)
@@ -284,7 +284,6 @@ do day = 1, NDAYS
 
   Time      = year + (doy-0.5)/366 ! "Time" = Decimal year (approximation)
   DM        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40 + CLVD/0.45) * 10.0 ! "DM"  = Aboveground dry matter in kgDM ha-1 (Simon included CLVD, changed units)
-  DM_nCLVD        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40) * 10.0 ! "DM"  = Aboveground dry matter in kgDM ha-1 (excluding CLVD) !todo thi smight not be right, I should include the propotion of dead to harvest??? make sure I do the same thing in plant.f95
   RES       = (CRES/0.40) / ((CLV+CST+CSTUB)/0.45 + CRES/0.40)      ! "RES" = Reserves in gDM gDM-1 aboveground green matter
   SLA       = LAI / CLV                          ! SLA     = m2 leaf area gC-1 dry matter vegetative tillers (Note units and RES not included)
   TSIZE     = (CLV+CST) / (TILG1+TILG2+TILV)     ! gC tillers-1 Average tiller size
@@ -365,16 +364,15 @@ do day = 1, NDAYS
   y(day,59) = IRR_TARG
   y(day,60) = IRR_TRIG
   y(day,61) = IRRIG_DEM
+
   y(day,62) = YIELD_RYE
   y(day,63) = YIELD_WEED
   y(day,64) = DM_RYE_RM
   y(day,65) = DM_WEED_RM
 
-  y(day,66) = HARVLV
-  y(day,67) = HARVLVD
-  y(day,68) = HARVST
-  y(day,69) = HARVRE
-  y(day,70) = DM_nCLVD
+  y(day,66) = DMH_RYE
+  y(day,67) = DMH_WEED
+  y(day,68) = DMH_RYE + DMH_WEED
 
 
   ! Update state variables

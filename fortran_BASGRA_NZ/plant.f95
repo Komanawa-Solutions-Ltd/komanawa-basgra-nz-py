@@ -33,7 +33,7 @@ contains
 Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                              GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
                              HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, WEED_HARV_FR, &
-                    DM_RYE_RM, DM_WEED_RM)
+                    DM_RYE_RM, DM_WEED_RM, DMH_RYE, DMH_WEED)
   integer :: day
   integer :: NDAYS, NHARVCOL
   real, dimension(NDAYS, NHARVCOL) :: DAYS_HARVEST     ! major re-structure by Matt Hanson
@@ -58,8 +58,8 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
   temp_opt_harvfrin = opt_harvfrin
 
 
-  ! calculate dry matter of ryegrass + weeds,
-  DMH_RYE        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40) * 10.0 ! todo removed dead leaves (CLVD), as these are not be harvested, todo this might not be right, perhaps use proportion of CLVD used in harvestable work.
+  ! calculate dry matter of ryegrass + weeds, include the harvestable fraction of dry matter
+  DMH_RYE        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40 + (CLVD * HARVFRD / 0.45)) * 10.0
   DMH_WEED =  WEED_DM_FRAC*DMH_RYE/BASAL*(1-BASAL)
 
   ! if above trigger and trigger >=0 (HARV_TRIG<0, flag for no harvest) then harvest
