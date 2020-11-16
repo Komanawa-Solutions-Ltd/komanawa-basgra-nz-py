@@ -1,5 +1,5 @@
 module brent
-
+    ! from https://people.sc.fsu.edu/~jburkardt/f_src/brent/brent.html
   contains
 
 function glomin ( a, b, c, m, machep, e, t, f, x )
