@@ -3,6 +3,7 @@ module plant
 use parameters_site
 use parameters_plant
 use environment
+use brent
 
 implicit none
 
@@ -15,13 +16,23 @@ real :: RATEH,reHardPeriod,RDRTIL,RDRS,RDRW ! Simon renamed TV2TIL to RDRTIL
 real :: CRESMN,DAYLGEMX
 real :: ALLOSH, ALLORT, ALLOLV, ALLOST, FS, ALLOFRAC
 
+! define variables for the the harvest fraction optimisation, needs to be global
+
+real :: clv_cres_ect, fhageer, HAGRE_stuff, goal
+
 contains
+
+  real function f(x)
+    IMPLICIT NONE
+    real, intent(in):: x
+  f = clv_cres_ect * x * 10 + x ** (1 - fhageer) * HAGRE_stuff * 10 - goal
+  end function f
 
 ! Calculate Harvest GSTUB,HARVLA,HARVLV,HARVPH,HARVRE,HARVST,HARVTILG2,HARVFR
 ! Simon plant processes are now calculated as if harvest did not happen
 Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                              GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
-                             HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, FIXED_REMOVAL, WEED_HARV_FR, &
+                             HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, WEED_HARV_FR, &
                     DM_RYE_RM, DM_WEED_RM)
   integer :: day
   integer :: NDAYS, NHARVCOL
@@ -33,21 +44,22 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
   integer :: HARV
 !  integer :: i
 
-  logical    :: FIXED_REMOVAL
   real ::  FRAC_HARV
   real ::  HARV_TRIG
   real ::  HARV_TARG
   real ::  WEED_DM_FRAC, DM_RM, DM_RYE_RM, DM_WEED_RM
+  logical :: temp_opt_harvfrin
 
   ! set parameters from days_harvest
   FRAC_HARV = DAYS_HARVEST(day, 3)
   HARV_TRIG = DAYS_HARVEST(day, 4)
   HARV_TARG = DAYS_HARVEST(day, 5)
   WEED_DM_FRAC = DAYS_HARVEST(day, 6)
+  temp_opt_harvfrin = opt_harvfrin
 
 
   ! calculate dry matter of ryegrass + weeds,
-  DMH_RYE        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40 + CLVD/0.45) * 10.0
+  DMH_RYE        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40) * 10.0 ! todo removed dead leaves (CLVD), as these are not be harvested, todo this might not be right, perhaps use proportion of CLVD used in harvestable work.
   DMH_WEED =  WEED_DM_FRAC*DMH_RYE/BASAL*(1-BASAL)
 
   ! if above trigger and trigger >=0 (HARV_TRIG<0, flag for no harvest) then harvest
@@ -60,9 +72,16 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
 
           DM_RYE_RM = DM_RM * (DMH_RYE/(DMH_RYE+DMH_WEED)) ! amount of rye to harvest
           DM_WEED_RM = DM_RM * (DMH_WEED/(DMH_RYE+DMH_WEED)) ! amount of weed to harvest
-          HARVFRIN = DM_RYE_RM/DMH_RYE
 
+          HARVFRIN = DM_RYE_RM/DMH_RYE
           WEED_HARV_FR = DM_WEED_RM/DM_RYE_RM
+
+          ! set values for the optimisation function
+          goal = DM_RYE_RM
+          clv_cres_ect = (CLV / 0.45 + CLVD * HARVFRD / 0.45) + (CRES * CLV / (CLV + CST + CSTUB) / 0.40)
+          fhageer= HAGERE
+          HAGRE_stuff = (CST / 0.45 + CRES * CST / (CLV + CST + CSTUB) / 0.40)
+
       else
           ! harvest assuming that the goal is to harvest to the target dry matter
           ! harvest weeds and rye propotionally according to dry matter content
@@ -70,9 +89,27 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
 
           DM_RYE_RM = DM_RM * (DMH_RYE/(DMH_RYE+DMH_WEED)) ! amount of rye to harvest
           DM_WEED_RM = DM_RM * (DMH_WEED/(DMH_RYE+DMH_WEED)) ! amount of weed to harvest
-          HARVFRIN = DM_RYE_RM/DMH_RYE
 
+          HARVFRIN = DM_RYE_RM/DMH_RYE
           WEED_HARV_FR = DM_WEED_RM/DM_RYE_RM
+
+          ! set values for the optimisation function
+          goal = DM_RYE_RM
+          clv_cres_ect = (CLV / 0.45 + CLVD * HARVFRD / 0.45) + (CRES * CLV / (CLV + CST + CSTUB) / 0.40)
+          fhageer= HAGERE
+          HAGRE_stuff = (CST / 0.45 + CRES * CST / (CLV + CST + CSTUB) / 0.40)
+      end if
+
+      if (HARVFRIN<=0) then
+        temp_opt_harvfrin = .false. ! to ensure that we cannot have a optimisation where there is zero harvest,
+        ! this could break harvfrin
+      end if
+      if (temp_opt_harvfrin) then
+     ! estimate the fraction of harvest to undertake using brent zero !todo send this to andrea
+     HARVFRIN = zero(0.0,1.0,& ! bounds
+       1e-5, & ! machine tolerance
+      1e-5, & ! tolerance
+      f) ! function to minimize
       end if
 
   else

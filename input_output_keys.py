@@ -130,6 +130,9 @@ _param_keys = (
 
     # new for harvest, certainly parameters
     'fixed_removal',  # sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
+    'opt_harvfrin',  # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
+    # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
+    # harvest, the amount harvested may be significantly greather than expected depending on CST
 
 )
 
@@ -145,6 +148,9 @@ _days_harvest_keys = (
 )
 
 # todo check harvest implementation:
+# #todo I thinkn I have fixed the harvest propotion thing, but not sure..., short test and I'm done
+#todo I really need to throuroughly check the weed harvesting options!
+
 
 _matrix_weather_keys_pet = (
     'year',  # e.g. 2002
@@ -246,6 +252,11 @@ _out_cols = (
     'WEED_YIELD',  # PRG Yield from weed (other) species, #  (tDM ha-1)
     'DM_RYE_RM',  # dry matter of Rye species harvested in this time step (kg DM ha-1)
     'DM_WEED_RM',  # dry matter of weed species harvested in this time step (kg DM ha-1)
+    'HARVLV',
+    'HARVLVD',
+    'HARVST',
+    'HARVRE',
+    'DM_nCLVD',  # dry matter excluding CLVD or dead leaves, used for harvesting
 
 )
 
@@ -282,7 +293,10 @@ _site_param_keys = (
     'DRATE',  # woodward set to 50   ! mm d-1 Maximum soil drainage rate !
     'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
     'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
-    'fixed_removal',  # sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
+    'fixed_removal',  # sudo boolean(1=True, 0=False) defines if auto_harv_targ is fixed amount or amount to harvest to,
+    'opt_harvfrin' # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
+                     # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
+                     # harvest, the amount harvested may be significantly greather than expected depending on CST
 
 )
 _plant_param_keys = (

@@ -5,7 +5,7 @@ use parameters_plant
 
 implicit none
 
-real      :: pa(115) ! Note: NPAR is also hardwired in BASGRA.f90
+real      :: pa(NPAR) !npar set in parameters_site
 
 ! a script checks that these variable names match what is expected in the parameter.txt file (Simon)
 ! Initial values
@@ -138,6 +138,11 @@ if (pa(115) < 0.9) then ! sudo boolean as float, expects 1 or 0
     FIXED_REMOVAL = .FALSE.
 else
     FIXED_REMOVAL = .TRUE.
+end if
+if (pa(116) < 0.9) then ! sudo boolean as float, expects 1 or 0
+    opt_harvfrin = .FALSE.
+else
+    opt_harvfrin = .TRUE.
 end if
 
 

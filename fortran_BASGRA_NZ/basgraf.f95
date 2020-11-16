@@ -74,14 +74,14 @@ integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT
 integer, parameter ::  NHARVCOL = 6 ! here so that I don't have to keep updating in harvest as well
 real(kind = c_double), intent(in), dimension(NDAYS,NHARVCOL) :: DAYS_HARVEST
-integer, parameter                                  :: NPAR     = 115 ! NPAR also hardwired in set_params.f90
+
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
   integer, parameter                                :: NWEATHER =  10
 #else
   integer, parameter                                :: NWEATHER =  11
 #endif
-real(kind = c_double), intent(in), dimension(NPAR)              :: PARAMS
+real(kind = c_double), intent(in), dimension(NPAR)              :: PARAMS ! NPAR set in parameters_site.f90
 real(kind = c_double), intent(in), dimension(NMAXDAYS,NWEATHER) :: MATRIX_WEATHER
 real(kind = c_double), intent(out), dimension(NDAYS,NOUT)       :: y
 
@@ -99,7 +99,7 @@ real :: VERND, DVERND, WALS, BASAL
 real :: DeHardRate, DLAI, DLV, DLVD, DPHEN, DRAIN, DRT, DSTUB, dTANAER, DTILV, EVAP, EXPLOR
 real :: Frate, FREEZEL, FREEZEPL, GLAI, GLV, GPHEN, GRES, GRT, GST, GSTUB, GTILV, HardRate
 real :: HARVFR, HARVFRIN, HARVLA, HARVLV, HARVLVD, HARVPH, HARVRE, HARVST, HARVTILG2, INFIL, IRRIG, IRRIG_DEM, O2IN
-real :: WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM
+real :: WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM, DM_nCLVD
 real :: O2OUT, PackMelt, poolDrain, poolInfil, Psnow, reFreeze, RGRTV, RDRHARV
 real :: RGRTVG1, RROOTD, RUNOFF, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN, Wremain, SP
 integer :: HARV
@@ -210,7 +210,7 @@ do day = 1, NDAYS
   call set_weather_day(day,DRYSTOR, year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
   call Harvest (day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                 GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
-                HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, FIXED_REMOVAL, &
+                HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, &
                 WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM)
 
 
@@ -284,6 +284,7 @@ do day = 1, NDAYS
 
   Time      = year + (doy-0.5)/366 ! "Time" = Decimal year (approximation)
   DM        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40 + CLVD/0.45) * 10.0 ! "DM"  = Aboveground dry matter in kgDM ha-1 (Simon included CLVD, changed units)
+  DM_nCLVD        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40) * 10.0 ! "DM"  = Aboveground dry matter in kgDM ha-1 (excluding CLVD) !todo thi smight not be right, I should include the propotion of dead to harvest??? make sure I do the same thing in plant.f95
   RES       = (CRES/0.40) / ((CLV+CST+CSTUB)/0.45 + CRES/0.40)      ! "RES" = Reserves in gDM gDM-1 aboveground green matter
   SLA       = LAI / CLV                          ! SLA     = m2 leaf area gC-1 dry matter vegetative tillers (Note units and RES not included)
   TSIZE     = (CLV+CST) / (TILG1+TILG2+TILV)     ! gC tillers-1 Average tiller size
@@ -368,6 +369,13 @@ do day = 1, NDAYS
   y(day,63) = YIELD_WEED
   y(day,64) = DM_RYE_RM
   y(day,65) = DM_WEED_RM
+
+  y(day,66) = HARVLV
+  y(day,67) = HARVLVD
+  y(day,68) = HARVST
+  y(day,69) = HARVRE
+  y(day,70) = DM_nCLVD
+
 
   ! Update state variables
   AGE     = AGE     + 1.0

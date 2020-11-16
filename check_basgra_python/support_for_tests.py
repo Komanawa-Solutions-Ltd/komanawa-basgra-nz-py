@@ -96,6 +96,9 @@ def establish_peyman_input(return_pet=False):
     params.loc['DRATE'] = 50  # used to be set inside fortran
     params.loc['CO2A'] = 350  # used to be set inside fortran
     params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
+    params.loc['opt_harvfrin'] = 0
+
+
     params = params.to_dict()
 
     return params, matrix_weather, days_harvest
@@ -123,6 +126,7 @@ def establish_org_input(site='scott'):
     params.loc['DRATE'] = 50  # used to be set inside fortran
     params.loc['CO2A'] = 350  # used to be set inside fortran
     params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
+    params.loc['opt_harvfrin'] = 0
 
     params = params.to_dict()
 
@@ -249,11 +253,21 @@ def get_lincoln_broadfield():
 
     return outdata
 
-def base_manual_harvest_data(matrix_weather):
+def base_manual_harvest_data(matrix_weather, old_days_harvest):
     raise NotImplementedError #todo
 
 def base_auto_harvest_data(matrix_weather):
-    raise NotImplementedError #todo
+    strs = ['{}-{:03d}'.format(e, f) for e, f in matrix_weather[['year', 'doy']].itertuples(False, None)]
+
+    days_harvest_out = pd.DataFrame({'year': matrix_weather.loc[:, 'year'],
+                                     'doy': matrix_weather.loc[:, 'doy'],
+                                     'frac_harv': np.zeros(len(matrix_weather)),  # set filler values
+                                     'harv_trig': np.zeros(len(matrix_weather)) - 1,  # set flag to not harvest
+                                     'harv_targ': np.zeros(len(matrix_weather)),  # set filler values
+                                     'weed_dm_frac': np.zeros(len(matrix_weather)),  # set filler values
+                                     'date': pd.to_datetime(strs, format='%Y-%j')
+                                     })
+    return days_harvest_out
 
 
 if __name__ == '__main__':

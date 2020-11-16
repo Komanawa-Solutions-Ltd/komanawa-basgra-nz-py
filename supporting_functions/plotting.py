@@ -21,10 +21,17 @@ _outvars = (
     'BASAL',
     'ROOTD',
     'WAFC',
+    'IRR_TARG',
+    'IRR_TRIG',
+    'IRRIG_DEM',
+    'RYE_YIELD',
+    'WEED_YIELD',
+    'DM_RYE_RM',
+    'DM_WEED_RM',
 )
 
 
-def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10,8)):
+def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8)):
     """
     plot multiple basgra results against eachother
     :param data: dictionary of key: outputs of run_basgra()
@@ -42,7 +49,7 @@ def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10,8))
 
     cmap = get_cmap('tab20')
     n_scens = len(data.keys())
-    colors = [cmap(e/n_scens) for e in range(n_scens)] # pick from color map
+    colors = [cmap(e / n_scens) for e in range(n_scens)]  # pick from color map
 
     figs = {}
 

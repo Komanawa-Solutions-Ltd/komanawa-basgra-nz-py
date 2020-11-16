@@ -1,8 +1,10 @@
 module parameters_site
 
+
 implicit none
 
 ! Simulation period and time step
+integer, parameter                                  :: NPAR     = 116
   real, parameter       :: DELT   =   1.0 ! Model time step
 
 ! Geography
@@ -47,6 +49,7 @@ implicit none
 
 ! Management: harvest
   logical    :: FIXED_REMOVAL
+  logical    :: opt_harvfrin
 
 ! Mathematical constants
   real, parameter       :: pi   = 3.141592653589793
