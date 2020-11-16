@@ -10,10 +10,41 @@ from input_output_keys import _matrix_weather_keys_pet, _matrix_weather_keys_pey
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
     test_dir, establish_peyman_input, _clean_harvest, base_auto_harvest_data, base_manual_harvest_data
 
-from supporting_functions.plotting import plot_multiple_results #todo DADB
+from supporting_functions.plotting import plot_multiple_results  # todo dadb
+
 verbose = False
 
+drop_keys = [  # newly added keys that must be dropped initially to manage tests, datasets are subsequently re-created
+    'WAFC',
+    'IRR_TARG',
+    'IRR_TRIG',
+    'IRRIG_DEM',
+    'RYE_YIELD',
+    'WEED_YIELD',
+    'DM_RYE_RM',
+    'DM_WEED_RM',
+    'DMH_RYE',
+    'DMH_WEED',
+    'DMH',
+]
 
+view_keys = [
+    'WAL',
+    'WCL',
+    'DM',
+    'YIELD',
+    'BASAL',
+    'ROOTD',
+    'IRRIG_DEM',
+    'HARVFR',
+    'RYE_YIELD',
+    'WEED_YIELD',
+    'DM_RYE_RM',
+    'DM_WEED_RM',
+    'DMH_RYE',
+    'DMH_WEED',
+    'DMH',
+]
 
 def test_trans_manual_harv():
     # todo write a test for this
@@ -21,15 +52,7 @@ def test_trans_manual_harv():
 
 
 def _output_checks(out, correct_out):
-    # todo dadb remove new output columns, once I am happy that all tests have passed, re-save the 'correct' out with these values
-    drop_keys = [
-        'RYE_YIELD',
-        'WEED_YIELD',
-        'DM_RYE_RM',
-        'DM_WEED_RM', 'HARVLV',	'HARVLVD',	'HARVST',	'HARVRE',	'DM_nCLVD',
-    ]
 
-    out.drop(columns=drop_keys, inplace=True)
     # check shapes
     assert out.shape == correct_out.shape, 'something is wrong with the output shapes'
 
@@ -49,26 +72,29 @@ def _output_checks(out, correct_out):
     print('model passed tests')
 
 
-def test_org_basgra_nz():
+def test_org_basgra_nz(update_data=False):
     print('testing original basgra_nz')
     params, matrix_weather, days_harvest = establish_org_input()
     days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
 
     # test against my saved version (simply to have all columns #todo
-    #correct_out = pd.read_csv(os.path.join(test_dir, ''), index_col=0)
-    #_output_checks(out, correct_out)
+    data_path = os.path.join(test_dir, 'test_org_basgra.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out)
 
     # test to the original data provided by Simon Woodward
-    out.drop(columns=['WAFC', 'IRR_TARG', 'IRR_TRIG',
-                      'IRRIG_DEM'], inplace=True)  # drop a newly added parameter
+
+    out.drop(columns=drop_keys, inplace=True)  # remove all of the newly added keys
 
     correct_out2 = get_org_correct_values()
     _output_checks(out, correct_out2)
 
 
-
-def test_irrigation_trigger():
+def test_irrigation_trigger(update_data=False):
     print('testing irrigation trigger')
     params, matrix_weather, days_harvest = establish_org_input('lincoln')
 
@@ -86,11 +112,15 @@ def test_irrigation_trigger():
     days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
 
-    correct_out = pd.read_csv(os.path.join(test_dir, 'test_irrigation_trigger_output.csv'), index_col=0)
+    data_path = os.path.join(test_dir, 'test_irrigation_trigger_output.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
 
-def test_irrigation_fraction():
+def test_irrigation_fraction(update_data=False):
     print('testing irrigation fraction')
     params, matrix_weather, days_harvest = establish_org_input('lincoln')
 
@@ -106,11 +136,16 @@ def test_irrigation_fraction():
 
     days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
-    correct_out = pd.read_csv(os.path.join(test_dir, 'test_irrigation_fraction_output.csv'), index_col=0)
+
+    data_path = os.path.join(test_dir, 'test_irrigation_fraction_output.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
 
-def test_water_short():
+def test_water_short(update_data=False):
     print('testing water shortage')
     params, matrix_weather, days_harvest = establish_org_input('lincoln')
 
@@ -129,11 +164,15 @@ def test_water_short():
     days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
 
-    correct_out = pd.read_csv(os.path.join(test_dir, 'test_water_short_output.csv'), index_col=0)
+    data_path = os.path.join(test_dir, 'test_water_short_output.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
 
-def test_short_season():
+def test_short_season(update_data=False):
     print('testing short season')
     params, matrix_weather, days_harvest = establish_org_input('lincoln')
 
@@ -150,11 +189,15 @@ def test_short_season():
     days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
 
-    correct_out = pd.read_csv(os.path.join(test_dir, 'test_short_season_output.csv'), index_col=0)
+    data_path = os.path.join(test_dir, 'test_short_season_output.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
 
-def test_variable_irr_trig_targ():
+def test_variable_irr_trig_targ(update_data=False):
     print('testing time variable irrigation triggers and targets')
     params, matrix_weather, days_harvest = establish_org_input('lincoln')
 
@@ -175,13 +218,19 @@ def test_variable_irr_trig_targ():
 
     days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
-    correct_out = pd.read_csv(os.path.join(test_dir, 'test_variable_irr_trig_targ.csv'), index_col=0)
+
+    data_path = os.path.join(test_dir, 'test_variable_irr_trig_targ.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
 
 def _compair_pet():
     """just to compaire the pet and peyman results, the are slightly differnt,
     but I think that is due to different methods of calculating PET,"""
+    from supporting_functions.plotting import plot_multiple_results
     params, matrix_weather, days_harvest = establish_peyman_input(False)
     peyman_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default',
                                supply_pet=False)
@@ -193,155 +242,161 @@ def _compair_pet():
     plot_multiple_results({'pet': pet_out, 'peyman': peyman_out})
 
 
-def test_pet_calculation():
+def test_pet_calculation(update_data=False):
     print('testing pet calculation')
     params, matrix_weather, days_harvest = establish_peyman_input()
     days_harvest = _clean_harvest(matrix_weather, days_harvest)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=False)
-    correct_out = pd.read_csv(os.path.join(test_dir, 'test_pet_calculation.csv'),
-                              index_col=0)
+
+    data_path = os.path.join(test_dir, 'test_pet_calculation.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
-# Manual Harvest tests
 
-def test_fixed_harvest_man():
+# Manual Harvest tests #todo new tests below here
+
+def test_fixed_harvest_man(update_data=False):
+    test_nm = 'test_fixed_harvest_man'
+    print('testing: ' + test_nm)
     params, matrix_weather, days_harvest = establish_org_input()
     days_harvest = base_manual_harvest_data(matrix_weather, days_harvest)
-    days_harvest = None #todo, set up
+    days_harvest = None  # todo, set up
 
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
-    correct_out = pd.read_csv(os.path.join(test_dir, ''), #todo once I am happy save to the test folder
-                              index_col=0)
+
+    out.loc[:, view_keys].to_csv(r"C:\Users\Matt Hanson\Downloads\{}_out.csv".format(test_nm)) #todo DADB
+    params = pd.Series(params) #todo DADB
+    params.to_csv(r"C:\Users\Matt Hanson\Downloads\{}_parms.csv".format(test_nm)) #todo DADB
+    plot_multiple_results(data={'test': out}, out_vars=view_keys) #todo DADB
+
+    data_path = os.path.join(test_dir, '')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
     raise NotImplementedError
 
 
-def test_harv_trig_man(): #todo
+def test_harv_trig_man(update_data=False):  # todo
     # test manaual harvesting dates with a set trigger, weed fraction set to zero
     raise NotImplementedError
 
 
-def test_harv_targ_man(): #todo
+def test_harv_targ_man(update_data=False):  # todo
     # test manaual harvesting dates with a set target, weed fraction set to zero
     raise NotImplementedError
 
-def test_weed_fraction_man(): #todo
+
+def test_weed_fraction_man(update_data=False):  # todo
     # test manual harvesting trig set to zero +- target with weed fraction above 0
     raise NotImplementedError
 
+
 # automatic harvesting tests
 
-def test_auto_harv_trig(): #todo
+def test_auto_harv_trig(update_data=False):  # todo
+    test_nm = 'test_auto_harv_trig'
+    print('testing: ' + test_nm)
+
     # test auto harvesting dates with a set trigger, weed fraction set to zero
     params, matrix_weather, days_harvest = establish_org_input()
+    params['opt_harvfrin'] = 1
+
     days_harvest = base_auto_harvest_data(matrix_weather)
 
     idx = days_harvest.date < '2014-01-01'
-    days_harvest.loc[idx,'frac_harv'] = 1
-    days_harvest.loc[idx,'harv_trig'] =3000
-    days_harvest.loc[idx,'harv_targ'] = 2000
-    days_harvest.loc[idx,'weed_dm_frac'] =0
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 3000
+    days_harvest.loc[idx, 'harv_targ'] = 2000
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
 
     idx = days_harvest.date >= '2014-01-01'
-    days_harvest.loc[idx,'frac_harv'] = 0.75
-    days_harvest.loc[idx,'harv_trig'] =2500
-    days_harvest.loc[idx,'harv_targ'] = 1500
-    days_harvest.loc[idx,'weed_dm_frac'] =0
+    days_harvest.loc[idx, 'frac_harv'] = 0.75
+    days_harvest.loc[idx, 'harv_trig'] = 2500
+    days_harvest.loc[idx, 'harv_targ'] = 1500
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
 
     # todo something weird happening in 2/11/2014
     days_harvest.drop(columns=['date'], inplace=True)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, auto_harvest=True)
 
-    view_keys = (
-        'WAL',
-        'WCL',
-        'DM',
-        'YIELD',
-        'BASAL',
-        'ROOTD',
-        'IRRIG_DEM',
-        'RYE_YIELD',
-        'WEED_YIELD',
-        'DM_RYE_RM',
-        'DM_WEED_RM',
-        'HARVFR',
-    )
-    out.loc[:, view_keys].to_csv(r"C:\Users\Matt Hanson\Downloads\test_auto harv_trig out.csv")
-    plot_multiple_results(data={'test': out},out_vars=view_keys)
 
+    out.loc[:, view_keys].to_csv(r"C:\Users\Matt Hanson\Downloads\{}_out.csv".format(test_nm)) #todo DADB
+    params = pd.Series(params) #todo DADB
+    params.to_csv(r"C:\Users\Matt Hanson\Downloads\{}_parms.csv".format(test_nm)) #todo DADB
+    plot_multiple_results(data={'test': out}, out_vars=view_keys) #todo DADB
 
-    correct_out = pd.read_csv(os.path.join(test_dir, ''),  # todo once I am happy save to the test folder,
-                              index_col=0)
+    data_path = os.path.join(test_dir, ) ,
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
     raise NotImplementedError
 
-def test_auto_harv_fixed(): #todo
+
+def test_auto_harv_fixed(update_data=False):  # todo
+    test_nm = 'test_auto_harv_fixed'
+    print('testing: ' + test_nm)
+
     # test auto harvesting dates with a set trigger, weed fraction set to zero
     params, matrix_weather, days_harvest = establish_org_input()
     days_harvest = base_auto_harvest_data(matrix_weather)
     params['fixed_removal'] = 1
+    params['opt_harvfrin'] = 1
 
     idx = days_harvest.date < '2014-01-01'
-    days_harvest.loc[idx,'frac_harv'] = 1
-    days_harvest.loc[idx,'harv_trig'] =3000
-    days_harvest.loc[idx,'harv_targ'] = 500
-    days_harvest.loc[idx,'weed_dm_frac'] =0
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 3000
+    days_harvest.loc[idx, 'harv_targ'] = 500
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
 
     idx = days_harvest.date >= '2014-01-01'
-    days_harvest.loc[idx,'frac_harv'] = 0.75
-    days_harvest.loc[idx,'harv_trig'] =1500
-    days_harvest.loc[idx,'harv_targ'] = 500
-    days_harvest.loc[idx,'weed_dm_frac'] =0
-
+    days_harvest.loc[idx, 'frac_harv'] = 0.75
+    days_harvest.loc[idx, 'harv_trig'] = 1500
+    days_harvest.loc[idx, 'harv_targ'] = 500
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
 
     days_harvest.drop(columns=['date'], inplace=True)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, auto_harvest=True)
-    #todo same wierdness on 8-9-2014
-    view_keys = (
-    'WAL',
-    'WCL',
-    'DM',
-    'YIELD',
-    'BASAL',
-    'ROOTD',
-    'IRRIG_DEM',
-    'HARVFR',
-    'RYE_YIELD',
-    'WEED_YIELD',
-    'DM_RYE_RM',
-    'DM_WEED_RM',
-        'HARVLV',
-        'HARVLVD',
-        'HARVST',
-        'HARVRE',
-        'DM_nCLVD',
 
-    )
+    # todo same wierdness on 8-9-2014
+    out.loc[:, view_keys].to_csv(r"C:\Users\Matt Hanson\Downloads\{}_out.csv".format(test_nm)) #todo DADB
+    params = pd.Series(params) #todo DADB
+    params.to_csv(r"C:\Users\Matt Hanson\Downloads\{}_parms.csv".format(test_nm)) #todo DADB
+    plot_multiple_results(data={'test': out}, out_vars=view_keys) #todo DADB
 
-    out.to_csv(r"C:\Users\Matt Hanson\Downloads\test_auto harve_fixed out.csv")
-    pd.Series(params).to_csv(r"C:\Users\Matt Hanson\Downloads\test_auto harve_fixed out_params.csv")
-    plot_multiple_results(data={'test': out},out_vars=view_keys)
+    data_path = os.path.join(test_dir, '')  # todo once I am happy save to the test folder, happy it is acting well
+    if update_data:
+        out.to_csv(data_path)
 
-
-    correct_out = pd.read_csv(os.path.join(test_dir, ''),  # todo once I am happy save to the test folder, happy it is acting well
-                              index_col=0)
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
     raise NotImplementedError
 
 
-def test_weed_fraction_auto(): #todo
+def test_weed_fraction_auto(update_data=False):  # todo
     # test auto harvesting trig set +- target with weed fraction above 0
     raise NotImplementedError
 
 
-def test_weed_fixed_harv_auto(): #todo
+def test_weed_fixed_harv_auto(update_data=False):  # todo
+    test_nm = 'test_weed_fixed_harv_auto'
+    print('testing: ' + test_nm)
+
     # test auto harvesting dates with a set trigger, weed fraction set to zero
     params, matrix_weather, days_harvest = establish_org_input()
     days_harvest = base_auto_harvest_data(matrix_weather)
     params['fixed_removal'] = 1
+    params['opt_harvfrin'] = 1
+
 
     idx = days_harvest.date < '2014-01-01'
     days_harvest.loc[idx, 'frac_harv'] = 1
@@ -358,46 +413,38 @@ def test_weed_fixed_harv_auto(): #todo
     days_harvest.drop(columns=['date'], inplace=True)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, auto_harvest=True)
 
-    view_keys = (
-        'WAL',
-        'WCL',
-        'DM',
-        'YIELD',
-        'BASAL',
-        'ROOTD',
-        'IRRIG_DEM',
-        'RYE_YIELD',
-        'WEED_YIELD',
-        'DM_RYE_RM',
-        'DM_WEED_RM',
-        'HARVLV',
-        'HARVLVD',
-        'HARVST',
-        'HARVRE',
-        'DM_nCLVD',
-    )
+    out.loc[:, view_keys].to_csv(r"C:\Users\Matt Hanson\Downloads\{}_out.csv".format(test_nm)) #todo DADB
+    params = pd.Series(params) #todo DADB
+    params.to_csv(r"C:\Users\Matt Hanson\Downloads\{}_parms.csv".format(test_nm)) #todo DADB
+    plot_multiple_results(data={'test': out}, out_vars=view_keys) #todo DADB
 
-    out.loc[:, view_keys].to_csv(r"C:\Users\Matt Hanson\Downloads\test_auto harve_fixed_weed.csv")
-    plot_multiple_results(data={'test': out}, out_vars=view_keys)
+    data_path = os.path.join(test_dir, '')  # todo once I am happy save to the test folder, happy it is acting well
+    if update_data:
+        out.to_csv(data_path)
 
-    correct_out = pd.read_csv(os.path.join(test_dir, ''),
-                              # todo once I am happy save to the test folder, happy it is acting well
-                              index_col=0)
+    correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
     # test auto fixed harvesting trig set +- target with weed fraction above 0
     raise NotImplementedError
 
 
-
 # todo write a description in the readme file
 
 
 if __name__ == '__main__':
-    #test_auto_harv_fixed()
-    #test_auto_harv_trig()
+    if True: #new tests, top is working through, below I'm happy with
+        test_auto_harv_fixed()
 
 
+    if False: # new tests not happy with/testing
+        test_fixed_harvest_man()
+        test_harv_trig_man()
+        test_harv_targ_man()
+        test_weed_fraction_man()
+        test_auto_harv_trig()
+        test_weed_fraction_auto()
+        test_weed_fixed_harv_auto()
 
     test_org_basgra_nz()
     test_irrigation_trigger()
@@ -406,5 +453,6 @@ if __name__ == '__main__':
     test_short_season()
     test_variable_irr_trig_targ()
     test_pet_calculation()
+
 
     print('\n\nall tests passed')
