@@ -112,6 +112,7 @@ New format for havest dataframe, two allowable lenghts
 * Datatype transition from int(v2.0.0-) to float(v3.0.0)
 * Manual harvest (n x 6 dataframe, where n=number of harvest events), python auto_harvest=False
 * Automatic harvest (m x 6 dataframe, where m=ndays), python auto_harvest=True
+* the fixed harvest size requirements of 100 days were fixed in V1.0.0
 
 Dataframe columns
 * 'year',  # e.g. 2002

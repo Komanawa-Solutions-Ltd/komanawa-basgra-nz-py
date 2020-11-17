@@ -213,7 +213,7 @@ _out_cols = (
     'RDLVD',  # Decomp. Rate, #  (d-1)
     'HARVFR',  # Harvest Frac., #  (-)
 
-    'DM',  # Ryegrass Mass, #  (kg DM ha-1)
+    'DM',  # Ryegrass Mass, #  (kg DM ha-1) Note that this is after any harvest (e.g. at end of time stamp)
     'RES',  # Reserve C, #  (g g-1)
     'LERG',  # Gen. Elong. Rate, #  (m d-1)
     'PHENRF',  # Phen. Effect, #  (-)
@@ -258,9 +258,12 @@ _out_cols = (
     'DM_WEED_RM',  # dry matter of weed species harvested in this time step (kg DM ha-1)
                    # Note that this is the calculated removal but if 'opt_harvfrin' = False then it may be
                    # significantly different to the actual removal, which is show by the appropriate yeild variable
-    'DMH_RYE',  # harvestable dry matter of # species, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
-    'DMH_WEED',  # harvestable dry matter of # specie, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
+    'DMH_RYE',  # harvestable dry matter of rye species, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
+                # note that this is before any removal by harvesting
+    'DMH_WEED',  # harvestable dry matter of weed specie, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
+                 # note that this is before any removal by harvesting
     'DMH',  # harvestable dry matter = DMH_RYE + DMH_WEED  (kg DM ha-1)
+            # note that this is before any removal by harvesting
 
 )
 
