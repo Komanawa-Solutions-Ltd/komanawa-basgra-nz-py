@@ -103,6 +103,23 @@ def establish_peyman_input(return_pet=False):
 
     return params, matrix_weather, days_harvest
 
+def _compair_pet():
+    """just to compaire the pet and peyman results, the are slightly differnt,
+    but I think that is due to different methods of calculating PET,"""
+    from supporting_functions.plotting import plot_multiple_results
+    from basgra_python import run_basgra_nz
+    verbose=False
+    params, matrix_weather, days_harvest = establish_peyman_input(False)
+    peyman_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default',
+                               supply_pet=False)
+
+    params, matrix_weather, days_harvest = establish_peyman_input(True)
+    pet_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=True)
+
+    from supporting_functions.plotting import plot_multiple_results
+    plot_multiple_results({'pet': pet_out, 'peyman': peyman_out})
+
+
 
 def establish_org_input(site='scott'):
     if site == 'scott':
@@ -166,7 +183,7 @@ def establish_org_input(site='scott'):
     ndays = matrix_weather.shape[0]
     return params, matrix_weather, days_harvest
 
-def _clean_harvest(matrix_weather, days_harvest):
+def _clean_harvest(days_harvest, matrix_weather):
     start_year = matrix_weather['year'].min()
     start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
 
@@ -253,8 +270,16 @@ def get_lincoln_broadfield():
 
     return outdata
 
-def base_manual_harvest_data(matrix_weather, old_days_harvest):
-    raise NotImplementedError #todo
+def base_manual_harvest_data():
+    params, matrix_weather, days_harvest = establish_org_input()
+
+    days_harvest = _clean_harvest(days_harvest, matrix_weather)
+    days_harvest.loc[:,'frac_harv'] = 1
+    days_harvest.loc[:,'harv_trig'] = 3000
+    days_harvest.loc[:,'harv_targ'] = 1000
+    days_harvest.loc[:,'weed_dm_frac'] = 0
+
+    return days_harvest
 
 def base_auto_harvest_data(matrix_weather):
     strs = ['{}-{:03d}'.format(e, f) for e, f in matrix_weather[['year', 'doy']].itertuples(False, None)]
@@ -271,4 +296,4 @@ def base_auto_harvest_data(matrix_weather):
 
 
 if __name__ == '__main__':
-    establish_peyman_input()
+    base_manual_harvest_data()
