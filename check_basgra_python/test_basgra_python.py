@@ -250,6 +250,7 @@ def test_variable_irr_trig_targ(update_data=False):
 
 
 def test_pet_calculation(update_data=False):
+    # note this test was not as throughrougly investigated as it was not needed for my work stream
     print('testing pet calculation')
     params, matrix_weather, days_harvest = establish_peyman_input()
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
@@ -263,21 +264,38 @@ def test_pet_calculation(update_data=False):
     _output_checks(out, correct_out)
 
 
-# Manual Harvest tests #todo new tests below here
+# Manual Harvest tests
 
 def test_fixed_harvest_man(update_data=False):
     test_nm = 'test_fixed_harvest_man'
     print('testing: ' + test_nm)
     params, matrix_weather, days_harvest = establish_org_input()
-    days_harvest = base_manual_harvest_data(matrix_weather, days_harvest)
-    days_harvest = None  # todo, set up
+    params['fixed_removal'] = 1
+    params['opt_harvfrin'] = 1
+
+    days_harvest = base_manual_harvest_data()
+
+    idx = days_harvest.date < '2014-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 2500
+    days_harvest.loc[idx, 'harv_targ'] = 1000
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
+
+    idx = days_harvest.date >= '2014-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 1000
+    days_harvest.loc[idx, 'harv_targ'] = 10
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
+
+    idx = days_harvest.date >= '2017-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 2000
+    days_harvest.loc[idx, 'harv_targ'] = 100
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
+
+    days_harvest.drop(columns=['date'], inplace=True)
 
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
-
-    out.loc[:, view_keys].to_csv(r"C:\Users\Matt Hanson\Downloads\{}_out.csv".format(test_nm))  # todo DADB
-    params = pd.Series(params)  # todo DADB
-    params.to_csv(r"C:\Users\Matt Hanson\Downloads\{}_parms.csv".format(test_nm))  # todo DADB
-    plot_multiple_results(data={'test': out}, out_vars=view_keys)  # todo DADB
 
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
@@ -286,17 +304,86 @@ def test_fixed_harvest_man(update_data=False):
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
-    raise NotImplementedError
 
-
-def test_harv_trig_man(update_data=False):  # todo
+def test_harv_trig_man(update_data=False):
     # test manaual harvesting dates with a set trigger, weed fraction set to zero
-    raise NotImplementedError
+    test_nm = 'test_harv_trig_man'
+    print('testing: ' + test_nm)
+    params, matrix_weather, days_harvest = establish_org_input()
+    params['fixed_removal'] = 0
+    params['opt_harvfrin'] = 1
+
+    days_harvest = base_manual_harvest_data()
+
+    idx = days_harvest.date < '2014-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 0.5
+    days_harvest.loc[idx, 'harv_trig'] = 2500
+    days_harvest.loc[idx, 'harv_targ'] = 2200
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
+
+    idx = days_harvest.date >= '2014-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 1000
+    days_harvest.loc[idx, 'harv_targ'] = 500
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
+
+    idx = days_harvest.date >= '2017-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 1500
+    days_harvest.loc[idx, 'harv_targ'] = 1000
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
+
+    days_harvest.drop(columns=['date'], inplace=True)
+
+    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+
+    data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out)
 
 
-def test_weed_fraction_man(update_data=False):  # todo
+
+def test_weed_fraction_man(update_data=False):
     # test manual harvesting trig set to zero +- target with weed fraction above 0
-    raise NotImplementedError
+    test_nm = 'test_weed_fraction_man'
+    print('testing: ' + test_nm)
+    params, matrix_weather, days_harvest = establish_org_input()
+    params['fixed_removal'] = 0
+    params['opt_harvfrin'] = 1
+
+    days_harvest = base_manual_harvest_data()
+
+    idx = days_harvest.date < '2014-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 0.5
+    days_harvest.loc[idx, 'harv_trig'] = 2500
+    days_harvest.loc[idx, 'harv_targ'] = 2200
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0
+
+    idx = days_harvest.date >= '2014-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 1000
+    days_harvest.loc[idx, 'harv_targ'] = 500
+    days_harvest.loc[idx, 'weed_dm_frac'] = 0.5
+
+    idx = days_harvest.date >= '2017-01-01'
+    days_harvest.loc[idx, 'frac_harv'] = 1
+    days_harvest.loc[idx, 'harv_trig'] = 1500
+    days_harvest.loc[idx, 'harv_targ'] = 1000
+    days_harvest.loc[idx, 'weed_dm_frac'] = 1
+
+    days_harvest.drop(columns=['date'], inplace=True)
+
+    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+
+    data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out)
 
 
 # automatic harvesting tests
@@ -441,7 +528,8 @@ def test_weed_fixed_harv_auto(update_data=False):
 
 if __name__ == '__main__':
 
-    test_trans_manual_harv()
+
+
     test_org_basgra_nz()
     test_irrigation_trigger()
     test_irrigation_fraction()
@@ -450,18 +538,12 @@ if __name__ == '__main__':
     test_variable_irr_trig_targ()
     test_pet_calculation()
 
+    test_trans_manual_harv()
+    test_harv_trig_man()
+    test_fixed_harvest_man()
+    test_weed_fraction_auto()
+    test_auto_harv_trig()
+    test_weed_fixed_harv_auto()
+    test_auto_harv_fixed()
+    test_weed_fraction_man()
     print('\n\nall established tests passed')
-
-    if True:  # new tests, top is working through, below I'm happy with
-        # working on
-
-        # finished and happy with, but for which I have not yet saved the data (will to once all tests are sorted)
-        test_weed_fraction_auto()
-        test_auto_harv_trig()
-        test_weed_fixed_harv_auto()
-        test_auto_harv_fixed()
-
-    if False:  # new tests have not worked on
-        test_fixed_harvest_man()
-        test_harv_trig_man()
-        test_weed_fraction_man()

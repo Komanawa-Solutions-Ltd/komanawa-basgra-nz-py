@@ -12,6 +12,7 @@ from subprocess import Popen
 from copy import deepcopy
 from input_output_keys import _param_keys, _out_cols, _days_harvest_keys, _matrix_weather_keys_pet, \
     _matrix_weather_keys_peyman
+from warnings import warn
 
 # compiled with gfortran 64,
 # https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download
@@ -163,13 +164,26 @@ def _trans_manual_harv(days_harvest, matrix_weather):
                                      'frac_harv': np.zeros(len(matrix_weather)),  # set filler values
                                      'harv_trig': np.zeros(len(matrix_weather)) - 1,  # set flag to not harvest
                                      'harv_targ': np.zeros(len(matrix_weather)),  # set filler values
-                                     'weed_dm_frac': np.zeros(len(matrix_weather)),  # set filler values
+                                     'weed_dm_frac': np.zeros(len(matrix_weather))*np.nan,  # set filler values
                                      })
     days_harvest_out = days_harvest_out.set_index(['year', 'doy'])
     for k in ['frac_harv', 'harv_trig', 'harv_targ', 'weed_dm_frac']:
         days_harvest_out.loc[days_harvest.index, k] = days_harvest.loc[:, k]
 
     days_harvest_out = days_harvest_out.reset_index()
+
+    # fill the weed fraction so that DMH_WEED is always calculated
+
+    if pd.isna(days_harvest_out.weed_dm_frac).iloc[0]:
+        warn('weed_dm_frac is na for the first day of simulation, setting to first valid weed_dm_frac\n'
+             'this does not affect the harvesting only the calculation of the DMH_weed variable.')
+
+        idx = np.where(pd.notna(days_harvest_out.weed_dm_frac))[0][0]  # get first non-nan value
+        id_val = pd.Series(days_harvest_out.index).iloc[0]
+        days_harvest_out.loc[id_val, 'weed_dm_frac'] = days_harvest_out.loc[:, 'weed_dm_frac'].iloc[idx]
+
+    days_harvest_out.loc[:, 'weed_dm_frac'] = days_harvest_out.loc[:, 'weed_dm_frac'].fillna(method='ffill')
+
     return days_harvest_out
 
 
