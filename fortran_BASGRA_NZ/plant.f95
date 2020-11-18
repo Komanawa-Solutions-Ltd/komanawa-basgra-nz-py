@@ -3,11 +3,12 @@ module plant
 use parameters_site
 use parameters_plant
 use environment
+use brent
 
 implicit none
 
 ! Plant variables
-integer :: NOHARV,HARVI
+integer :: NOHARV ! simon removed NOHARV switch, so not used
 real :: CRESMX,DAYLGE,FRACTV,GLVSI,GSTSI,LERG,LERV,LUEMXQ,NELLVG,PHENRF,PHOT,RESMOB
 real :: RDLVD, ALLOTOT,GRESSI,GSHSI,GLAISI,SOURCE,SINK1T,CSTAV,TGE
 real :: RDRFROST,RDRT,RDRL,RDRTOX,RESPGRT,RESPGSH,RESPHARD,RESPHARDSI,RESNOR,RLEAF,RplantAer,SLANEW
@@ -15,58 +16,119 @@ real :: RATEH,reHardPeriod,RDRTIL,RDRS,RDRW ! Simon renamed TV2TIL to RDRTIL
 real :: CRESMN,DAYLGEMX
 real :: ALLOSH, ALLORT, ALLOLV, ALLOST, FS, ALLOFRAC
 
+! define variables for the the harvest fraction optimisation, needs to be global
+
+real :: clv_cres_ect, fhageer, HAGRE_stuff, goal
+
 contains
+
+  real function f(x)
+    IMPLICIT NONE
+    real, intent(in):: x
+  f = clv_cres_ect * x * 10 + x ** (1 - fhageer) * HAGRE_stuff * 10 - goal
+  end function f
 
 ! Calculate Harvest GSTUB,HARVLA,HARVLV,HARVPH,HARVRE,HARVST,HARVTILG2,HARVFR
 ! Simon plant processes are now calculated as if harvest did not happen
-Subroutine Harvest(NDHARV, CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
+Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                              GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
-                             HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV)
-  integer :: NDHARV
-  integer :: doy,year
-  integer, dimension(NDHARV,3) :: DAYS_HARVEST     ! Simon added third column (percent leaf removed)
-  real    :: CLV, CRES, CST, CSTUB, CLVD, LAI, PHEN, TILG2, TILG1, TILV
+                             HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, WEED_HARV_FR, &
+                    DM_RYE_RM, DM_WEED_RM, DMH_RYE, DMH_WEED)
+  integer :: day
+  integer :: NDAYS, NHARVCOL
+  real, dimension(NDAYS, NHARVCOL) :: DAYS_HARVEST     ! major re-structure by Matt Hanson
+  real    :: BASAL, CLV, CRES, CST, CSTUB, CLVD, LAI, PHEN, TILG2, TILG1, TILV
   real    :: GSTUB, HARVLV, HARVLVD, HARVLA, HARVRE, HARVTILG2, HARVST, HARVPH
-  real    :: CLAI, HARVFR, TV1, HARVFRIN, RDRHARV, HARVFRST, DIESFRST
+  real    :: CLAI, HARVFR, TV1, HARVFRIN, RDRHARV, HARVFRST, DIESFRST, DMH_RYE, DMH_WEED
+  real    :: WEED_HARV_FR ! fraction of harvest yeild from weed species, outputs to calc weed yeild
   integer :: HARV
 !  integer :: i
 
-  HARV   = 0
-  NOHARV = 1
-  HARVFR = 0.0
-!  do i=1,100 !
-!    if ( (year==DAYS_HARVEST(i,1)) .and. (doy==DAYS_HARVEST(i,2)) ) then
-    if ( (year==DAYS_HARVEST(HARVI,1)) .and. (doy==DAYS_HARVEST(HARVI,2)) ) then
-      HARV   = 1
-      NOHARV = 0
-      HARVFRIN = DAYS_HARVEST(HARVI,3) / 100.0  ! Simon read in fraction of mass harvested
-      ! Logic to calculate proportion of CLV harvested
-      ! HARVFRIN*(CLV+CST+CSTUB+CLVD+CRES/0.40*0.45)=HARVRF*CLV+HAGERE*CST+0*CSTUB+HARVFRD*CLVD+CRES/0.40*0.45*(HARVRF*CLV+HAGERE*CST+0*CSTUB)/(CLV+CST+CSTUB)
-      ! HARVFR*(CLV+CRES/0.40*0.45*CLV/(CLV+CST+CSTUB))=HARVFRIN*(CLV+CST+CSTUB+CLVD+CRES/0.40*0.45)-HAGERE*CST-HARVFRD*CLVD-CRES/0.40*0.45*HAGERE*CST/(CLV+CST+CSTUB)
-!      HARVFR=(HARVFRIN*(CLV+CST+CSTUB+CLVD+CRES/0.40*0.45)-HAGERE*CST-HARVFRD*CLVD-CRES/0.40*0.45*HAGERE*CST/(CLV+CST+CSTUB)) &
-!              /(CLV+CRES/0.40*0.45*CLV/(CLV+CST+CSTUB))
-!      HARVFR=max(0.0,min(0.8,HARVFR)) ! Set an upper bound
-      HARVFR = HARVFRIN  ! Simon just use entered fraction for leaf. Otherwise dead can have too much effect.
-      HARVI  = HARVI + 1 ! advance harvest array index to next event
-	end if
-!  end do
+  real ::  FRAC_HARV
+  real ::  HARV_TRIG
+  real ::  HARV_TARG
+  real ::  WEED_DM_FRAC, DM_RM, DM_RYE_RM, DM_WEED_RM
+  logical :: temp_opt_harvfrin
+
+  ! set parameters from days_harvest
+  FRAC_HARV = DAYS_HARVEST(day, 3)
+  HARV_TRIG = DAYS_HARVEST(day, 4)
+  HARV_TARG = DAYS_HARVEST(day, 5)
+  WEED_DM_FRAC = DAYS_HARVEST(day, 6)
+  temp_opt_harvfrin = opt_harvfrin
+
+
+  ! calculate dry matter of ryegrass + weeds, include the harvestable fraction of dry matter
+  DMH_RYE        = ((CLV+CST+CSTUB)/0.45 + CRES/0.40 + (CLVD * HARVFRD / 0.45)) * 10.0
+  DMH_WEED =  WEED_DM_FRAC*DMH_RYE/BASAL*(1-BASAL)
+
+  ! if above trigger and trigger >=0 (HARV_TRIG<0, flag for no harvest) then harvest
+  if (((DMH_RYE + DMH_WEED) >= HARV_TRIG) .and. (HARV_TRIG>=0)) then
+      HARV = 1
+      if (FIXED_REMOVAL) then
+          ! harvest assuming that the target is a fixed volume to harvest and
+          ! harvest weeds and rye propotionally according to dry matter content
+          DM_RM = HARV_TARG * FRAC_HARV ! amount of total dry matter to remove
+
+          DM_RYE_RM = DM_RM * (DMH_RYE/(DMH_RYE+DMH_WEED)) ! amount of rye to harvest
+          DM_WEED_RM = DM_RM * (DMH_WEED/(DMH_RYE+DMH_WEED)) ! amount of weed to harvest
+
+          HARVFRIN = DM_RYE_RM/DMH_RYE
+          WEED_HARV_FR = DM_WEED_RM/DM_RYE_RM
+
+          ! set values for the optimisation function
+          goal = DM_RYE_RM
+          clv_cres_ect = (CLV / 0.45 + CLVD * HARVFRD / 0.45) + (CRES * CLV / (CLV + CST + CSTUB) / 0.40)
+          fhageer= HAGERE
+          HAGRE_stuff = (CST / 0.45 + CRES * CST / (CLV + CST + CSTUB) / 0.40)
+
+      else
+          ! harvest assuming that the goal is to harvest to the target dry matter
+          ! harvest weeds and rye propotionally according to dry matter content
+          DM_RM = ((DMH_RYE + DMH_WEED) - HARV_TARG) * FRAC_HARV ! amount of total dry matter to remove
+
+          DM_RYE_RM = DM_RM * (DMH_RYE/(DMH_RYE+DMH_WEED)) ! amount of rye to harvest
+          DM_WEED_RM = DM_RM * (DMH_WEED/(DMH_RYE+DMH_WEED)) ! amount of weed to harvest
+
+          HARVFRIN = DM_RYE_RM/DMH_RYE
+          WEED_HARV_FR = DM_WEED_RM/DM_RYE_RM
+
+          ! set values for the optimisation function
+          goal = DM_RYE_RM
+          clv_cres_ect = (CLV / 0.45 + CLVD * HARVFRD / 0.45) + (CRES * CLV / (CLV + CST + CSTUB) / 0.40)
+          fhageer= HAGERE
+          HAGRE_stuff = (CST / 0.45 + CRES * CST / (CLV + CST + CSTUB) / 0.40)
+      end if
+
+      if (HARVFRIN<=0) then
+        temp_opt_harvfrin = .false. ! to ensure that we cannot have a optimisation where there is zero harvest,
+        ! this could break harvfrin
+      end if
+      if (temp_opt_harvfrin) then
+     ! estimate the fraction of harvest to undertake using brent zero !todo send this to andrea
+     HARVFRIN = zero(0.0,1.0,& ! bounds
+       1e-5, & ! machine tolerance
+      1e-5, & ! tolerance
+      f) ! function to minimize
+      end if
+
+  else
+      ! do not harvest
+      HARV = 0
+      HARVFRIN = 0.0 ! no harvest
+      WEED_HARV_FR = 0.0
+      DM_RYE_RM = 0 ! amount of rye to harvest
+      DM_WEED_RM = 0 ! amount of weed to harvest
+      ! difference between HARVFRIN and HARVFR is unclear, but I belive that HARVFR is simply a legacy variable
+  end if
+
+
+  HARVFR = HARVFRIN  ! Simon just use entered fraction for leaf. Otherwise dead can have too much effect.
+
+
+
 
   FRACTV = (TILV + TILG1)/(TILG2 + TILG1 + TILV) ! Fraction of non-elongating tillers (Simon included TILG1)
-  ! (1-FRACTV) * CLAI = LAI on elongating tillers, assumed to all be harvested
-
-! CLAIV	                 = m2 leaf m-2 Maximum LAI remaining after harvest, when no tillers elongate
-! CLAI	= FRACTV * CLAIV = m2 leaf m-2	Maximum LAI remaining after harvest
-
-!  if (LAI <= CLAI) then
-!    HARVFR = 0.0             ! Forgot to harvest (1-FRACTV)*LAI?
-!  else
-!    HARVFR = 1.0 - CLAI/LAI  ! Fraction of leaf that is harvested
-!  end if
-
-!  HARVFR    = max(0.0, 1.0-CLAIV/LAI ) * FRACTV + 1.0 * (1.0 - FRACTV)         ! Simon proportion of CLV harvested
-
-  ! HAGERE = proportion of CST harvested
-  ! RES       = (CRES/0.40) / ((CLV+CST+CSTUB)/0.45 + CRES/0.40)               ! CRES is in CLV, CST and CSTUB
   HARVFRST  = HARVFR ** (1-HAGERE)                                             ! Simon proportion of CST harvested
   DIESFRST  = 1.0 - HARVFRST                                                   ! Simon proportion of CST that dies
   TV1       = (HARVFR * CLV + HARVFRST * CST + 0 * CSTUB)/(CLV + CST + CSTUB)  ! Simon proportion of CRES harvested
@@ -83,11 +145,8 @@ Subroutine Harvest(NDHARV, CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHE
   HARVLVD   = (HARV   * CLVD * HARVFR * HARVFRD) / DELT
   HARVPH    = (HARV   * PHEN        ) / DELT           ! PHEN zeroed after each harvest
   HARVST    = (HARV   * CST * HARVFRST) / DELT         ! Simon separated out GSTUB from HARVST
-!  GSTUB     = (HARV   * CST * (1-HARVFRST) ) / DELT      ! Non harvested portion of CST becomes CSTUB, which quickly dies
   GSTUB     = (HARV   * CST * DIESFRST) / DELT         ! Simon allowed stem survival when HARVFRST + DIESFRST < 1
   HARVRE    = (HARV   * CRES * TV1  ) / DELT
-!  HARVTILV   = 0.
-!  HARVTILG1   = 0.
   HARVTILG2 = (HARV   * TILG2       ) / DELT           ! TILG2 zeroed after each harvest
 end Subroutine Harvest
 

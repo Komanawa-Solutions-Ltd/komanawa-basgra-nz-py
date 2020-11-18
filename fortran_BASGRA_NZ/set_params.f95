@@ -5,7 +5,7 @@ use parameters_plant
 
 implicit none
 
-real      :: pa(111) ! Note: NPAR is also hardwired in BASGRA.f90
+real      :: pa(NPAR) !npar set in parameters_site
 
 ! a script checks that these variable names match what is expected in the parameter.txt file (Simon)
 ! Initial values
@@ -122,8 +122,29 @@ TRANRFCR     = pa(106)
 DELE         = pa(107)
 DELD         = pa(108)
 
+! previous site parameters brough out of the model
 IRRIGF       = pa(109)
-doy_irr_start= pa(110)
-doy_irr_end  = pa(111)
+DRATE        = pa(110) ! mm d-1 Maximum soil drainage rate !
+CO2A         = pa(111)
+poolInfilLimit = pa(112)
+
+! new irrigation parameters
+doy_irr_start= pa(113)
+doy_irr_end  = pa(114)
+
+! new harvest parameters
+
+if (pa(115) < 0.9) then ! sudo boolean as float, expects 1 or 0
+    FIXED_REMOVAL = .FALSE.
+else
+    FIXED_REMOVAL = .TRUE.
+end if
+if (pa(116) < 0.9) then ! sudo boolean as float, expects 1 or 0
+    opt_harvfrin = .FALSE.
+else
+    opt_harvfrin = .TRUE.
+end if
+
+
 return
 end

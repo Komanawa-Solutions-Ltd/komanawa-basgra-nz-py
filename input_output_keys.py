@@ -117,11 +117,40 @@ _param_keys = (
     'TRANRFCR',  # TRANRFCR,  # -, # Critical water stress for tiller death
     'DELE',  # DELE,  # -, # Litter disappearance due to earthworms
     'DELD',  # DELD,  # -, # Litter disappearance due to decomposition
+
+    # site parameters brought out
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
+    'DRATE',  # woodward set to 50   ! mm d-1 Maximum soil drainage rate !
+    'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
+    'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
+
+    # new for irrigation
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
 
+    # new for harvest, certainly parameters
+    'fixed_removal',  # sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
+    'opt_harvfrin',  # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
+    # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
+    # harvest, the amount harvested may be significantly greather than expected depending on CST
+
 )
+
+_days_harvest_keys = (
+    'year',  # e.g. 2002
+    'doy',  # day of year 1 - 356 (366 for leap year)
+    'frac_harv',
+    # fraction (0-1) of material above target to harvest to maintain 'backward capabilities' with v2.0.0
+    'harv_trig',  # dm above which to initiate harvest, if trigger is less than zero no harvest will take place
+    'harv_targ',  # dm to harvest to or to remove depending on 'fixed_removal'
+    'weed_dm_frac',  # fraction of dm of ryegrass to attribute to weeds
+
+)
+
+# todo check harvest implementation:
+# #todo I thinkn I have fixed the harvest propotion thing, but not sure..., short test and I'm done
+#todo I really need to throuroughly check the weed harvesting options!
+
 
 _matrix_weather_keys_pet = (
     'year',  # e.g. 2002
@@ -154,14 +183,6 @@ _matrix_weather_keys_peyman = (
     'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
 )
 
-_days_harvest_keys = (
-    # -1 for these seems to set as a null value, to account for the 100 max harvests days
-    'year',  # e.g. 2002
-    'doy',  # day of year 1 - 356 (366 for leap year)
-    'percent_harvest',  # percent of harvest as an integer 0-100,
-
-)
-
 _out_cols = (
     # varname, # shortname, # units
     'Time',  # Time, #  (y)
@@ -192,7 +213,7 @@ _out_cols = (
     'RDLVD',  # Decomp. Rate, #  (d-1)
     'HARVFR',  # Harvest Frac., #  (-)
 
-    'DM',  # Ryegrass Mass, #  (kg DM ha-1)
+    'DM',  # Ryegrass Mass, #  (kg DM ha-1) Note that this is after any harvest (e.g. at end of time stamp)
     'RES',  # Reserve C, #  (g g-1)
     'LERG',  # Gen. Elong. Rate, #  (m d-1)
     'PHENRF',  # Phen. Effect, #  (-)
@@ -217,7 +238,7 @@ _out_cols = (
     'WCL',  # Eff. Soil Moisture, #  (%)
     'HARVFRIN',  # Harvest Data, #  (-)
     'SLANEW',  # New SLA, #  (m2 gC-1)
-    'YIELD',  # PRG Yield, #  (tDM ha-1)
+    'YIELD',  # PRG Yield, #  (tDM ha-1) sum of YIELD_RYE and YIELD_WEED
     'BASAL',  # Basal Area, #  (%)
     'GTILV',  # Till. Birth, #  (till m-2 d-1)
     'DTILV',  # Till. Death, #  (till m-2 d-1)
@@ -227,7 +248,27 @@ _out_cols = (
     'IRR_TARG',  # irrigation Target (fraction of field capacity) to fill to, also an input variable
     'IRR_TRIG',  # irrigation trigger (fraction of field capacity at which to start irrigating
     'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
+    'RYE_YIELD',  # PRG Yield from rye grass species, #  (tDM ha-1)  note that this is the actual amount of
+                  # material that has been removed
+    'WEED_YIELD',  # PRG Yield from weed (other) species, #  (tDM ha-1)  note that this is the actual amount
+                   # of material that has been removed
+    'DM_RYE_RM',  # dry matter of Rye species harvested in this time step (kg DM ha-1) Note that this is the
+                  # calculated removal but if 'opt_harvfrin' = False then it may be significantly different to the
+                  # actual removal, which is show by the appropriate yeild variable
+    'DM_WEED_RM',  # dry matter of weed species harvested in this time step (kg DM ha-1)
+                   # Note that this is the calculated removal but if 'opt_harvfrin' = False then it may be
+                   # significantly different to the actual removal, which is show by the appropriate yeild variable
+    'DMH_RYE',  # harvestable dry matter of rye species, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
+                # note that this is before any removal by harvesting
+    'DMH_WEED',  # harvestable dry matter of weed specie, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
+                 # note that this is before any removal by harvesting
+    'DMH',  # harvestable dry matter = DMH_RYE + DMH_WEED  (kg DM ha-1)
+            # note that this is before any removal by harvesting
+
 )
+
+# todo create correct output order, so that I can re-order the data
+# todo write the memory requirements for size of a maximum run and the size of a minimum run
 
 _site_param_keys = (
     'LAT',  # LAT,  # degN, # Latitude
@@ -255,6 +296,14 @@ _site_param_keys = (
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
+    'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
+    'DRATE',  # woodward set to 50   ! mm d-1 Maximum soil drainage rate !
+    'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
+    'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
+    'fixed_removal',  # sudo boolean(1=True, 0=False) defines if auto_harv_targ is fixed amount or amount to harvest to,
+    'opt_harvfrin' # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
+                     # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
+                     # harvest, the amount harvested may be significantly greather than expected depending on CST
 
 )
 _plant_param_keys = (

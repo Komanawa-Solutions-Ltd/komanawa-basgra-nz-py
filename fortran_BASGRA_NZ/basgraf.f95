@@ -7,7 +7,7 @@ module basgramodule
 
 contains
 
-subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,NDHARV,VERBOSE) bind(C, name = "BASGRA_")
+subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,VERBOSE) bind(C, name = "BASGRA_")
 !-------------------------------------------------------------------------------
 ! This is the BASic GRAss model originally written in MATLAB/Simulink by Marcel
 ! van Oijen, Mats Hoglind, Stig Morten Thorsen and Ad Schapendonk.
@@ -47,14 +47,13 @@ subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,NDHARV,VERBOSE
   !  switching between modes requires different compiliations, to set to mode 2, -Dweathergen, must be called while
   !  compiling (e.g.gfortran -x f95-cpp-input -Dweathergen -O3 -c -fdefault-real-8 ....)
 
-  !DAYS_HARVEST: int, The harvest dates, size is (NDHARV,3) the columns are
+  !DAYS_HARVEST: int, The harvest dates, size is (NDHARV,3) the columns are !todo update this documentation
   !              1: year
   !              2: the day of year(1-365 or 366(for leap years))
   !              3: the percent harvest (e.g. 50 = 50%)
   !NDAYS: int, the number of days to simulate, this should match the number of days of real data in MATRIX_WEATHER
   !NOUT: int, the number of output variables, at present this should be 56
   !y: double, the output array, initialised as zeros
-  !NDHARV: int, the number of harvest days
   !VERBOSE: boolean, if True print a number of debugging information
 
  !-------------------------------------------------------------------------------
@@ -70,19 +69,19 @@ implicit none
 
 ! Define model inputs
 
-integer(kind = c_int), intent(in)            :: NDHARV
 logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT
-integer(kind = c_int), intent(in), dimension(NDHARV,3) :: DAYS_HARVEST ! Simon added third column (= pc harvested) Matt H added ndharv to make it undefined by size
-integer, parameter                                  :: NPAR     = 111 ! NPAR also hardwired in set_params.f90
+integer, parameter ::  NHARVCOL = 6 ! here so that I don't have to keep updating in harvest as well
+real(kind = c_double), intent(in), dimension(NDAYS,NHARVCOL) :: DAYS_HARVEST
+
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
   integer, parameter                                :: NWEATHER =  10
 #else
   integer, parameter                                :: NWEATHER =  11
 #endif
-real(kind = c_double), intent(in), dimension(NPAR)              :: PARAMS
+real(kind = c_double), intent(in), dimension(NPAR)              :: PARAMS ! NPAR set in parameters_site.f90
 real(kind = c_double), intent(in), dimension(NMAXDAYS,NWEATHER) :: MATRIX_WEATHER
 real(kind = c_double), intent(out), dimension(NDAYS,NOUT)       :: y
 
@@ -90,7 +89,7 @@ real(kind = c_double), intent(out), dimension(NDAYS,NOUT)       :: y
 integer               :: day, doy, i, year
 
 ! Define state variables
-real :: CLV, CLVD, YIELD, CRES, CRT, CST, CSTUB, DRYSTOR, Fdepth, LAI, LT50, O2, PHEN, AGE
+real :: CLV, CLVD, YIELD, YIELD_RYE, YIELD_WEED, CRES, CRT, CST, CSTUB, DRYSTOR, Fdepth, LAI, LT50, O2, PHEN, AGE
 real :: ROOTD, Sdepth, TILG1, TILG2, TILV, TANAER, WAL, WAPL, WAPS, WAS, WETSTOR, WAFC
 !integer :: VERN
 real :: VERN                                  ! Simon made VERN a continuous function of VERND
@@ -100,6 +99,7 @@ real :: VERND, DVERND, WALS, BASAL
 real :: DeHardRate, DLAI, DLV, DLVD, DPHEN, DRAIN, DRT, DSTUB, dTANAER, DTILV, EVAP, EXPLOR
 real :: Frate, FREEZEL, FREEZEPL, GLAI, GLV, GPHEN, GRES, GRT, GST, GSTUB, GTILV, HardRate
 real :: HARVFR, HARVFRIN, HARVLA, HARVLV, HARVLVD, HARVPH, HARVRE, HARVST, HARVTILG2, INFIL, IRRIG, IRRIG_DEM, O2IN
+real :: WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM, DMH_RYE, DMH_WEED
 real :: O2OUT, PackMelt, poolDrain, poolInfil, Psnow, reFreeze, RGRTV, RDRHARV
 real :: RGRTVG1, RROOTD, RUNOFF, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN, Wremain, SP
 integer :: HARV
@@ -130,7 +130,8 @@ TMMXI  = MATRIX_WEATHER(:,5)
   IRR_TARGI = MATRIX_WEATHER(:,11)
 #endif
 
-if (VERBOSE) then
+if (VERBOSE) then !todo these checks may not make sence any more
+    ! a space to check inputs are being passed correctly between python and fortran
   print*, 'following are a number of values to confirm correct read'
   print*, 'number of days in run', NDAYS
   print*, 'number of output parameters', NOUT
@@ -142,13 +143,6 @@ if (VERBOSE) then
   print*, 'matrix weather doy;', DOYI
   print*, 'matrix weather minimum temperature;', TMMNI
 endif
-
-
-! Initialise harvest array index
-HARVI   = 1
-do while ( (DAYS_HARVEST(HARVI,1)<YEARI(1)) .or. ((DAYS_HARVEST(HARVI,1)==YEARI(1)).and.(DAYS_HARVEST(HARVI,2)<DOYI(1))) )
-  HARVI = HARVI + 1
-end do
 
 ! Extract parameters
 call set_params(PARAMS)
@@ -197,7 +191,9 @@ ROOTD   = ROOTDM * CRT/BASAL / (CRT/BASAL + KCRT)! Simon tied ROOTD to CRT like 
 !  end if
 VERND   = VERNDI
 VERN    = max(0.0, min(1.0, (VERND-TVERNDMN)/(TVERND-TVERNDMN))) ! FIXME does not include effect of new summer tillers
-YIELD   = YIELDI
+YIELD_RYE   = YIELDI ! currently hard coded to zero
+YIELD_WEED   = YIELDI ! currently hard coded to zero
+YIELD   = YIELD_RYE + YIELD_WEED
 WAL     = 1000. * (ROOTDM - Fdepth) * WCFC        ! Simon set to WCFC
 WALS    = min(WAL, 25.0)                          ! Simon added WALS rapid surface layer (see manual section 4.3)
 WAPL    = WAPLI
@@ -211,11 +207,13 @@ do day = 1, NDAYS
   ! Calculate intermediate and rate variables (many variable and parameters are passed implicitly)
   !    SUBROUTINE      INPUTS                          OUTPUTS
 
-  call set_weather_day(day,DRYSTOR,                    year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
+  call set_weather_day(day,DRYSTOR, year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
+  call Harvest (day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
+                GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
+                HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, &
+                WEED_HARV_FR, DM_RYE_RM, DM_WEED_RM, DMH_RYE, DMH_WEED)
 
-  call Harvest        (NDHARV,CLV,CRES,CST,CSTUB,CLVD,year,doy,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
-                                                       GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
-                                                       HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV)
+
   LAI     = LAI     - HARVLA * (1 + RDRHARV)
   CLV     = CLV     - HARVLV * (1 + RDRHARV)
   CLVD    = CLVD    - HARVLVD     + (HARVLV + HARVRE) * RDRHARV
@@ -231,10 +229,13 @@ do day = 1, NDAYS
   TILTOT  = TILG1 + TILG2 + TILV
   PHEN    = PHEN    - HARVPH
   if (doy.eq.152) then                               ! Reset yield on 1 June
-    YIELD = 0.0
+      YIELD = 0.0
+      YIELD_RYE = 0.0
+      YIELD_WEED = 0.0
   end if
-  YIELD     = YIELD + ((HARVLV + HARVLVD + HARVST) / 0.45 + HARVRE / 0.40) * 10.0 / 1000.0 ! tDM ha-1 Simon cumulative harvest
-
+  YIELD_RYE     = YIELD_RYE + ((HARVLV + HARVLVD + HARVST) / 0.45 + HARVRE / 0.40) * 10.0 / 1000.0 ! tDM ha-1 Simon cumulative harvest
+  YIELD_WEED = YIELD_WEED + (((HARVLV + HARVLVD + HARVST) / 0.45 + HARVRE / 0.40) * 10.0 / 1000.0)* WEED_HARV_FR
+  YIELD = YIELD_RYE + YIELD_WEED
   call SoilWaterContent(Fdepth,ROOTD,WAL,WALS)                   ! calculate WCL
   call Physics        (DAVTMP,Fdepth,ROOTD,Sdepth,WAS, Frate)    ! calculate Tsurf, Frate
   call MicroClimate   (doy,DRYSTOR,Fdepth,Frate,LAI,BASAL,Sdepth,Tsurf,WAPL,WAPS,WETSTOR, &
@@ -363,6 +364,16 @@ do day = 1, NDAYS
   y(day,59) = IRR_TARG
   y(day,60) = IRR_TRIG
   y(day,61) = IRRIG_DEM
+
+  y(day,62) = YIELD_RYE
+  y(day,63) = YIELD_WEED
+  y(day,64) = DM_RYE_RM
+  y(day,65) = DM_WEED_RM
+
+  y(day,66) = DMH_RYE
+  y(day,67) = DMH_WEED
+  y(day,68) = DMH_RYE + DMH_WEED
+
 
   ! Update state variables
   AGE     = AGE     + 1.0
