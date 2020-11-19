@@ -82,13 +82,15 @@ a number of inputs have been added to parameters:
 this was previously set within the fortran code
 * 'doy_irr_start', #doy >= doy_irr_start has irrigation applied if needed
 * 'doy_irr_end',  #doy <= doy_irr_end has irrigation applied
+* 'irr_frm_paw',  # are irrigation trigger/target the fraction of profile available water (1/True or 
+                    # the fraction of field capacity (0/False). 
 
 new columns has been added to matrix_weather:
 * 'max_irr',  # maximum irrigation available (mm/d)
-* 'irr_trig',  # fraction of field capacity at or below which irrigation is triggered (fraction 0-1) e.g. 0.5 
+* 'irr_trig',  # fraction of PAW/field (see irr_frm_paw) capacity at or below which irrigation is triggered (fraction 0-1) e.g. 0.5 
 means that irrigation will only be applied when soil water content is at 1/2 field capacity
  (e.g. water holding capacity)
-* 'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
+* 'irr_targ',  # fraction of PAW/field (see irr_frm_paw) capacity to irrigate to (fraction 0-1)
 
 New outputs have been added:
 

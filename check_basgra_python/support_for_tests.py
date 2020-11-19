@@ -97,6 +97,8 @@ def establish_peyman_input(return_pet=False):
     params.loc['CO2A'] = 350  # used to be set inside fortran
     params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
     params.loc['opt_harvfrin'] = 0
+    params.loc['irr_frm_paw'] = 0
+
 
     params = params.to_dict()
 
@@ -143,6 +145,7 @@ def establish_org_input(site='scott'):
     params.loc['CO2A'] = 350  # used to be set inside fortran
     params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
     params.loc['opt_harvfrin'] = 0
+    params.loc['irr_frm_paw'] = 0
 
     params = params.to_dict()
 

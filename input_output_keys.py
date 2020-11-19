@@ -127,6 +127,8 @@ _param_keys = (
     # new for irrigation
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
+    'irr_frm_paw',  # ! are irrigation trigger/target the fraction of profile available water (1/True or
+    # the fraction of field capacity (0/False).
 
     # new for harvest, certainly parameters
     'fixed_removal',  # sudo boolean defines if auto_harv_targ is fixed amount or amount to harvest to
@@ -147,11 +149,6 @@ _days_harvest_keys = (
 
 )
 
-# todo check harvest implementation:
-# #todo I thinkn I have fixed the harvest propotion thing, but not sure..., short test and I'm done
-#todo I really need to throuroughly check the weed harvesting options!
-
-
 _matrix_weather_keys_pet = (
     'year',  # e.g. 2002
     'doy',  # day of year 1 - 356 or 366 for leap years
@@ -161,10 +158,10 @@ _matrix_weather_keys_pet = (
     'rain',  # sum daily rainfall (mm)
     'pet',  # priestly evapotransperation (mm)
     'max_irr',  # maximum irrigation available (mm/d)
-    'irr_trig',  # fraction of field capacity at or below which irrigation is triggered (fraction 0-1)
+    'irr_trig',  # fraction of PAW/field (see irr_frm_paw) at or below which irrigation is triggered (fraction 0-1)
     # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
     # field capacity (e.g. water holding capacity)
-    'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
+    'irr_targ',  # fraction of PAW/field (see irr_frm_paw) to irrigate to (fraction 0-1)
 )
 
 _matrix_weather_keys_peyman = (
@@ -248,22 +245,26 @@ _out_cols = (
     'IRR_TARG',  # irrigation Target (fraction of field capacity) to fill to, also an input variable
     'IRR_TRIG',  # irrigation trigger (fraction of field capacity at which to start irrigating
     'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
+    'WAWP',  # # mm # Water in non-frozen root zone at wilting point
+    'MXPAW',  # mm # maximum Profile available water
+    'PAW',  # mm Profile available water at the time step
+
     'RYE_YIELD',  # PRG Yield from rye grass species, #  (tDM ha-1)  note that this is the actual amount of
-                  # material that has been removed
+    # material that has been removed
     'WEED_YIELD',  # PRG Yield from weed (other) species, #  (tDM ha-1)  note that this is the actual amount
-                   # of material that has been removed
+    # of material that has been removed
     'DM_RYE_RM',  # dry matter of Rye species harvested in this time step (kg DM ha-1) Note that this is the
-                  # calculated removal but if 'opt_harvfrin' = False then it may be significantly different to the
-                  # actual removal, which is show by the appropriate yeild variable
+    # calculated removal but if 'opt_harvfrin' = False then it may be significantly different to the
+    # actual removal, which is show by the appropriate yeild variable
     'DM_WEED_RM',  # dry matter of weed species harvested in this time step (kg DM ha-1)
-                   # Note that this is the calculated removal but if 'opt_harvfrin' = False then it may be
-                   # significantly different to the actual removal, which is show by the appropriate yeild variable
+    # Note that this is the calculated removal but if 'opt_harvfrin' = False then it may be
+    # significantly different to the actual removal, which is show by the appropriate yeild variable
     'DMH_RYE',  # harvestable dry matter of rye species, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
-                # note that this is before any removal by harvesting
+    # note that this is before any removal by harvesting
     'DMH_WEED',  # harvestable dry matter of weed specie, includes harvestable fraction of dead (HARVFRD) (kg DM ha-1)
-                 # note that this is before any removal by harvesting
+    # note that this is before any removal by harvesting
     'DMH',  # harvestable dry matter = DMH_RYE + DMH_WEED  (kg DM ha-1)
-            # note that this is before any removal by harvesting
+    # note that this is before any removal by harvesting
 
 )
 
@@ -297,13 +298,15 @@ _site_param_keys = (
     'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
     'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
+    'irr_frm_paw',  # ! are irrigation trigger/target the fraction of profile available water (1/True or
+    # the fraction of field capacity (0/False).
     'DRATE',  # woodward set to 50   ! mm d-1 Maximum soil drainage rate !
     'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
     'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
     'fixed_removal',  # sudo boolean(1=True, 0=False) defines if auto_harv_targ is fixed amount or amount to harvest to,
-    'opt_harvfrin' # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
-                     # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
-                     # harvest, the amount harvested may be significantly greather than expected depending on CST
+    'opt_harvfrin'  # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
+    # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
+    # harvest, the amount harvested may be significantly greather than expected depending on CST
 
 )
 _plant_param_keys = (

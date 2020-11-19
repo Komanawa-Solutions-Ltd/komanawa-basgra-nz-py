@@ -26,6 +26,10 @@ drop_keys = [  # newly added keys that must be dropped initially to manage tests
     'DMH_RYE',
     'DMH_WEED',
     'DMH',
+    'WAWP',
+    'MXPAW',
+    'PAW',
+
 ]
 
 view_keys = [
@@ -44,6 +48,10 @@ view_keys = [
     'DMH_RYE',
     'DMH_WEED',
     'DMH',
+    'WAWP',  # # mm # Water in non-frozen root zone at wilting point
+    'MXPAW',  # mm # maximum Profile available water
+    'PAW',  # mm Profile available water at the time step
+
 ]
 
 
@@ -248,6 +256,7 @@ def test_variable_irr_trig_targ(update_data=False):
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
+#todo test irrigation from PAW
 
 def test_pet_calculation(update_data=False):
     # note this test was not as throughrougly investigated as it was not needed for my work stream
@@ -538,7 +547,6 @@ if __name__ == '__main__':
     test_variable_irr_trig_targ()
     test_pet_calculation()
 
-    test_trans_manual_harv()
     test_harv_trig_man()
     test_fixed_harvest_man()
     test_weed_fraction_auto()
@@ -546,4 +554,6 @@ if __name__ == '__main__':
     test_weed_fixed_harv_auto()
     test_auto_harv_fixed()
     test_weed_fraction_man()
+
+    test_trans_manual_harv()
     print('\n\nall established tests passed')

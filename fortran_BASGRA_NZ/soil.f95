@@ -79,15 +79,20 @@ contains
     ! FIXME Why would ROOTD affect soil freezing? Uncouple Fdepth from ROOTD.
     Subroutine FRDRUNIR(EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS, &
             DRAIN, FREEZEL, IRRIG, IRRIG_DEM, RUNOFF, THAWS, &
-            MAX_IRR, doy, doy_irr_start, doy_irr_end, IRR_TRIG, IRR_TARG, WAFC)
+            MAX_IRR, doy, doy_irr_start, doy_irr_end, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW)
 
         real :: EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS
         real :: DRAIN, FREEZEL, IRRIG, RUNOFF, THAWS
         real :: MAX_IRR, IRR_TRIG, IRR_TARG, IRRIG_DEM
         integer :: doy, doy_irr_start, doy_irr_end
-        real :: INFILTOT, WAFC, WAST
+        real :: INFILTOT, WAFC, WAST, WAWP, MXPAW, PAW
+        logical :: irrigate
+
         WAFC = 1000. * WCFC * max(0., (ROOTDM - Fdepth))                      ! (mm) Field capacity, Simon modified to ROOTDM
         WAST = 1000. * WCST * max(0., (ROOTDM - Fdepth))                      ! (mm) Saturation, Simon modified to ROOTDM
+        WAWP = 1000. * WCWP * max(0., (ROOTDM - Fdepth))                      ! (mm) Saturation, Simon modified to ROOTDM
+        MXPAW = WAFC-WAWP
+
         INFILTOT = INFIL + poolDrain
         if (Fdepth < ROOTDM) then                                            ! Simon modified to ROOTDM
             FREEZEL = max(0., min(WAL / DELT + (INFILTOT - EVAP - TRAN), &
@@ -105,18 +110,31 @@ contains
         RUNOFF = max(0., (WAL - WAST) / DELT + &
                 (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN))          ! = mm d-1 Runoff, runs off to WAST !todo why is this always zero
 
-        IRRIG_DEM = ((WAFC * IRR_TARG - WAL) / DELT - &
+        PAW = max(0., ((WAL + (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF) * DELT) - WAWP))
+
+
+        if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from field capacity
+            irrigate = (PAW <= irr_trig * MXPAW)
+
+            IRRIG_DEM = ((MXPAW * IRR_TARG + WAWP - WAL) / DELT - &
                 (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation demand to IRR_TARG
+
+        else ! calculate irrigation demand and trigger from field capacity
+            irrigate = (((WAL + (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF) * DELT) / WAFC) <= irr_trig)
+
+            IRRIG_DEM = ((WAFC * IRR_TARG - WAL) / DELT - &
+                (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation demand to IRR_TARG
+
+        end if
 
         IRRIG_DEM = MAX(0.,IRRIG_DEM) ! do not allow irrigation demand to become negative
 
         if ((doy<=doy_irr_end).OR.(doy>=doy_irr_start)) then
 
             ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
-            if (((WAL + (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF) * DELT) / WAFC) <= irr_trig) then
+            if (irrigate) then
 
-                IRRIG = IRRIGF * ((WAFC - WAL) / DELT - &
-                        (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation
+                IRRIG = IRRIGF * IRRIG_DEM  ! = mm d-1 Irrigation
 
                 if (IRRIG>MAX_IRR) then
                     IRRIG = MAX_IRR

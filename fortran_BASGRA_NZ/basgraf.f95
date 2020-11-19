@@ -90,7 +90,7 @@ integer               :: day, doy, i, year
 
 ! Define state variables
 real :: CLV, CLVD, YIELD, YIELD_RYE, YIELD_WEED, CRES, CRT, CST, CSTUB, DRYSTOR, Fdepth, LAI, LT50, O2, PHEN, AGE
-real :: ROOTD, Sdepth, TILG1, TILG2, TILV, TANAER, WAL, WAPL, WAPS, WAS, WETSTOR, WAFC
+real :: ROOTD, Sdepth, TILG1, TILG2, TILV, TANAER, WAL, WAPL, WAPS, WAS, WETSTOR, WAFC, WAWP, MXPAW, PAW
 !integer :: VERN
 real :: VERN                                  ! Simon made VERN a continuous function of VERND
 real :: VERND, DVERND, WALS, BASAL
@@ -254,7 +254,7 @@ do day = 1, NDAYS
   call FRDRUNIR       (EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
                                                        DRAIN,FREEZEL,IRRIG, IRRIG_DEM, RUNOFF,THAWS, &
                        MAX_IRR, doy, doy_irr_start, doy_irr_end, IRR_TRIG, IRR_TARG, &
-                       WAFC) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
+                       WAFC, WAWP, MXPAW, PAW) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
   call O2status       (O2,ROOTD)                                 ! calculate FO2
 
   call Vernalisation  (DAYL,PHEN,YDAYL,TMMN,TMMX,DAVTMP,Tsurf,VERN,VERND,DVERND) ! Simon calculate VERN,VERND,DVERND
@@ -364,15 +364,19 @@ do day = 1, NDAYS
   y(day,59) = IRR_TARG
   y(day,60) = IRR_TRIG
   y(day,61) = IRRIG_DEM
+  y(day,62) = WAWP
+  y(day,63) = MXPAW
+  y(day,64) = PAW
 
-  y(day,62) = YIELD_RYE
-  y(day,63) = YIELD_WEED
-  y(day,64) = DM_RYE_RM
-  y(day,65) = DM_WEED_RM
 
-  y(day,66) = DMH_RYE
-  y(day,67) = DMH_WEED
-  y(day,68) = DMH_RYE + DMH_WEED
+  y(day,65) = YIELD_RYE
+  y(day,66) = YIELD_WEED
+  y(day,67) = DM_RYE_RM
+  y(day,68) = DM_WEED_RM
+
+  y(day,69) = DMH_RYE
+  y(day,70) = DMH_WEED
+  y(day,71) = DMH_RYE + DMH_WEED
 
 
   ! Update state variables
