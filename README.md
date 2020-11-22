@@ -62,6 +62,26 @@ and harvest management.  This required changes to the fortran code, but tests we
 compatibility (with some argument changes) to
 [Simon Woodward's BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src) as of August 2020.
 
+## Maximum simulation length
+At present the maximum simulation length is set explicitly within the fortran code in the environment.f95.  
+It is set to 100 years (NMAXDAYS = 36600).  This was set at this length to allow long term climate change simulations,
+without expending too many resources.  Note that internally the python code must make the weather matrix length to 
+nmaxdays.
+
+## Resource requirements
+BASGRA is fast!  The following baseline test are provided in supporting_functions/check_resource_use.py:
+
+* BASGRA took 1.585375e-01 seconds to run run_example_basgra which has 2192 sim days
+* BASGRA took 7.232549e-05 seconds per realisation day to run run_example_basgra
+* BASGRA took 7.072114e-01 seconds to run support_for_memory_usage which has 36600 sim days
+* BASGRA took 1.932272e-05 seconds per realisation day to run support_for_memory_usage
+
+BASGRA is relatively light weight 
+* run_example_basgra which has 2192 sim days required a max of c. 9 mb of memory
+* run support_for_memory_usage which has 36600 sim days required a max of c. 45 mb of memory
+* memory tests were run with [memory_profiler 0.58.0](https://pypi.org/project/memory-profiler/) 
+ to rerun these tests (supporting_functions/test_memory_use.py) requires installation of the memory profiler
+
 ## irrigation triggering and demand modelling v2.0.0
 
 ### New Irrigation Process
@@ -198,4 +218,10 @@ New format for havest dataframe,
     * 'frac_harv', as per v2.0.0- percent_harvest/100,  note that fraction harvest is now a float value
     * 'harv_trig', as 0 
     * 'harv_targ', as 0
-    * 'weed_dm_frac' as 0    
+    * 'weed_dm_frac' as 0
+    
+# future developments
+
+## testing regime  (todo if I get time)
+
+## modifying outputs (todo if I get time)

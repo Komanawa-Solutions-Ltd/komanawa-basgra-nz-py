@@ -10,7 +10,7 @@ from input_output_keys import _matrix_weather_keys_pet, _matrix_weather_keys_pey
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
     test_dir, establish_peyman_input, _clean_harvest, base_auto_harvest_data, base_manual_harvest_data
 
-from supporting_functions.plotting import plot_multiple_results  # todo dadb
+from supporting_functions.plotting import plot_multiple_results  # used in test development and debugging
 
 verbose = False
 
@@ -106,7 +106,7 @@ def test_org_basgra_nz(update_data=False):
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
     out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
 
-    # test against my saved version (simply to have all columns #todo
+    # test against my saved version (simply to have all columns
     data_path = os.path.join(test_dir, 'test_org_basgra.csv')
     if update_data:
         out.to_csv(data_path)
@@ -256,7 +256,33 @@ def test_variable_irr_trig_targ(update_data=False):
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
-#todo test irrigation from PAW
+
+def test_irr_paw(update_data=False):
+    test_nm = 'test_irr_paw'
+    print('testing: ' + test_nm)
+    params, matrix_weather, days_harvest = establish_org_input('lincoln')
+
+    matrix_weather = get_lincoln_broadfield()
+    matrix_weather.loc[:, 'max_irr'] = 5
+    matrix_weather.loc[:, 'irr_trig'] = 0.5
+    matrix_weather.loc[:, 'irr_targ'] = 0.9
+
+    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
+
+    params['IRRIGF'] = 1  # irrigation to 100% of field capacity
+    params['doy_irr_start'] = 305  # start irrigating in Nov
+    params['doy_irr_end'] = 90  # finish at end of march
+    params['irr_frm_paw'] = 1
+
+    days_harvest = _clean_harvest(days_harvest, matrix_weather)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out)
+
 
 def test_pet_calculation(update_data=False):
     # note this test was not as throughrougly investigated as it was not needed for my work stream
@@ -352,7 +378,6 @@ def test_harv_trig_man(update_data=False):
 
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
-
 
 
 def test_weed_fraction_man(update_data=False):
@@ -532,21 +557,20 @@ def test_weed_fixed_harv_auto(update_data=False):
     _output_checks(out, correct_out)
 
 
-# todo write a description in the readme file
-
-
 if __name__ == '__main__':
-
-
-
+    # input types tests
     test_org_basgra_nz()
+    test_pet_calculation()
+
+    # irrigation tests
     test_irrigation_trigger()
     test_irrigation_fraction()
     test_water_short()
     test_short_season()
     test_variable_irr_trig_targ()
-    test_pet_calculation()
+    test_irr_paw()
 
+    # harvest checks
     test_harv_trig_man()
     test_fixed_harvest_man()
     test_weed_fraction_auto()
@@ -555,5 +579,7 @@ if __name__ == '__main__':
     test_auto_harv_fixed()
     test_weed_fraction_man()
 
+    # input data for manual harvest check
     test_trans_manual_harv()
+
     print('\n\nall established tests passed')

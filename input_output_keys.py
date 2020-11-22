@@ -268,8 +268,7 @@ _out_cols = (
 
 )
 
-# todo create correct output order, so that I can re-order the data
-# todo write the memory requirements for size of a maximum run and the size of a minimum run
+# todo documentation write the memory requirements for size of a maximum run and the size of a minimum run
 
 _site_param_keys = (
     'LAT',  # LAT,  # degN, # Latitude

@@ -164,7 +164,7 @@ def _trans_manual_harv(days_harvest, matrix_weather):
                                      'frac_harv': np.zeros(len(matrix_weather)),  # set filler values
                                      'harv_trig': np.zeros(len(matrix_weather)) - 1,  # set flag to not harvest
                                      'harv_targ': np.zeros(len(matrix_weather)),  # set filler values
-                                     'weed_dm_frac': np.zeros(len(matrix_weather))*np.nan,  # set filler values
+                                     'weed_dm_frac': np.zeros(len(matrix_weather)) * np.nan,  # set filler values
                                      })
     days_harvest_out = days_harvest_out.set_index(['year', 'doy'])
     for k in ['frac_harv', 'harv_trig', 'harv_targ', 'weed_dm_frac']:
@@ -235,14 +235,11 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
                 days_harvest['doy'].values == expected_days.dt.dayofyear.values).all()
         assert check, 'the date range of matrix_weather contains missing or duplicate days'
     else:
-        start_year_harv = days_harvest.year.min()
-        stop_year_harv = days_harvest.year.max()
-        start_doy_harv = days_harvest.loc[days_harvest.year == start_year_harv, 'doy'].min()
-        stop_doy_harv = days_harvest.loc[days_harvest.year == stop_year_harv, 'doy'].max()
-        assert (start_year_harv >= start_year) and (
-                    start_doy_harv >= start_day), 'days_harvest must start at or after first day of simulation'
-        assert (stop_year_harv <= stop_year) and (
-                    stop_doy_harv <= stop_day), 'days_harvest must stop at or before last day of simulation'
+
+        strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in days_harvest[['year', 'doy']].itertuples(False, None)]
+        harvest_dt = pd.to_datetime(strs, format='%Y-%j')
+        assert harvest_dt.min() >= expected_days.min(), 'days_harvest must start at or after first day of simulation'
+        assert harvest_dt.max() <= expected_days.max(), 'days_harvest must stop at or before last day of simulation'
 
 
 if __name__ == '__main__':
