@@ -224,6 +224,10 @@ def get_woodward_weather():
     matrix_weather.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
     matrix_weather.set_index('date', inplace=True)
     matrix_weather = matrix_weather.loc[matrix_weather.index > '2011-08-01']
+    matrix_weather.loc[:, 'max_irr'] = 10.
+    matrix_weather.loc[:, 'irr_trig'] = 0
+    matrix_weather.loc[:, 'irr_targ'] = 1
+
     return matrix_weather
 
 

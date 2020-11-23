@@ -31,7 +31,7 @@ _outvars = (
 )
 
 
-def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8)):
+def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8), title_str=''):
     """
     plot multiple basgra results against eachother
     :param data: dictionary of key: outputs of run_basgra()
@@ -39,6 +39,7 @@ def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8)
     :param out_vars: variables to make figures for, default is:
                      ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD',
                       'BASAL', 'ROOTD', 'WAFC')
+    :param title_str: a string to append to the front of the title
     :return:
     """
 
@@ -56,7 +57,7 @@ def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8)
     for v in out_vars:
         fig, ax = plt.subplots(figsize=fig_size)
         fig.autofmt_xdate()
-        ax.set_title(v)
+        ax.set_title(title_str + v)
         figs[v] = ax
 
     for i, (k, out) in enumerate(data.items()):
