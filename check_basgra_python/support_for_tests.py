@@ -6,6 +6,7 @@ import pandas as pd
 import os
 import numpy as np
 from supporting_functions.conversions import convert_RH_vpa
+from supporting_functions.woodward_2020_params import get_woodward_mean_full_params
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 
@@ -85,22 +86,7 @@ def establish_peyman_input(return_pet=False):
     days_harvest.drop(columns=['percent_harvest'], inplace=True)
 
     # load parameters from simon woodward's paper
-    params = pd.read_csv(os.path.join(test_dir, 'BASGRA_parModes.txt'),
-                         delim_whitespace=True, index_col=0).iloc[:, col]
-
-    # add in my new values
-    params.loc['IRRIGF'] = 0
-    params.loc['doy_irr_start'] = 300
-    params.loc['doy_irr_end'] = 90
-    params.loc['fixed_removal'] = 0
-    params.loc['DRATE'] = 50  # used to be set inside fortran
-    params.loc['CO2A'] = 350  # used to be set inside fortran
-    params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
-    params.loc['opt_harvfrin'] = 0
-    params.loc['irr_frm_paw'] = 0
-
-
-    params = params.to_dict()
+    params = get_woodward_mean_full_params('scott')
 
     return params, matrix_weather, days_harvest
 
@@ -133,21 +119,7 @@ def establish_org_input(site='scott'):
         col = 1 + 8 * (3 - 1)
     else:
         raise ValueError('unexpected site')
-    params = pd.read_csv(os.path.join(test_dir, 'BASGRA_parModes.txt'),
-                         delim_whitespace=True, index_col=0).iloc[:, col]
-
-    # add in my new values
-    params.loc['IRRIGF'] = 0
-    params.loc['doy_irr_start'] = 300
-    params.loc['doy_irr_end'] = 90
-    params.loc['fixed_removal'] = 0
-    params.loc['DRATE'] = 50  # used to be set inside fortran
-    params.loc['CO2A'] = 350  # used to be set inside fortran
-    params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
-    params.loc['opt_harvfrin'] = 0
-    params.loc['irr_frm_paw'] = 0
-
-    params = params.to_dict()
+    params = get_woodward_mean_full_params(site)
 
     matrix_weather = pd.read_csv(os.path.join(test_dir, weather_nm),
                                  delim_whitespace=True, index_col=0,
