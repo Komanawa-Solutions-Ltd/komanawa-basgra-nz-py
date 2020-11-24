@@ -10,8 +10,8 @@ import numpy as np
 import pandas as pd
 from subprocess import Popen
 from copy import deepcopy
-from input_output_keys import _param_keys, _out_cols, _days_harvest_keys, _matrix_weather_keys_pet, \
-    _matrix_weather_keys_peyman
+from input_output_keys import param_keys, out_cols, days_harvest_keys, matrix_weather_keys_pet, \
+    matrix_weather_keys_peyman
 from warnings import warn
 
 # compiled with gfortran 64,
@@ -86,15 +86,15 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
 
     # define expected weather keys
     if supply_pet:
-        _matrix_weather_keys = _matrix_weather_keys_pet
+        _matrix_weather_keys = matrix_weather_keys_pet
     else:
-        _matrix_weather_keys = _matrix_weather_keys_peyman
+        _matrix_weather_keys = matrix_weather_keys_peyman
 
     # test the input variables
     _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
                         auto_harvest)
 
-    nout = len(_out_cols)
+    nout = len(out_cols)
     ndays = len(matrix_weather)
 
     # define output indexes before data manipulation
@@ -103,14 +103,14 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     # copy everything and ensure order is correct
     params = deepcopy(params)
     matrix_weather = deepcopy(matrix_weather.loc[:, _matrix_weather_keys])
-    days_harvest = deepcopy(days_harvest.loc[:, _days_harvest_keys])
+    days_harvest = deepcopy(days_harvest.loc[:, days_harvest_keys])
 
     # translate manual harvest inputs into fortran format
     if not auto_harvest:
         days_harvest = _trans_manual_harv(days_harvest, matrix_weather)
 
     # get variables into right python types
-    params = np.array([params[e] for e in _param_keys]).astype(float)
+    params = np.array([params[e] for e in param_keys]).astype(float)
     matrix_weather = matrix_weather.values.astype(float)
     days_harvest = days_harvest.values.astype(float)
 
@@ -143,7 +143,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     # format results
     y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
     y_p = y_p.flatten(order='C').reshape((ndays, nout), order='F')
-    y_p = pd.DataFrame(y_p, out_index, _out_cols)
+    y_p = pd.DataFrame(y_p, out_index, out_cols)
     strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in y_p[['year', 'doy']].itertuples(False, None)]
     y_p.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
     y_p.set_index('date', inplace=True)
@@ -192,7 +192,7 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     # check parameters
     assert isinstance(verbose, bool), 'verbose must be boolean'
     assert isinstance(params, dict)
-    assert set(params.keys()) == set(_param_keys), 'incorrect params keys'
+    assert set(params.keys()) == set(param_keys), 'incorrect params keys'
     assert not any([np.isnan(e) for e in params.values()]), 'params cannot have na data'
 
     # check matrix weather
@@ -218,7 +218,7 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
 
     # check harvest data
     assert isinstance(days_harvest, pd.DataFrame)
-    assert set(days_harvest.keys()) == set(_days_harvest_keys), 'incorrect keys for days_harvest'
+    assert set(days_harvest.keys()) == set(days_harvest_keys), 'incorrect keys for days_harvest'
     assert pd.api.types.is_integer_dtype(days_harvest.doy), 'doy must be an integer datatype in days_harvest'
     assert pd.api.types.is_integer_dtype(days_harvest.year), 'year must be an integer datatype in days_harvest'
     assert not days_harvest.isna().any().any(), 'days_harvest cannot have na data'

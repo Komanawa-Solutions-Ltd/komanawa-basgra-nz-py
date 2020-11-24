@@ -6,7 +6,7 @@ import os
 import numpy as np
 import pandas as pd
 from basgra_python import run_basgra_nz, _trans_manual_harv
-from input_output_keys import _matrix_weather_keys_pet, _matrix_weather_keys_peyman
+from input_output_keys import matrix_weather_keys_pet, matrix_weather_keys_peyman
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
     test_dir, establish_peyman_input, _clean_harvest, base_auto_harvest_data, base_manual_harvest_data
 
@@ -133,7 +133,7 @@ def test_irrigation_trigger(update_data=False):
     matrix_weather.loc[:, 'irr_trig'] = 0.5
     matrix_weather.loc[:, 'irr_targ'] = 1
 
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1  # irrigation to 100% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -158,7 +158,7 @@ def test_irrigation_fraction(update_data=False):
     matrix_weather.loc[:, 'max_irr'] = 10
     matrix_weather.loc[:, 'irr_trig'] = 1
     matrix_weather.loc[:, 'irr_targ'] = 1
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = .60  # irrigation of 60% of what is needed to get to field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -185,7 +185,7 @@ def test_water_short(update_data=False):
     matrix_weather.loc[:, 'irr_trig'] = 0.8
     matrix_weather.loc[:, 'irr_targ'] = 1
 
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = .90  # irrigation to 90% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -210,7 +210,7 @@ def test_short_season(update_data=False):
     matrix_weather.loc[:, 'max_irr'] = 10
     matrix_weather.loc[:, 'irr_trig'] = 1
     matrix_weather.loc[:, 'irr_targ'] = 1
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = .90  # irrigation to 90% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -240,7 +240,7 @@ def test_variable_irr_trig_targ(update_data=False):
     matrix_weather.loc[(matrix_weather.index < '2012-08-01'), 'irr_targ'] = 0.8
     matrix_weather.loc[(matrix_weather.index > '2015-08-01'), 'irr_targ'] = 0.8
 
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1
     params['doy_irr_start'] = 305  # start irrigating in Nov
@@ -267,7 +267,7 @@ def test_irr_paw(update_data=False):
     matrix_weather.loc[:, 'irr_trig'] = 0.5
     matrix_weather.loc[:, 'irr_targ'] = 0.9
 
-    matrix_weather = matrix_weather.loc[:, _matrix_weather_keys_pet]
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1  # irrigation to 100% of field capacity
     params['doy_irr_start'] = 305  # start irrigating in Nov

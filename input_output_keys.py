@@ -3,7 +3,7 @@
  Created: 14/08/2020 8:53 AM
  """
 
-_param_keys = (
+param_keys = (
     # PARAMETER   # Name,  # units   #  Description
     'LOG10CLVI',  # CLVI,  # gC m-2, # Initial value of leaves
     'LOG10CRESI',  # CRESI,  # gC m-2, # Initial value of reserves
@@ -138,7 +138,7 @@ _param_keys = (
 
 )
 
-_days_harvest_keys = (
+days_harvest_keys = (
     'year',  # e.g. 2002
     'doy',  # day of year 1 - 356 (366 for leap year)
     'frac_harv',
@@ -149,7 +149,7 @@ _days_harvest_keys = (
 
 )
 
-_matrix_weather_keys_pet = (
+matrix_weather_keys_pet = (
     'year',  # e.g. 2002
     'doy',  # day of year 1 - 356 or 366 for leap years
     'radn',  # daily solar radiation (MJ/m2)
@@ -164,7 +164,7 @@ _matrix_weather_keys_pet = (
     'irr_targ',  # fraction of PAW/field (see irr_frm_paw) to irrigate to (fraction 0-1)
 )
 
-_matrix_weather_keys_peyman = (
+matrix_weather_keys_peyman = (
     'year',  # e.g. 2002
     'doy',  # day of year 1 - 356 or 366 for leap years
     'radn',  # daily solar radiation (MJ/m2)
@@ -180,7 +180,7 @@ _matrix_weather_keys_peyman = (
     'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
 )
 
-_out_cols = (
+out_cols = (
     # varname, # shortname, # units
     'Time',  # Time, #  (y)
     'year',  # Year, #  (y)
@@ -268,9 +268,8 @@ _out_cols = (
 
 )
 
-# todo documentation write the memory requirements for size of a maximum run and the size of a minimum run
 
-_site_param_keys = (
+site_param_keys = (
     'LAT',  # LAT,  # degN, # Latitude
     'WCI',  # WCI,  # m3 m-3, # Initial value of volumetric water content
     'FWCAD',  # WCAD,  # m3 m-3, # Relative saturation at air dryness
@@ -308,7 +307,7 @@ _site_param_keys = (
     # harvest, the amount harvested may be significantly greather than expected depending on CST
 
 )
-_plant_param_keys = (
+plant_param_keys = (
     # PARAMETER   # Name,  # units   #  Description
     'LOG10CLVI',  # CLVI,  # gC m-2, # Initial value of leaves
     'LOG10CRESI',  # CRESI,  # gC m-2, # Initial value of reserves
@@ -403,6 +402,6 @@ _plant_param_keys = (
 
 )
 
-t = set(_site_param_keys)
-t.update(_plant_param_keys)
-assert t == set(_param_keys), 'missing params {} must be present in site or plant list'.format(set(_param_keys) - t)
+t = set(site_param_keys)
+t.update(plant_param_keys)
+assert t == set(param_keys), 'missing params {} must be present in site or plant list'.format(set(param_keys) - t)

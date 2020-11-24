@@ -5,7 +5,7 @@
 
 import pandas as pd
 import os
-from input_output_keys import _plant_param_keys, _site_param_keys
+from input_output_keys import plant_param_keys, site_param_keys
 
 def get_woodward_mean_site_param(site):
     """
@@ -38,7 +38,7 @@ def get_woodward_mean_site_param(site):
     params.loc['opt_harvfrin'] = 0
     params.loc['irr_frm_paw'] = 0
 
-    params = params.loc[list(_site_param_keys)]
+    params = params.loc[list(site_param_keys)]
     params = params.to_dict()
 
     return params
@@ -76,7 +76,7 @@ def get_woodward_mean_plant_params(site):
     params.loc['opt_harvfrin'] = 0
     params.loc['irr_frm_paw'] = 0
 
-    params = params.loc[list(_plant_param_keys)]
+    params = params.loc[list(plant_param_keys)]
     params = params.to_dict()
 
     return params
