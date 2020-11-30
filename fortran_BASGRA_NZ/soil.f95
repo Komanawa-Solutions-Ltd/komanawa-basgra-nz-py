@@ -79,12 +79,13 @@ contains
     ! FIXME Why would ROOTD affect soil freezing? Uncouple Fdepth from ROOTD.
     Subroutine FRDRUNIR(EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS, &
             DRAIN, FREEZEL, IRRIG, IRRIG_DEM, RUNOFF, THAWS, &
-            MAX_IRR, doy, doy_irr_start, doy_irr_end, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW)
+            MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW)
 
         real :: EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS
         real :: DRAIN, FREEZEL, IRRIG, RUNOFF, THAWS
         real :: MAX_IRR, IRR_TRIG, IRR_TARG, IRRIG_DEM
-        integer :: doy, doy_irr_start, doy_irr_end
+        integer :: doy, nirr
+        integer, dimension(nirr)              :: doy_irr
         real :: INFILTOT, WAFC, WAST, WAWP, MXPAW, PAW
         logical :: irrigate
 
@@ -129,7 +130,7 @@ contains
 
         IRRIG_DEM = MAX(0.,IRRIG_DEM) ! do not allow irrigation demand to become negative
 
-        if ((doy<=doy_irr_end).OR.(doy>=doy_irr_start)) then
+        if (any(doy==doy_irr)) then
 
             ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
             if (irrigate) then

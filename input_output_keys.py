@@ -125,8 +125,6 @@ param_keys = (
     'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
 
     # new for irrigation
-    'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
-    'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
     'irr_frm_paw',  # ! are irrigation trigger/target the fraction of profile available water (1/True or
     # the fraction of field capacity (0/False).
 
@@ -292,9 +290,6 @@ site_param_keys = (
     'TrainSnow',  # TrainSnow,  # Â°C, # Temperature below which precipitation is snow
     'BD',  # BD,  # kg l-1, # Bulk density of soil
 
-    'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
-    'doy_irr_start',  # doy>=doy_irr_start has irrigation applied if needed
-    'doy_irr_end',  # doy <= doy_irr_end has irrigation applied
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
     'irr_frm_paw',  # ! are irrigation trigger/target the fraction of profile available water (1/True or
     # the fraction of field capacity (0/False).

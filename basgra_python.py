@@ -27,7 +27,7 @@ _bat_path = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ\\compile_
 _max_weather_size = 36600
 
 
-def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
+def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
                   dll_path='default', supply_pet=True, auto_harvest=False):
     """
     python wrapper for the fortran BASGRA code
@@ -45,6 +45,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
                         'weed_dm_frac',
                         )
 
+    :param doy_irr: a list of the days of year to irrigate on
     :param verbose: boolean, if True the fortran function prints a number of statements for debugging purposes
     :param dll_path: path to the compiled fortran DLL to use, default was made on windows 10 64 bit
     :param supply_pet: boolean, if True BASGRA expects pet to be supplied, if False the parameters required to
@@ -90,12 +91,14 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     else:
         _matrix_weather_keys = matrix_weather_keys_peyman
 
+    doy_irr = np.atleast_1d(doy_irr)
     # test the input variables
     _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
-                        auto_harvest)
+                        auto_harvest, doy_irr)
 
     nout = len(out_cols)
     ndays = len(matrix_weather)
+    nirr = len(doy_irr)
 
     # define output indexes before data manipulation
     out_index = matrix_weather.index
@@ -113,6 +116,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     params = np.array([params[e] for e in param_keys]).astype(float)
     matrix_weather = matrix_weather.values.astype(float)
     days_harvest = days_harvest.values.astype(float)
+    doy_irr = doy_irr.astype(np.int32)
 
     # manage weather size,
     weather_size = len(matrix_weather)
@@ -128,9 +132,11 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     matrix_weather_p = np.asfortranarray(matrix_weather).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
     days_harvest_p = np.asfortranarray(days_harvest).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
     y_p = np.asfortranarray(y).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
+    doy_irr_p = np.asfortranarray(doy_irr).ctypes.data_as(ct.POINTER(ct.c_long))
 
     # integers
     ndays_p = ct.pointer(ct.c_int(ndays))
+    nirr_p = ct.pointer(ct.c_int(nirr))
     nout_p = ct.pointer(ct.c_int(nout))
     verb_p = ct.pointer(ct.c_bool(verbose))
 
@@ -138,7 +144,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, verbose=False,
     for_basgra = ct.CDLL(dll_path)
 
     # run BASGRA
-    for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, y_p, verb_p)
+    for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, nirr_p, doy_irr_p, y_p, verb_p)
 
     # format results
     y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
@@ -188,7 +194,7 @@ def _trans_manual_harv(days_harvest, matrix_weather):
 
 
 def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
-                        auto_harvest):
+                        auto_harvest, doy_irr):
     # check parameters
     assert isinstance(verbose, bool), 'verbose must be boolean'
     assert isinstance(params, dict)
@@ -240,6 +246,13 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
         harvest_dt = pd.to_datetime(strs, format='%Y-%j')
         assert harvest_dt.min() >= expected_days.min(), 'days_harvest must start at or after first day of simulation'
         assert harvest_dt.max() <= expected_days.max(), 'days_harvest must stop at or before last day of simulation'
+
+    # doy_irr tests
+    assert isinstance(doy_irr, np.ndarray), 'doy_irr must be convertable to a numpy array'
+    assert doy_irr.ndim == 1, 'doy_irr must be 1d'
+    assert pd.api.types.is_integer_dtype(doy_irr), 'doy_irr must be integers'
+    assert doy_irr.max() <= 366, 'entries doy_irr must not be greater than 366'
+    assert doy_irr.min() >= 0, 'entries doy_irr must not be less than 0'
 
 
 if __name__ == '__main__':

@@ -12,13 +12,13 @@ def test():
     pass
 
 def run_example_basgra():
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=False)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False)
 
 
 def support_for_memory_usage():
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     start_year = matrix_weather['year'].min()
     start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
 
@@ -31,7 +31,7 @@ def support_for_memory_usage():
     matrix_weather.loc[:, 'doy'] = expected_days.dt.dayofyear.values
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=False)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False)
 
 
 if __name__ == '__main__':

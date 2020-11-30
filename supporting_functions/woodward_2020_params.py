@@ -29,8 +29,6 @@ def get_woodward_mean_site_param(site):
     params = pd.read_csv(os.path.join(os.path.dirname(__file__), 'Woodward_2020_BASGRA_parModes.txt'),
                          delim_whitespace=True, index_col=0).iloc[:, col]
     params.loc['IRRIGF'] = 0
-    params.loc['doy_irr_start'] = 300
-    params.loc['doy_irr_end'] = 90
     params.loc['fixed_removal'] = 0
     params.loc['DRATE'] = 50  # used to be set inside fortran
     params.loc['CO2A'] = 350  # used to be set inside fortran
@@ -67,8 +65,6 @@ def get_woodward_mean_plant_params(site):
     params = pd.read_csv(os.path.join(os.path.dirname(__file__), 'Woodward_2020_BASGRA_parModes.txt'),
                          delim_whitespace=True, index_col=0).iloc[:, col]
     params.loc['IRRIGF'] = 0
-    params.loc['doy_irr_start'] = 300
-    params.loc['doy_irr_end'] = 90
     params.loc['fixed_removal'] = 0
     params.loc['DRATE'] = 50  # used to be set inside fortran
     params.loc['CO2A'] = 350  # used to be set inside fortran

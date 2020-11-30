@@ -88,7 +88,7 @@ BASGRA is relatively light weight
 Irrigation modelling was developed to answer questions about pasture growth rates in the face of possible irrigation
  water restribtions; therefore the irrigation has been implemented as follows:
 
-* if the day of year is within the irrigation season
+* if the day of year is within the irrigation season (doy in doy_irr)
     * if the fraction of soil water (e.g. WAL/WAFC) including the timestep modification to the soil water content
      (e.g. transpriation, rainfall, etc) are BELOW the trigger for that day
         * irrigation is applied at a rate = max(IRRIGF* amount of water needed to fill to 
@@ -97,11 +97,11 @@ Irrigation modelling was developed to answer questions about pasture growth rate
 This modification includes bug fixes that allowed irrigation to be negative.
 
 ### New irrigation input/outputs
+There is a new input variable: doy_irr, which is the days that irrigation can occur(1d array)
+
 a number of inputs have been added to parameters:
 * 'IRRIGF',  # fraction # fraction of irrigation to apply to bring water content up to field capacity, 
 this was previously set within the fortran code
-* 'doy_irr_start', #doy >= doy_irr_start has irrigation applied if needed
-* 'doy_irr_end',  #doy <= doy_irr_end has irrigation applied
 * 'irr_frm_paw',  # are irrigation trigger/target the fraction of profile available water (1/True or 
                     # the fraction of field capacity (0/False). 
 
@@ -121,7 +121,7 @@ New outputs have been added:
 * 'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
 
 ### How to run so that the results are backwards compatible with versions before V2.0.0
-To run the model in the original (no irrigation fashion) set both max_irr and irr_trig to zero.
+To run the model in the original (no irrigation fashion) set both max_irr and irr_trig to zero, also set doy_irr = [0]
 
 
 ## Harvest management and scheduling v3.0.0

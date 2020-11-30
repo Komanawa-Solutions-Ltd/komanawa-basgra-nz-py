@@ -7,7 +7,7 @@ module basgramodule
 
 contains
 
-subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,y,VERBOSE) bind(C, name = "BASGRA_")
+subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,nirr, doy_irr,y,VERBOSE) bind(C, name = "BASGRA_")
 !-------------------------------------------------------------------------------
 ! This is the BASic GRAss model originally written in MATLAB/Simulink by Marcel
 ! van Oijen, Mats Hoglind, Stig Morten Thorsen and Ad Schapendonk.
@@ -72,6 +72,7 @@ implicit none
 logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT
+integer(kind = c_int), intent(in)            :: nirr
 integer, parameter ::  NHARVCOL = 6 ! here so that I don't have to keep updating in harvest as well
 real(kind = c_double), intent(in), dimension(NDAYS,NHARVCOL) :: DAYS_HARVEST
 
@@ -82,6 +83,7 @@ real(kind = c_double), intent(in), dimension(NDAYS,NHARVCOL) :: DAYS_HARVEST
   integer, parameter                                :: NWEATHER =  11
 #endif
 real(kind = c_double), intent(in), dimension(NPAR)              :: PARAMS ! NPAR set in parameters_site.f90
+integer(kind = c_int), intent(in), dimension(nirr)              :: doy_irr
 real(kind = c_double), intent(in), dimension(NMAXDAYS,NWEATHER) :: MATRIX_WEATHER
 real(kind = c_double), intent(out), dimension(NDAYS,NOUT)       :: y
 
@@ -253,7 +255,7 @@ do day = 1, NDAYS
 
   call FRDRUNIR       (EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
                                                        DRAIN,FREEZEL,IRRIG, IRRIG_DEM, RUNOFF,THAWS, &
-                       MAX_IRR, doy, doy_irr_start, doy_irr_end, IRR_TRIG, IRR_TARG, &
+                       MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, &
                        WAFC, WAWP, MXPAW, PAW) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
   call O2status       (O2,ROOTD)                                 ! calculate FO2
 

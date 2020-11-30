@@ -129,10 +129,8 @@ CO2A         = pa(111)
 poolInfilLimit = pa(112)
 
 ! new irrigation parameters
-doy_irr_start= pa(113)
-doy_irr_end  = pa(114)
 
-if (pa(115) < 0.9) then ! sudo boolean as float, expects 1 or 0
+if (pa(113) < 0.9) then ! sudo boolean as float, expects 1 or 0
     Irr_frm_PAW  = .FALSE.
 else
     Irr_frm_PAW = .TRUE.
@@ -140,12 +138,12 @@ end if
 
 ! new harvest parameters
 
-if (pa(116) < 0.9) then ! sudo boolean as float, expects 1 or 0
+if (pa(114) < 0.9) then ! sudo boolean as float, expects 1 or 0
     FIXED_REMOVAL = .FALSE.
 else
     FIXED_REMOVAL = .TRUE.
 end if
-if (pa(117) < 0.9) then ! sudo boolean as float, expects 1 or 0
+if (pa(115) < 0.9) then ! sudo boolean as float, expects 1 or 0
     opt_harvfrin = .FALSE.
 else
     opt_harvfrin = .TRUE.

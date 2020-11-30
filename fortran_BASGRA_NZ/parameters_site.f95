@@ -4,7 +4,7 @@ module parameters_site
 implicit none
 
 ! Simulation period and time step
-integer, parameter                                  :: NPAR     = 117
+integer, parameter                                  :: NPAR     = 115
   real, parameter       :: DELT   =   1.0 ! Model time step
 
 ! Geography
@@ -42,8 +42,6 @@ integer, parameter                                  :: NPAR     = 117
 
 ! Management: irrigation
   real       :: IRRIGF                   ! Relative irrigation rate
-  integer    :: doy_irr_start            !doy>=doy_irr_start has irrigation applied if needed
-  integer    :: doy_irr_end              ! doy <= doy_irr_end has irrigation applied
   real       :: IRR_TRIG ! irrigation trigger, fraction of field capacity to start irrigating at
   real       :: IRR_TARG ! irrigation target, fraction of field capacity to fill to
   logical    ::  Irr_frm_PAW ! are irrigation trigger/target the fraction of profile avalible water or field capcity.

@@ -87,8 +87,8 @@ def establish_peyman_input(return_pet=False):
 
     # load parameters from simon woodward's paper
     params = get_woodward_mean_full_params('scott')
-
-    return params, matrix_weather, days_harvest
+    doy_irr = [0]
+    return params, matrix_weather, days_harvest, doy_irr
 
 
 def _compair_pet():
@@ -97,12 +97,12 @@ def _compair_pet():
     from supporting_functions.plotting import plot_multiple_results
     from basgra_python import run_basgra_nz
     verbose = False
-    params, matrix_weather, days_harvest = establish_peyman_input(False)
-    peyman_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default',
+    params, matrix_weather, days_harvest, doy_irr = establish_peyman_input(False)
+    peyman_out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default',
                                supply_pet=False)
 
-    params, matrix_weather, days_harvest = establish_peyman_input(True)
-    pet_out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=True)
+    params, matrix_weather, days_harvest, doy_irr = establish_peyman_input(True)
+    pet_out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default', supply_pet=True)
 
     from supporting_functions.plotting import plot_multiple_results
     plot_multiple_results({'pet': pet_out, 'peyman': peyman_out})
@@ -154,7 +154,8 @@ def establish_org_input(site='scott'):
     days_harvest.drop(columns=['percent_harvest'], inplace=True)
 
     ndays = matrix_weather.shape[0]
-    return params, matrix_weather, days_harvest
+    doy_irr = [0]
+    return params, matrix_weather, days_harvest, doy_irr
 
 
 def _clean_harvest(days_harvest, matrix_weather):
@@ -250,7 +251,7 @@ def get_lincoln_broadfield():
 
 
 def base_manual_harvest_data():
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
     days_harvest.loc[:, 'frac_harv'] = 1

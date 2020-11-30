@@ -58,7 +58,7 @@ view_keys = [
 def test_trans_manual_harv(update_data=False):
     test_nm = 'test_trans_manual_harv'
     print('testing: ' + test_nm)
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
     np.random.seed(1)
@@ -102,9 +102,9 @@ def _output_checks(out, correct_out):
 
 def test_org_basgra_nz(update_data=False):
     print('testing original basgra_nz')
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     # test against my saved version (simply to have all columns
     data_path = os.path.join(test_dir, 'test_org_basgra.csv')
@@ -126,7 +126,7 @@ def test_org_basgra_nz(update_data=False):
 
 def test_irrigation_trigger(update_data=False):
     print('testing irrigation trigger')
-    params, matrix_weather, days_harvest = establish_org_input('lincoln')
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 15
@@ -136,11 +136,11 @@ def test_irrigation_trigger(update_data=False):
     matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1  # irrigation to 100% of field capacity
-    params['doy_irr_start'] = 305  # start irrigating in Nov
-    params['doy_irr_end'] = 90  # finish at end of march
+
+    doy_irr = list(range(305,367)) + list(range(1, 91))
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     data_path = os.path.join(test_dir, 'test_irrigation_trigger_output.csv')
     if update_data:
@@ -152,7 +152,7 @@ def test_irrigation_trigger(update_data=False):
 
 def test_irrigation_fraction(update_data=False):
     print('testing irrigation fraction')
-    params, matrix_weather, days_harvest = establish_org_input('lincoln')
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
@@ -161,11 +161,10 @@ def test_irrigation_fraction(update_data=False):
     matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = .60  # irrigation of 60% of what is needed to get to field capacity
-    params['doy_irr_start'] = 305  # start irrigating in Nov
-    params['doy_irr_end'] = 90  # finish at end of march
+    doy_irr = list(range(305, 367)) + list(range(1, 91))
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     data_path = os.path.join(test_dir, 'test_irrigation_fraction_output.csv')
     if update_data:
@@ -177,7 +176,7 @@ def test_irrigation_fraction(update_data=False):
 
 def test_water_short(update_data=False):
     print('testing water shortage')
-    params, matrix_weather, days_harvest = establish_org_input('lincoln')
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 5
@@ -188,11 +187,10 @@ def test_water_short(update_data=False):
     matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = .90  # irrigation to 90% of field capacity
-    params['doy_irr_start'] = 305  # start irrigating in Nov
-    params['doy_irr_end'] = 90  # finish at end of march
+    doy_irr = list(range(305, 367)) + list(range(1, 91))
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     data_path = os.path.join(test_dir, 'test_water_short_output.csv')
     if update_data:
@@ -204,7 +202,7 @@ def test_water_short(update_data=False):
 
 def test_short_season(update_data=False):
     print('testing short season')
-    params, matrix_weather, days_harvest = establish_org_input('lincoln')
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
@@ -213,11 +211,10 @@ def test_short_season(update_data=False):
     matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = .90  # irrigation to 90% of field capacity
-    params['doy_irr_start'] = 305  # start irrigating in Nov
-    params['doy_irr_end'] = 60  # finish at end of feb
+    doy_irr = list(range(305, 367)) + list(range(1, 61))
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     data_path = os.path.join(test_dir, 'test_short_season_output.csv')
     if update_data:
@@ -229,7 +226,7 @@ def test_short_season(update_data=False):
 
 def test_variable_irr_trig_targ(update_data=False):
     print('testing time variable irrigation triggers and targets')
-    params, matrix_weather, days_harvest = establish_org_input('lincoln')
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 10
@@ -243,11 +240,10 @@ def test_variable_irr_trig_targ(update_data=False):
     matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1
-    params['doy_irr_start'] = 305  # start irrigating in Nov
-    params['doy_irr_end'] = 60  # finish at end of feb
+    doy_irr = list(range(305, 367)) + list(range(1, 61))
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     data_path = os.path.join(test_dir, 'test_variable_irr_trig_targ.csv')
     if update_data:
@@ -260,7 +256,7 @@ def test_variable_irr_trig_targ(update_data=False):
 def test_irr_paw(update_data=False):
     test_nm = 'test_irr_paw'
     print('testing: ' + test_nm)
-    params, matrix_weather, days_harvest = establish_org_input('lincoln')
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
 
     matrix_weather = get_lincoln_broadfield()
     matrix_weather.loc[:, 'max_irr'] = 5
@@ -270,12 +266,11 @@ def test_irr_paw(update_data=False):
     matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
 
     params['IRRIGF'] = 1  # irrigation to 100% of field capacity
-    params['doy_irr_start'] = 305  # start irrigating in Nov
-    params['doy_irr_end'] = 90  # finish at end of march
+    doy_irr = list(range(305, 367)) + list(range(1, 91))
     params['irr_frm_paw'] = 1
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
         out.to_csv(data_path)
@@ -287,9 +282,9 @@ def test_irr_paw(update_data=False):
 def test_pet_calculation(update_data=False):
     # note this test was not as throughrougly investigated as it was not needed for my work stream
     print('testing pet calculation')
-    params, matrix_weather, days_harvest = establish_peyman_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_peyman_input()
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, dll_path='default', supply_pet=False)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default', supply_pet=False)
 
     data_path = os.path.join(test_dir, 'test_pet_calculation.csv')
     if update_data:
@@ -304,7 +299,7 @@ def test_pet_calculation(update_data=False):
 def test_fixed_harvest_man(update_data=False):
     test_nm = 'test_fixed_harvest_man'
     print('testing: ' + test_nm)
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     params['fixed_removal'] = 1
     params['opt_harvfrin'] = 1
 
@@ -330,7 +325,7 @@ def test_fixed_harvest_man(update_data=False):
 
     days_harvest.drop(columns=['date'], inplace=True)
 
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
@@ -344,7 +339,7 @@ def test_harv_trig_man(update_data=False):
     # test manaual harvesting dates with a set trigger, weed fraction set to zero
     test_nm = 'test_harv_trig_man'
     print('testing: ' + test_nm)
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     params['fixed_removal'] = 0
     params['opt_harvfrin'] = 1
 
@@ -370,7 +365,7 @@ def test_harv_trig_man(update_data=False):
 
     days_harvest.drop(columns=['date'], inplace=True)
 
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
@@ -384,7 +379,7 @@ def test_weed_fraction_man(update_data=False):
     # test manual harvesting trig set to zero +- target with weed fraction above 0
     test_nm = 'test_weed_fraction_man'
     print('testing: ' + test_nm)
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     params['fixed_removal'] = 0
     params['opt_harvfrin'] = 1
 
@@ -410,7 +405,7 @@ def test_weed_fraction_man(update_data=False):
 
     days_harvest.drop(columns=['date'], inplace=True)
 
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
@@ -427,7 +422,7 @@ def test_auto_harv_trig(update_data=False):
     print('testing: ' + test_nm)
 
     # test auto harvesting dates with a set trigger, weed fraction set to zero
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     params['opt_harvfrin'] = 1
 
     days_harvest = base_auto_harvest_data(matrix_weather)
@@ -445,7 +440,7 @@ def test_auto_harv_trig(update_data=False):
     days_harvest.loc[idx, 'weed_dm_frac'] = 0
 
     days_harvest.drop(columns=['date'], inplace=True)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, auto_harvest=True)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, auto_harvest=True)
 
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
@@ -460,7 +455,7 @@ def test_auto_harv_fixed(update_data=False):
     print('testing: ' + test_nm)
 
     # test auto harvesting dates with a set trigger, weed fraction set to zero
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     days_harvest = base_auto_harvest_data(matrix_weather)
     params['fixed_removal'] = 1
     params['opt_harvfrin'] = 1
@@ -478,7 +473,7 @@ def test_auto_harv_fixed(update_data=False):
     days_harvest.loc[idx, 'weed_dm_frac'] = 0
 
     days_harvest.drop(columns=['date'], inplace=True)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, auto_harvest=True)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, auto_harvest=True)
 
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
@@ -495,7 +490,7 @@ def test_weed_fraction_auto(update_data=False):
     print('testing: ' + test_nm)
 
     # test auto harvesting dates with a set trigger, weed fraction set to zero
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     params['opt_harvfrin'] = 1
 
     days_harvest = base_auto_harvest_data(matrix_weather)
@@ -513,7 +508,7 @@ def test_weed_fraction_auto(update_data=False):
     days_harvest.loc[idx, 'weed_dm_frac'] = 0.75
 
     days_harvest.drop(columns=['date'], inplace=True)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, auto_harvest=True)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, auto_harvest=True)
 
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
@@ -529,7 +524,7 @@ def test_weed_fixed_harv_auto(update_data=False):
     print('testing: ' + test_nm)
 
     # test auto harvesting dates with a set trigger, weed fraction set to zero
-    params, matrix_weather, days_harvest = establish_org_input()
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
     days_harvest = base_auto_harvest_data(matrix_weather)
     params['fixed_removal'] = 1
     params['opt_harvfrin'] = 1
@@ -547,7 +542,7 @@ def test_weed_fixed_harv_auto(update_data=False):
     days_harvest.loc[idx, 'weed_dm_frac'] = 1
 
     days_harvest.drop(columns=['date'], inplace=True)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, verbose=verbose, auto_harvest=True)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, auto_harvest=True)
 
     data_path = os.path.join(test_dir, '{}_data.csv'.format(test_nm))
     if update_data:
