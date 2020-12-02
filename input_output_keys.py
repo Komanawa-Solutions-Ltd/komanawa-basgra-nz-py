@@ -133,6 +133,12 @@ param_keys = (
     'opt_harvfrin',  # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
     # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
     # harvest, the amount harvested may be significantly greather than expected depending on CST
+    'reseed_harv_delay',  # number of days to delay harvest after reseed, must be >=1
+    'reseed_LAI',  # >=0 the leaf area index to set after reseeding, if < 0 then simply use the current LAI
+    'reseed_TILG2',
+    # Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+    'reseed_TILG1',  # Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+    'reseed_TILV',  # Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
 
 )
 
@@ -144,6 +150,8 @@ days_harvest_keys = (
     'harv_trig',  # dm above which to initiate harvest, if trigger is less than zero no harvest will take place
     'harv_targ',  # dm to harvest to or to remove depending on 'fixed_removal'
     'weed_dm_frac',  # fraction of dm of ryegrass to attribute to weeds
+    'reseed_trig',  # when BASAL <= reseed_trig, trigger a reseeding. if <0 then do not reseed
+    'reseed_basal',  # set BASAL = reseed_basal when reseeding.
 
 )
 
@@ -264,8 +272,9 @@ out_cols = (
     'DMH',  # harvestable dry matter = DMH_RYE + DMH_WEED  (kg DM ha-1)
     # note that this is before any removal by harvesting
 
-)
+    'RESEEDED',  # reseeded flag, if ==1 then the simulation was reseeded on this day
 
+)
 
 site_param_keys = (
     'LAT',  # LAT,  # degN, # Latitude
@@ -297,9 +306,14 @@ site_param_keys = (
     'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
     'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
     'fixed_removal',  # sudo boolean(1=True, 0=False) defines if auto_harv_targ is fixed amount or amount to harvest to,
-    'opt_harvfrin'  # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
+    'opt_harvfrin',  # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
     # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
     # harvest, the amount harvested may be significantly greather than expected depending on CST
+    'reseed_harv_delay',  # number of days to delay harvest after reseed, must be >=1
+    'reseed_LAI',  # >=0 the leaf area index to set after reseeding, if < 0 then simply use the current LAI
+    'reseed_TILG2',# Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+    'reseed_TILG1',  # Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+    'reseed_TILV',  # Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
 
 )
 plant_param_keys = (

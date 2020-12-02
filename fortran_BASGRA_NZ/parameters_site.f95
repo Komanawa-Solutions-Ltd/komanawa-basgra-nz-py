@@ -4,7 +4,7 @@ module parameters_site
 implicit none
 
 ! Simulation period and time step
-integer, parameter                                  :: NPAR     = 115
+integer, parameter                                  :: NPAR     = 120
   real, parameter       :: DELT   =   1.0 ! Model time step
 
 ! Geography
@@ -49,6 +49,13 @@ integer, parameter                                  :: NPAR     = 115
 ! Management: harvest
   logical    :: FIXED_REMOVAL
   logical    :: opt_harvfrin
+
+! Managment: reseed
+  integer    :: reseed_harv_delay ! number of days to delay harvest after reseed, must be >=1
+  real       :: reseed_LAI ! >=0 the leaf area index to set after reseeding, if < 0 then simply use the current LAI
+  real       :: reseed_TILG2  ! Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+  real       :: reseed_TILG1  ! Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+  real       :: reseed_TILV  ! Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
 
 ! Mathematical constants
   real, parameter       :: pi   = 3.141592653589793

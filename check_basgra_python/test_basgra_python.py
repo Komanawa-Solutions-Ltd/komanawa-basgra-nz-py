@@ -29,6 +29,7 @@ drop_keys = [  # newly added keys that must be dropped initially to manage tests
     'WAWP',
     'MXPAW',
     'PAW',
+    'RESEEDED',
 
 ]
 
@@ -77,24 +78,39 @@ def test_trans_manual_harv(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out)
+    _output_checks(out, correct_out, dropable=False)
 
 
-def _output_checks(out, correct_out):
+def _output_checks(out, correct_out, dropable=True):
+    """
+    base checker
+    :param out: basgra data from current test
+    :param correct_out: expected basgra data
+    :param dropable: boolean, if True, can drop output keys, allows _output_checks to be used for not basgra data and
+                     for new outputs to be dropped when comparing results.
+    :return:
+    """
+    if dropable:
+        drop_keys = [
+
+        ] # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
+        out2 = out.drop(columns=drop_keys)
+    else:
+        out2 = out.copy(True)
     # check shapes
-    assert out.shape == correct_out.shape, 'something is wrong with the output shapes'
+    assert out2.shape == correct_out.shape, 'something is wrong with the output shapes'
 
     # check datatypes
     assert issubclass(out.values.dtype.type, np.float), 'outputs of the model should all be floats'
 
-    out = out.values
-    correct_out = correct_out
-    out[np.isnan(out)] = -9999.99999
-    correct_out[np.isnan(correct_out)] = -9999.99999
+    out2 = out2.values
+    correct_out2 = correct_out.values
+    out2[np.isnan(out2)] = -9999.99999
+    correct_out2[np.isnan(correct_out2)] = -9999.99999
     # check values match for sample run
-    isclose = np.isclose(out, correct_out)
+    isclose = np.isclose(out2, correct_out2)
     asmess = '{} values do not match between the output and correct output with rtol=1e-05, atol=1e-08'.format(
-        isclose.sum())
+        (~isclose).sum())
     assert isclose.all(), asmess
 
     print('    model passed test\n')
@@ -551,6 +567,7 @@ def test_weed_fixed_harv_auto(update_data=False):
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
+# todo create reseed test and document reseed in readme
 
 if __name__ == '__main__':
     # input types tests

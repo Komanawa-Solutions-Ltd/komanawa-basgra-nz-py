@@ -73,7 +73,7 @@ logical(kind = c_bool), intent(in)           :: VERBOSE
 integer(kind = c_int), intent(in)            :: NDAYS
 integer(kind = c_int), intent(in)            :: NOUT
 integer(kind = c_int), intent(in)            :: nirr
-integer, parameter ::  NHARVCOL = 6 ! here so that I don't have to keep updating in harvest as well
+integer, parameter ::  NHARVCOL = 8 ! here so that I don't have to keep updating in harvest as well
 real(kind = c_double), intent(in), dimension(NDAYS,NHARVCOL) :: DAYS_HARVEST
 
 ! BASGRA handles two types of weather files with different data columns
@@ -107,7 +107,7 @@ real :: RGRTVG1, RROOTD, RUNOFF, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN,
 integer :: HARV
 
 ! Extra output variables (Simon)
-real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE
+real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE, RESEEDED
 
 
 
@@ -131,20 +131,6 @@ TMMXI  = MATRIX_WEATHER(:,5)
   IRR_TRIGI = MATRIX_WEATHER(:,10)
   IRR_TARGI = MATRIX_WEATHER(:,11)
 #endif
-
-if (VERBOSE) then !todo these checks may not make sence any more
-    ! a space to check inputs are being passed correctly between python and fortran
-  print*, 'following are a number of values to confirm correct read'
-  print*, 'number of days in run', NDAYS
-  print*, 'number of output parameters', NOUT
-  print*, 'weather mode (e.g. weather parameters)', NWEATHER
-  print*, 'days_harvest year', DAYS_HARVEST(:,1)
-  print*, 'days_harvest doy', DAYS_HARVEST(:,2)
-  print*, 'days_harvest %', DAYS_HARVEST(:,3)
-  print*, 'matrix weather year;', YEARI
-  print*, 'matrix weather doy;', DOYI
-  print*, 'matrix weather minimum temperature;', TMMNI
-endif
 
 ! Extract parameters
 call set_params(PARAMS)
@@ -210,6 +196,9 @@ do day = 1, NDAYS
   !    SUBROUTINE      INPUTS                          OUTPUTS
 
   call set_weather_day(day,DRYSTOR, year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
+
+  call Reseed(day, NDAYS, NHARVCOL, DAYS_HARVEST, BASAL, LAI, PHEN, TILG1, TILG2, TILV, & ! inputs
+                  RESEEDED)
   call Harvest (day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                 GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
                 HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, &
@@ -379,6 +368,7 @@ do day = 1, NDAYS
   y(day,69) = DMH_RYE
   y(day,70) = DMH_WEED
   y(day,71) = DMH_RYE + DMH_WEED
+  y(day, 72) = RESEEDED
 
 
   ! Update state variables

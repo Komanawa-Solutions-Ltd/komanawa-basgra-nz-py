@@ -149,6 +149,12 @@ else
     opt_harvfrin = .TRUE.
 end if
 
+! reseed parameters
+reseed_harv_delay  = pa(116)  ! number of days to delay harvest after reseed, must be >=1
+reseed_LAI         = pa(117)  ! >=0 the leaf area index to set after reseeding, if < 0 then simply use the current LAI
+reseed_TILG2       = pa(118)  ! Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+reseed_TILG1       = pa(119)  ! Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+reseed_TILV        = pa(120)  ! Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
 
 
 return

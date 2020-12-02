@@ -170,10 +170,12 @@ def _trans_manual_harv(days_harvest, matrix_weather):
                                      'frac_harv': np.zeros(len(matrix_weather)),  # set filler values
                                      'harv_trig': np.zeros(len(matrix_weather)) - 1,  # set flag to not harvest
                                      'harv_targ': np.zeros(len(matrix_weather)),  # set filler values
-                                     'weed_dm_frac': np.zeros(len(matrix_weather)) * np.nan,  # set filler values
+                                     'weed_dm_frac': np.zeros(len(matrix_weather))*np.nan,  # set nas, filled later
+                                     'reseed_trig': np.zeros(len(matrix_weather)) -1,  # set flag to not reseed
+                                     'reseed_basal': np.zeros(len(matrix_weather)),  # set filler values
                                      })
     days_harvest_out = days_harvest_out.set_index(['year', 'doy'])
-    for k in ['frac_harv', 'harv_trig', 'harv_targ', 'weed_dm_frac']:
+    for k in set(days_harvest_keys) - {'year', 'doy'}:
         days_harvest_out.loc[days_harvest.index, k] = days_harvest.loc[:, k]
 
     days_harvest_out = days_harvest_out.reset_index()

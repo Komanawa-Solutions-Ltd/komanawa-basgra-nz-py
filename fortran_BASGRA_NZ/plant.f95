@@ -105,7 +105,7 @@ Subroutine Harvest(day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HAR
         ! this could break harvfrin
       end if
       if (temp_opt_harvfrin) then
-     ! estimate the fraction of harvest to undertake using brent zero !todo send this to andrea
+     ! estimate the fraction of harvest to undertake using brent zero
      HARVFRIN = zero(0.0,1.0,& ! bounds
        1e-5, & ! machine tolerance
       1e-5, & ! tolerance
@@ -538,5 +538,50 @@ Subroutine Tillering(DAYL,GLV,LAI,BASAL,TILV,TILG1,TRANRF,Tsurf,VERN,AGE, GLAI,R
     TILVG1  = TILVG1 - TILG1                                                  ! Simon remaining generative tillers revert to vegetative
   end if
 end Subroutine Tillering
+
+  Subroutine Reseed(day, NDAYS, NHARVCOL, DAYS_HARVEST, BASAL, LAI, PHEN, TILG1, TILG2, TILV, & ! inputs
+                  RESEEDED) ! outputs
+  ! add a re-seed option matt hanson
+    integer :: day
+    integer :: NDAYS, NHARVCOL
+    real, dimension(NDAYS, NHARVCOL) :: DAYS_HARVEST     ! major re-structure by Matt Hanson
+    real    :: BASAL, LAI, PHEN, TILG2, TILG1, TILV ! values that may be modified.
+    real    :: reseed_trig, reseed_basal, RESEEDED
+
+    reseed_trig =  DAYS_HARVEST(day, 7)
+    reseed_basal = DAYS_HARVEST(day, 8)
+    RESEEDED = 0
+    if ((reseed_trig>=0) .and. (BASAL<=reseed_basal)) then ! reseed_trig < 0 is a flag for do not re-seed
+      RESEEDED = 1
+
+      ! set parameters:
+      BASAL = reseed_basal ! coverage fraction=
+
+      if (reseed_LAI >=0) then
+        LAI = reseed_LAI  ! Leaf area index
+      end if
+
+      PHEN =0 ! Phenological stage zeroed after re-seed
+      if (reseed_TILG2>=0) then
+        TILG2 = reseed_TILG2  ! Non-elongating generative tiller density
+      end if
+      if (reseed_TILG1>=0) then
+        TILG1 = reseed_TILG1  ! Elongating generative tiller density
+      end if
+      if (reseed_TILV>=0) then
+        TILV = reseed_TILV  ! Non-elongating tiller density
+      end if
+      ! set harvest delay by setting harv_trig to -1 for the day and the following days
+      DAYS_HARVEST(day: day + reseed_harv_delay, 4) = -1
+
+      ! no reason to add mass, leave these variables constant, so do not pass to subroutine
+      !CLV ! Weight of leaves
+      !CRES  ! Weight of reserves
+      !CST  ! Weight of stems
+      !CSTUB  ! Weight of stubble
+      ! CLVD  ! Weight of leaves died since start simulation
+    end if
+
+  End Subroutine Reseed
 
 end module plant

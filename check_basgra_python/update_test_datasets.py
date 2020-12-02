@@ -24,6 +24,7 @@ if __name__ == '__main__':
             test_weed_fixed_harv_auto,
             test_auto_harv_fixed,
             test_weed_fraction_man,
+            test_irr_paw
 
         ]
         for f in functions:

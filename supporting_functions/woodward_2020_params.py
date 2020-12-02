@@ -7,6 +7,7 @@ import pandas as pd
 import os
 from input_output_keys import plant_param_keys, site_param_keys
 
+
 def get_woodward_mean_site_param(site):
     """
     get woodward 2020 site parameters see fortran_BASGRA_NZ/docs/Woodward et al 2020 Tiller Persistence GFS Final.pdf
@@ -18,28 +19,11 @@ def get_woodward_mean_site_param(site):
 
     :return:
     """
-    if site == 'scott' or site =='waikato':
-        col = 1 + 8 * (1)
-    elif site =='northland':
-        col = 1 + 8 * (1 - 1)
-    elif site == 'lincoln':
-        col = 1 + 8 * (3 - 1)
-    else:
-        raise ValueError('unexpected site')
-    params = pd.read_csv(os.path.join(os.path.dirname(__file__), 'Woodward_2020_BASGRA_parModes.txt'),
-                         delim_whitespace=True, index_col=0).iloc[:, col]
-    params.loc['IRRIGF'] = 0
-    params.loc['fixed_removal'] = 0
-    params.loc['DRATE'] = 50  # used to be set inside fortran
-    params.loc['CO2A'] = 350  # used to be set inside fortran
-    params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
-    params.loc['opt_harvfrin'] = 0
-    params.loc['irr_frm_paw'] = 0
-
+    params = pd.Series(get_woodward_mean_full_params(site))
     params = params.loc[list(site_param_keys)]
-    params = params.to_dict()
-
+    params.to_dict()
     return params
+
 
 def get_woodward_mean_plant_params(site):
     """
@@ -54,27 +38,9 @@ def get_woodward_mean_plant_params(site):
 
     :return:
     """
-    if site == 'scott' or site =='waikato':
-        col = 1 + 8 * (1)
-    elif site =='northland':
-        col = 1 + 8 * (1 - 1)
-    elif site == 'lincoln':
-        col = 1 + 8 * (3 - 1)
-    else:
-        raise ValueError('unexpected site')
-    params = pd.read_csv(os.path.join(os.path.dirname(__file__), 'Woodward_2020_BASGRA_parModes.txt'),
-                         delim_whitespace=True, index_col=0).iloc[:, col]
-    params.loc['IRRIGF'] = 0
-    params.loc['fixed_removal'] = 0
-    params.loc['DRATE'] = 50  # used to be set inside fortran
-    params.loc['CO2A'] = 350  # used to be set inside fortran
-    params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
-    params.loc['opt_harvfrin'] = 0
-    params.loc['irr_frm_paw'] = 0
-
+    params = pd.Series(get_woodward_mean_full_params(site))
     params = params.loc[list(plant_param_keys)]
-    params = params.to_dict()
-
+    params.to_dict()
     return params
 
 
@@ -89,8 +55,29 @@ def get_woodward_mean_full_params(site):
 
     :return:
     """
-    out = {}
-    out.update(get_woodward_mean_plant_params(site))
-    out.update(get_woodward_mean_site_param(site))
+    if site == 'scott' or site == 'waikato':
+        col = 1 + 8 * (1)
+    elif site == 'northland':
+        col = 1 + 8 * (1 - 1)
+    elif site == 'lincoln':
+        col = 1 + 8 * (3 - 1)
+    else:
+        raise ValueError('unexpected site')
+    params = pd.read_csv(os.path.join(os.path.dirname(__file__), 'Woodward_2020_BASGRA_parModes.txt'),
+                         delim_whitespace=True, index_col=0).iloc[:, col]
+    params.loc['IRRIGF'] = 0
+    params.loc['fixed_removal'] = 0
+    params.loc['DRATE'] = 50  # used to be set inside fortran
+    params.loc['CO2A'] = 350  # used to be set inside fortran
+    params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
+    params.loc['opt_harvfrin'] = 0
+    params.loc['irr_frm_paw'] = 0
+    params.loc['reseed_harv_delay'] = 0
+    params.loc['reseed_LAI'] = 0
+    params.loc['reseed_TILG2'] = 0
+    params.loc['reseed_TILG1'] = 0
+    params.loc['reseed_TILV'] = 0
 
-    return out
+    params = params.to_dict()
+
+    return params
