@@ -157,7 +157,7 @@ def establish_org_input(site='scott'):
     days_harvest.loc[:, 'harv_targ'] = 0
     days_harvest.loc[:, 'weed_dm_frac'] = 0
     days_harvest.loc[:, 'reseed_trig'] = -1
-    days_harvest.loc[:, 'reseed_basal'] = 0
+    days_harvest.loc[:, 'reseed_basal'] = 1
 
     days_harvest.drop(columns=['percent_harvest'], inplace=True)
 
@@ -267,7 +267,7 @@ def base_manual_harvest_data():
     days_harvest.loc[:, 'harv_targ'] = 1000
     days_harvest.loc[:, 'weed_dm_frac'] = 0
     days_harvest.loc[:, 'reseed_trig'] = -1
-    days_harvest.loc[:, 'reseed_basal'] = 0
+    days_harvest.loc[:, 'reseed_basal'] = 1
 
     strs = ['{}-{:03d}'.format(e, f) for e, f in days_harvest[['year', 'doy']].itertuples(False, None)]
     days_harvest.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
@@ -286,7 +286,7 @@ def base_auto_harvest_data(matrix_weather):
                                      'date': pd.to_datetime(strs, format='%Y-%j')
                                      })
     days_harvest_out.loc[:, 'reseed_trig'] = -1
-    days_harvest_out.loc[:, 'reseed_basal'] = 0
+    days_harvest_out.loc[:, 'reseed_basal'] = 1
 
     return days_harvest_out
 
