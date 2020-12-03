@@ -31,7 +31,7 @@ _outvars = (
 )
 
 
-def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8), title_str=''):
+def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8), title_str='',**kwargs):
     """
     plot multiple basgra results against eachother
     :param data: dictionary of key: outputs of run_basgra()
@@ -40,6 +40,7 @@ def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8)
                      ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD',
                       'BASAL', 'ROOTD', 'WAFC')
     :param title_str: a string to append to the front of the title
+    :param kwargs: other kwargs passed directly to the plot function
     :return:
     """
 
@@ -63,7 +64,7 @@ def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8)
     for i, (k, out) in enumerate(data.items()):
         for v in out_vars:
             ax = figs[v]
-            ax.plot(out.index, out[v], c=colors[i], label=k)
+            ax.plot(out.index, out[v], c=colors[i], label=k, **kwargs)
 
     for ax in figs.values():
         ax.legend()

@@ -551,7 +551,7 @@ end Subroutine Tillering
     reseed_trig =  DAYS_HARVEST(day, 7)
     reseed_basal = DAYS_HARVEST(day, 8)
     RESEEDED = 0
-    if ((reseed_trig>=0) .and. (BASAL<=reseed_basal)) then ! reseed_trig < 0 is a flag for do not re-seed
+    if ((reseed_trig>=0) .and. (BASAL<=reseed_trig)) then ! reseed_trig < 0 is a flag for do not re-seed
       RESEEDED = 1
 
       ! set parameters:
