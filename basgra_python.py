@@ -203,6 +203,10 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert set(params.keys()) == set(param_keys), 'incorrect params keys'
     assert not any([np.isnan(e) for e in params.values()]), 'params cannot have na data'
 
+    assert params['reseed_harv_delay'] >= 1, 'harvest delay must be >=1'
+    assert params['reseed_harv_delay'] % 1 < 1e5, 'harvest delay must effectively be an integer'
+
+
     # check matrix weather
     assert isinstance(matrix_weather, pd.DataFrame)
     assert set(matrix_weather.keys()) == set(_matrix_weather_keys), 'incorrect keys for matrix_weather'

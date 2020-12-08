@@ -567,7 +567,7 @@ def test_weed_fixed_harv_auto(update_data=False):
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
-# todo create reseed test and document reseed in readme
+# todo create reseed test
 
 if __name__ == '__main__':
     # input types tests

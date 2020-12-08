@@ -133,7 +133,7 @@ param_keys = (
     'opt_harvfrin',  # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
     # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
     # harvest, the amount harvested may be significantly greather than expected depending on CST
-    'reseed_harv_delay',  # number of days to delay harvest after reseed, must be >=1
+    'reseed_harv_delay',  # number of days to delay harvest after reseed, must be >=1 and must be a whole number
     'reseed_LAI',  # >=0 the leaf area index to set after reseeding, if < 0 then simply use the current LAI
     'reseed_TILG2',
     # Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable

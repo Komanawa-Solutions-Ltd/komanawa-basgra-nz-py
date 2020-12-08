@@ -72,7 +72,7 @@ def get_woodward_mean_full_params(site):
     params.loc['poolInfilLimit'] = 0.2  # used to be set inside fortran
     params.loc['opt_harvfrin'] = 0
     params.loc['irr_frm_paw'] = 0
-    params.loc['reseed_harv_delay'] = 0
+    params.loc['reseed_harv_delay'] = 1
     params.loc['reseed_LAI'] = 0
     params.loc['reseed_TILG2'] = 0
     params.loc['reseed_TILG1'] = 0

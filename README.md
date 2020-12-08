@@ -125,7 +125,9 @@ To run the model in the original (no irrigation fashion) set both max_irr and ir
 
 
 ## Harvest management and scheduling v3.0.0
-As of version v3.0.0 harvest managment has changed significantly to allow many more options for harvest management
+As of version v3.0.0 harvest management has changed significantly to allow many more options for harvest management
+
+Importantly days_harvest is now a float array instead of an integer array as was the case in v.2.0.0
 
 ### New Harvest processes 
 harvesting has been changed to allow:
@@ -169,7 +171,7 @@ must be defined sensibly for every day of the simulation.  Internally the python
 
 Note that if the dry matter value is below the trigger value for a given manual time step no harvesting will occur. 
 
-### New Harvest inputs
+### New Harvest inputs/outputs
 New input parameters
 * 'fixed_removal',  # float boolean(1.0=True, 0.0=False) defines if auto_harv_targ is fixed amount or amount to harvest
  to
@@ -220,8 +222,63 @@ New format for havest dataframe,
     * 'harv_targ', as 0
     * 'weed_dm_frac' as 0
     
-# future developments
+## Re-seeding module (experimental, bleeding edge repo)
+At times during a long term simulations weather events can push the BASAL coverage of the rye grass to well below the
+normal amount for the simulation.  The BASGRA model will slowly increase BASAL coverage, however this may not very 
+realistic.  Farmers may choose to re-seed pasture following an infrequent event.
+
+### Reseed process
+The process very simplistic and does not model the physiological processes of seed germination and 
+young plant growth.  it simply allows the following parameters to be re-set and initiates a delay for harvesting:
+* BASAL
+* LAI 
+* TILG2
+* TILG1
+* TILV 
+
+1. on each day check the internal BASAL parameter against the appropriate daily value for 'reseed_trig' 
+(the reseed trigger), if BASAL is <= 'reseed_trig', then reseed otherwise simply pass. if reseed_trig <0 then passes (flag for no reseed)
+2. set BASAL to 'reseed_basal'
+3. set the Phenological stage (PHEN) to 0 
+3. set [LAI, TILG2, TILG1, TILV] to either the user defined parameter 'reseed_{var}' or keep at current state value 
+when the user defined parameter 'reseed_{var}' <0.
+4. set a user defined delay in harvesting ('reseed_harv_delay'), by setting the next n days harv_trig to -1
+
+
+### New re-seed inputs/outputs
+In order to very simply model this behaviour a new re-seed module was added. This module requires 5 new parameters and
+2 new inputs in the harvest matrix, and produces 1 new output
+
+he parameters are:
+* 'reseed_harv_delay':  number of days to delay harvest after reseed, must be >=1 and an integer 
+(value not type, within 1e-5)
+* 'reseed_LAI': >=0 the leaf area index to set after reseeding, if < 0 then simply use the current LAI
+* 'reseed_TILG2': Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+* 'reseed_TILG1': Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+* 'reseed_TILV': Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
+
+The new columns in the harvest matrix are:
+* 'reseed_trig': (-1 or 0 to 1) when BASAL <= reseed_trig, trigger a reseeding. if <0 then do not reseed
+* 'reseed_basal': (0 to 1) set BASAL = reseed_basal when reseeding.
+
+The new output is:
+* 'RESEEDED': reseeded flag, if ==1 then the simulation was reseeded on this day, if 0 then not reseeded
+
+### How to run so that the results are backwards compatible with versions V3.0.0 -
+* set all 'reseed_basal' in the harvest matrix to -1.
+* set all 'reseed_basal' to 0 (can be set to anything between 0-1 as it will not be used)
+* set 'reseed_harv_delay' to 1 (to avoid python assertion error)
+* all other variables must be set, but they can all be safely set to -1 
+
+
+# python developments
+
+## supporting functions (todo if I get time)
+
+## examples (todo if I get time)
 
 ## testing regime  (todo if I get time)
 
 ## modifying outputs (todo if I get time)
+
+# other/further documentation (todo if i get time)
