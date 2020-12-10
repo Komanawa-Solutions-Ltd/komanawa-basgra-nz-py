@@ -77,6 +77,10 @@ def get_woodward_mean_full_params(site):
     params.loc['reseed_TILG2'] = 0
     params.loc['reseed_TILG1'] = 0
     params.loc['reseed_TILV'] = 0
+    params.loc['reseed_CLV'] = 0
+    params.loc['reseed_CRES'] = 0
+    params.loc['reseed_CST'] = 0
+    params.loc['reseed_CSTUB'] = 0
 
     params = params.to_dict()
 

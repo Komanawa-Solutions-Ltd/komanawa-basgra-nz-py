@@ -540,13 +540,13 @@ Subroutine Tillering(DAYL,GLV,LAI,BASAL,TILV,TILG1,TRANRF,Tsurf,VERN,AGE, GLAI,R
 end Subroutine Tillering
 
   Subroutine Reseed(day, NDAYS, NHARVCOL, DAYS_HARVEST, BASAL, LAI, PHEN, TILG1, TILG2, TILV, & ! inputs
-                  RESEEDED) ! outputs
-    ! todo add the carbon stores! on simon's reccomendations
+                    CLV, CRES, CST, CSTUB, &
+                    RESEEDED) ! outputs
   ! add a re-seed option matt hanson
     integer :: day
     integer :: NDAYS, NHARVCOL
     real, dimension(NDAYS, NHARVCOL) :: DAYS_HARVEST     ! major re-structure by Matt Hanson
-    real    :: BASAL, LAI, PHEN, TILG2, TILG1, TILV ! values that may be modified.
+    real    :: BASAL, LAI, PHEN, TILG2, TILG1, TILV, CLV, CRES, CST, CSTUB ! values that may be modified.
     real    :: reseed_trig, reseed_basal, RESEEDED
 
     reseed_trig =  DAYS_HARVEST(day, 7)
@@ -575,12 +575,24 @@ end Subroutine Tillering
       ! set harvest delay by setting harv_trig to -1 for the day and the following days
       DAYS_HARVEST(day: day + reseed_harv_delay, 4) = -1
 
-      ! no reason to add mass, leave these variables constant, so do not pass to subroutine
-      !CLV ! Weight of leaves
-      !CRES  ! Weight of reserves
-      !CST  ! Weight of stems
-      !CSTUB  ! Weight of stubble
-      ! CLVD  ! Weight of leaves died since start simulation
+      ! add the carbon stores! on simon's reccomendations
+      if (reseed_CLV>=0) then
+        CLV = reseed_CLV ! Weight of leaves
+
+      end if
+      if (reseed_CRES>=0) then
+        CRES = reseed_CRES  ! Weight of reserves
+
+      end if
+      if (reseed_CST>=0) then
+        CST = reseed_CST  ! Weight of stems
+
+      end if
+      if (reseed_CSTUB>=0) then
+        CSTUB = reseed_CSTUB  ! Weight of stubble
+
+      end if
+
     end if
 
   End Subroutine Reseed

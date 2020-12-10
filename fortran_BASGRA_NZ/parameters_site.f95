@@ -4,7 +4,7 @@ module parameters_site
 implicit none
 
 ! Simulation period and time step
-integer, parameter                                  :: NPAR     = 120
+integer, parameter                                  :: NPAR     = 124
   real, parameter       :: DELT   =   1.0 ! Model time step
 
 ! Geography
@@ -56,6 +56,11 @@ integer, parameter                                  :: NPAR     = 120
   real       :: reseed_TILG2  ! Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
   real       :: reseed_TILG1  ! Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
   real       :: reseed_TILV  ! Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
+  real       :: reseed_CLV ! Weight of leaves after reseed if >=0 otherwise use current state of variable
+  real       :: reseed_CRES  ! Weight of reserves after reseed if >=0 otherwise use current state of variable
+  real       :: reseed_CST  ! Weight of stems after reseed if >=0 otherwise use current state of variable
+  real       :: reseed_CSTUB  ! Weight of stubble after reseed if >=0 otherwise use current state of variable
+
 
 ! Mathematical constants
   real, parameter       :: pi   = 3.141592653589793

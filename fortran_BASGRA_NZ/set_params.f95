@@ -155,7 +155,10 @@ reseed_LAI         = pa(117)  ! >=0 the leaf area index to set after reseeding, 
 reseed_TILG2       = pa(118)  ! Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
 reseed_TILG1       = pa(119)  ! Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
 reseed_TILV        = pa(120)  ! Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
-
+reseed_CLV         = pa(121)
+reseed_CRES        = pa(122)
+reseed_CST         = pa(123)
+reseed_CSTUB       = pa(124)
 
 return
 end

@@ -198,7 +198,8 @@ do day = 1, NDAYS
   call set_weather_day(day,DRYSTOR, year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
 
   call Reseed(day, NDAYS, NHARVCOL, DAYS_HARVEST, BASAL, LAI, PHEN, TILG1, TILG2, TILV, & ! inputs
-                  RESEEDED)
+                    CLV, CRES, CST, CSTUB, &
+                    RESEEDED)
   call Harvest (day, NDAYS, NHARVCOL, BASAL, CLV,CRES,CST,CSTUB,CLVD,DAYS_HARVEST,LAI,PHEN,TILG2,TILG1,TILV, &
                 GSTUB,HARVLA,HARVLV,HARVLVD,HARVPH,HARVRE,HARVST, &
                 HARVTILG2,HARVFR,HARVFRIN,HARV,RDRHARV, &

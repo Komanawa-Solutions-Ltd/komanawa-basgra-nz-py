@@ -44,7 +44,7 @@ param_keys = (
     'RUBISC',  # RUBISC,  # g m-2 leaf, # Rubisco content of upper leaves
     'LSHAPE',  # SHAPE,  # -, # Area of a leaf relative to a rectangle of same length and width (must be < 1)
     'SIMAX1T',  # SIMAX1T,  # gC tiller-1 d-1, # Sink strength of small elongating tillers
-    'SLAMAX',  # SLAMAX,  # m2 leaf gC-1, # Maximum SLA of new leaves (Note unusual units!)
+    'SLAMAX',  # SLAMAX,  # m2 leaf gC-1, # Maximum SLA of new leaves (Note unusual units#)
     'TBASE',  # TBASE,  # Â°C, # Minimum value of effective temperature for leaf elongation
     'TCRES',  # TCRES,  # d, # Time constant of mobilisation of reserves
     'TOPTGE',  # TOPTGE,  # Â°C, # Optimum temperature for vegetative tillers to become generative (must be > TBASE)
@@ -120,12 +120,12 @@ param_keys = (
 
     # site parameters brought out
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
-    'DRATE',  # woodward set to 50   ! mm d-1 Maximum soil drainage rate !
-    'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
-    'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
+    'DRATE',  # woodward set to 50   # mm d-1 Maximum soil drainage rate #
+    'CO2A',  # woodward set to 350   # CO2 concentration in atmosphere (ppm)
+    'poolInfilLimit',  # woodward set to  0.2     # m Soil frost depth limit for water infiltration
 
     # new for irrigation
-    'irr_frm_paw',  # ! are irrigation trigger/target the fraction of profile available water (1/True or
+    'irr_frm_paw',  # # are irrigation trigger/target the fraction of profile available water (1/True or
     # the fraction of field capacity (0/False).
 
     # new for harvest, certainly parameters
@@ -139,6 +139,10 @@ param_keys = (
     # Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
     'reseed_TILG1',  # Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
     'reseed_TILV',  # Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
+    'reseed_CLV',  # Weight of leaves after reseed if >= 0 otherwise use current state of variable
+    'reseed_CRES',  # Weight of reserves after reseed if >= 0 otherwise use current state of variable
+    'reseed_CST',  # Weight of stems after reseed if >= 0 otherwise use current state of variable
+    'reseed_CSTUB',  # Weight of stubble after reseed if >= 0 otherwise use current state of variable
 
 )
 
@@ -300,20 +304,25 @@ site_param_keys = (
     'BD',  # BD,  # kg l-1, # Bulk density of soil
 
     'IRRIGF',  # fraction # fraction of the needed irrigation to apply to bring water content up to field capacity
-    'irr_frm_paw',  # ! are irrigation trigger/target the fraction of profile available water (1/True or
+    'irr_frm_paw',  # # are irrigation trigger/target the fraction of profile available water (1/True or
     # the fraction of field capacity (0/False).
-    'DRATE',  # woodward set to 50   ! mm d-1 Maximum soil drainage rate !
-    'CO2A',  # woodward set to 350   ! CO2 concentration in atmosphere (ppm)
-    'poolInfilLimit',  # woodward set to  0.2     ! m Soil frost depth limit for water infiltration
+    'DRATE',  # woodward set to 50   # mm d-1 Maximum soil drainage rate #
+    'CO2A',  # woodward set to 350   # CO2 concentration in atmosphere (ppm)
+    'poolInfilLimit',  # woodward set to  0.2     # m Soil frost depth limit for water infiltration
     'fixed_removal',  # sudo boolean(1=True, 0=False) defines if auto_harv_targ is fixed amount or amount to harvest to,
     'opt_harvfrin',  # # sudo boolean(1=True, 0=False) if True, harvest fraction is estimated by brent zero optimisation
     # if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the
     # harvest, the amount harvested may be significantly greather than expected depending on CST
     'reseed_harv_delay',  # number of days to delay harvest after reseed, must be >=1
     'reseed_LAI',  # >=0 the leaf area index to set after reseeding, if < 0 then simply use the current LAI
-    'reseed_TILG2',# Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+    'reseed_TILG2',
+    # Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
     'reseed_TILG1',  # Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
     'reseed_TILV',  # Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
+    'reseed_CLV',  # Weight of leaves after reseed if >= 0 otherwise use current state of variable
+    'reseed_CRES',  # Weight of reserves after reseed if >= 0 otherwise use current state of variable
+    'reseed_CST',  # Weight of stems after reseed if >= 0 otherwise use current state of variable
+    'reseed_CSTUB',  # Weight of stubble after reseed if >= 0 otherwise use current state of variable
 
 )
 plant_param_keys = (
@@ -357,7 +366,7 @@ plant_param_keys = (
     'RUBISC',  # RUBISC,  # g m-2 leaf, # Rubisco content of upper leaves
     'LSHAPE',  # SHAPE,  # -, # Area of a leaf relative to a rectangle of same length and width (must be < 1)
     'SIMAX1T',  # SIMAX1T,  # gC tiller-1 d-1, # Sink strength of small elongating tillers
-    'SLAMAX',  # SLAMAX,  # m2 leaf gC-1, # Maximum SLA of new leaves (Note unusual units!)
+    'SLAMAX',  # SLAMAX,  # m2 leaf gC-1, # Maximum SLA of new leaves (Note unusual units#)
     'TBASE',  # TBASE,  # Â°C, # Minimum value of effective temperature for leaf elongation
     'TCRES',  # TCRES,  # d, # Time constant of mobilisation of reserves
     'TOPTGE',  # TOPTGE,  # Â°C, # Optimum temperature for vegetative tillers to become generative (must be > TBASE)
