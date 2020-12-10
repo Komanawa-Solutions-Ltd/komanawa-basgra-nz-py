@@ -541,6 +541,7 @@ end Subroutine Tillering
 
   Subroutine Reseed(day, NDAYS, NHARVCOL, DAYS_HARVEST, BASAL, LAI, PHEN, TILG1, TILG2, TILV, & ! inputs
                   RESEEDED) ! outputs
+    ! todo add the carbon stores! on simon's reccomendations
   ! add a re-seed option matt hanson
     integer :: day
     integer :: NDAYS, NHARVCOL
