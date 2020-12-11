@@ -4,6 +4,7 @@
  """
 import matplotlib.pyplot as plt
 from matplotlib.cm import get_cmap
+import pandas as pd
 import os
 
 _outvars = (
@@ -32,7 +33,8 @@ _outvars = (
 
 
 def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8), title_str='',
-                          rolling=None, main_kwargs={}, rolling_kwargs={}, label_rolling=False, label_main=True, show=True):
+                          rolling=None, main_kwargs={}, rolling_kwargs={}, label_rolling=False, label_main=True,
+                          show=True):
     """
     plot multiple basgra results against eachother
     :param data: dictionary of key: outputs of run_basgra()
@@ -82,9 +84,69 @@ def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8)
                 else:
                     ax.plot(out.index, temp, c=colors[i], **rolling_kwargs)
 
-
     for ax in axs.values():
         if label_main or label_rolling:
+            ax.legend()
+        fig = ax.figure
+        if outdir is not None:
+            fig.savefig(os.path.join(outdir, '{}.png'.format(ax.title.get_text())))
+
+    if show:
+        plt.show()
+    return axs
+
+
+def plot_multiple_monthly_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8), title_str='',
+                                  main_kwargs={}, label_main=True, show=True):
+    """
+    plot multiple basgra results against each other shifts january to be in the middle.
+    :param data: dictionary of key: outputs of run_basgra()
+    :param outdir: none or directory, if not None then makes outdir and saves plots
+    :param out_vars: variables to make figures for, default is:
+                     ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD',
+                      'BASAL', 'ROOTD', 'WAFC')
+    :param title_str: a string to append to the front of the title
+    :param main_kwargs: other kwargs passed directly to the plot function for the main plot
+    :param label_main: bool if True labels are created for the main plot if either is true then  creates a legend
+    :param show: bool if true call plt.show before function return
+    :return: axs: dict(data.keys():plt.ax)
+    """
+
+    assert isinstance(data, dict)
+    for k, v in data.items():
+        assert isinstance(v, pd.DataFrame), 'data items must be dataframes, instead was {}'.format(type(v))
+        assert list(v.index) == list(range(1, 13)), 'data index must be range(1,13), instead was {}'.format(v.index)
+        v.index = [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6]
+        v.sort_index(inplace=True)
+
+    if outdir is not None:
+        if not os.path.exists(outdir):
+            os.makedirs(outdir)
+
+    cmap = get_cmap('tab20')
+    n_scens = len(data.keys())
+    colors = [cmap(e / n_scens) for e in range(n_scens)]  # pick from color map
+
+    axs = {}
+
+    for v in out_vars:
+        fig, ax = plt.subplots(figsize=fig_size)
+        fig.autofmt_xdate()
+        ax.set_title(title_str + v)
+        axs[v] = ax
+
+    for i, (k, out) in enumerate(data.items()):
+        for v in out_vars:
+            ax = axs[v]
+            if label_main:
+                ax.plot(out.index, out[v], c=colors[i], label=k, **main_kwargs)
+            else:
+                ax.plot(out.index, out[v], c=colors[i], **main_kwargs)
+
+    for ax in axs.values():
+        ax.set_xticks(range(1, 13))
+        ax.set_xticklabels(['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])
+        if label_main:
             ax.legend()
         fig = ax.figure
         if outdir is not None:
