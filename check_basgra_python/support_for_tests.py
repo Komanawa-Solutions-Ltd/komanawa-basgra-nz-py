@@ -18,6 +18,11 @@ def establish_peyman_input(return_pet=False):
     # load weather data
     weather_path = os.path.join(test_dir, 'hamilton_ruakura_ews2010-2013_{}.csv')
 
+    pressure = pd.read_csv(os.path.join(test_dir, 'hamilton_AWS_pressure.csv'),
+                           skiprows=8).loc[:, ['year',
+                                               'doy',
+                                               'pmsl']].set_index(['year', 'doy'])
+
     rain = pd.read_csv(weather_path.format('rain')).loc[:, ['year',
                                                             'doy',
                                                             'rain']].set_index(['year', 'doy'])
@@ -55,15 +60,16 @@ def establish_peyman_input(return_pet=False):
     matrix_weather = pd.merge(matrix_weather, rh, how='outer', left_index=True, right_index=True)
     matrix_weather = pd.merge(matrix_weather, wind, how='outer', left_index=True, right_index=True)
     matrix_weather = pd.merge(matrix_weather, pet, how='outer', left_index=True, right_index=True)
+    matrix_weather = pd.merge(matrix_weather, pressure, how='outer', left_index=True, right_index=True)
     matrix_weather.loc[:, 'vpa'] = convert_RH_vpa(matrix_weather.loc[:, 'rh'],
                                                   matrix_weather.loc[:, 'tmin'],
                                                   matrix_weather.loc[:, 'tmax'])
 
-    if return_pet:
-        matrix_weather.drop(columns=['rh', 'to_delete', 'wind', 'vpa'], inplace=True)
-    else:
-        matrix_weather.drop(columns=['rh', 'to_delete', 'pet'], inplace=True)
     matrix_weather = matrix_weather.fillna(method='ffill')
+    if return_pet:
+        matrix_weather.drop(columns=['rh', 'to_delete', 'wind', 'vpa', 'pmsl'], inplace=True)
+    else:
+        matrix_weather.drop(columns=['rh', 'to_delete', 'pet', 'pmsl'], inplace=True)
     matrix_weather.loc[:, 'max_irr'] = 10.
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
@@ -87,7 +93,6 @@ def establish_peyman_input(return_pet=False):
     days_harvest.loc[:, 'reseed_trig'] = -1
     days_harvest.loc[:, 'reseed_basal'] = 1
 
-
     days_harvest.drop(columns=['percent_harvest'], inplace=True)
 
     # load parameters from simon woodward's paper
@@ -107,7 +112,8 @@ def _compair_pet():
                                supply_pet=False)
 
     params, matrix_weather, days_harvest, doy_irr = establish_peyman_input(True)
-    pet_out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default', supply_pet=True)
+    pet_out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default',
+                            supply_pet=True)
 
     from supporting_functions.plotting import plot_multiple_results
     plot_multiple_results({'pet': pet_out, 'peyman': peyman_out})
@@ -292,4 +298,5 @@ def base_auto_harvest_data(matrix_weather):
 
 
 if __name__ == '__main__':
-    base_manual_harvest_data()
+    params, matrix_weather, days_harvest, doy_irr = establish_peyman_input(True)
+    matrix_weather.to_csv(r"C:\Users\Matt Hanson\Downloads\lincoln_weather.csv")
