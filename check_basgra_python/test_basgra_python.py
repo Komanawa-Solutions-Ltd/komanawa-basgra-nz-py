@@ -6,7 +6,7 @@ import os
 import numpy as np
 import pandas as pd
 from basgra_python import run_basgra_nz, _trans_manual_harv
-from input_output_keys import matrix_weather_keys_pet, matrix_weather_keys_peyman
+from input_output_keys import matrix_weather_keys_pet, matrix_weather_keys_penman
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
     test_dir, establish_peyman_input, _clean_harvest, base_auto_harvest_data, base_manual_harvest_data
 

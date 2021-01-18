@@ -22,7 +22,10 @@ This repo diverged from Simon Woodward's
 [BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src) as of August 2020, 
 efforts will be made to incorporate further updates, but no assurances
 
-# Python Implementation
+# todo table of contents here! 
+
+
+## Python Implementation
 BASGRA_NZ requires python 3.7 or less (3.8 handles DLLs more securely but this causes some faults)
 required packages: 
 * pandas
@@ -32,15 +35,13 @@ required packages:
 to install this general environment via conda: conda create --name basgranz python=3.7 numpy pandas matplotlib
 or a fixed anaconda .yml library can be found in the environment.yml file
 
-# package installation
+## package installation
 BASGRA_NZ_PY can only be installed locally from a github pull and addition to your PYTHONPATH
-
-todo setup pip/anaconda and see how to ship the dlls
 
 this installs both the python wrapper and the source fortran code.  at present a fortran installation is 
 required.
 
-# Fortran Installation 
+## Fortran Installation 
 At present BASGRA_NZ_py requires fortran 64 and assumes the use of gfortran64.  It is beyond the scope of this readme
 to detail how to install fortran, but general instructions can be found in this 
 [youtube video](https://www.youtube.com/watch?v=wGv2kGl8OV0) 
@@ -49,26 +50,30 @@ WARNING the installation in this video is 32Bit
 This repo was developed and tested with gfortran 64 4.8.1 which can be 
 [downloaded here](https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download)
 
-# Fortran compilation
+## Fortran compilation
 At present BASGRA_NZ_py requires fortran and requires the user to compile the fortran code.
 The compilation code can be found in the following .bat file: fortran_BASGRA_NZ/compile_BASGRA_gfortran.bat
 The python wrapper will attempt to run the compilation bat if the DLL it required does not exist.
 
 
-# new features implemented from [Simon Woodward's BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src)
+## new features implemented from [Simon Woodward's BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src)
 
 A number of new features where necessary for futher modeling work. Specially more generalized irrigation 
 and harvest management.  This required changes to the fortran code, but tests were put in place to ensure backwards 
 compatibility (with some argument changes) to
 [Simon Woodward's BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src) as of August 2020.
 
-## Maximum simulation length
+### model documentation resources
+This readme is the documentation of all new features to basgra_nz_py, but the documentation of the previous features
+are in fortran_BASGRA_NZ/docs
+
+### Maximum simulation length
 At present the maximum simulation length is set explicitly within the fortran code in the environment.f95.  
 It is set to 100 years (NMAXDAYS = 36600).  This was set at this length to allow long term climate change simulations,
 without expending too many resources.  Note that internally the python code must make the weather matrix length to 
 nmaxdays.
 
-## Resource requirements
+### Resource requirements
 BASGRA is fast!  The following baseline test are provided in supporting_functions/check_resource_use.py:
 
 * BASGRA took 1.585375e-01 seconds to run run_example_basgra which has 2192 sim days
@@ -82,9 +87,9 @@ BASGRA is relatively light weight
 * memory tests were run with [memory_profiler 0.58.0](https://pypi.org/project/memory-profiler/) 
  to rerun these tests (supporting_functions/test_memory_use.py) requires installation of the memory profiler
 
-## irrigation triggering and demand modelling (v2.0.0+) 
+### irrigation triggering and demand modelling (v2.0.0+) 
 
-### New Irrigation Process
+#### New Irrigation Process
 Irrigation modelling was developed to answer questions about pasture growth rates in the face of possible irrigation
  water restribtions; therefore the irrigation has been implemented as follows:
 
@@ -96,7 +101,7 @@ Irrigation modelling was developed to answer questions about pasture growth rate
     
 This modification includes bug fixes that allowed irrigation to be negative.
 
-### New irrigation input/outputs
+#### New irrigation input/outputs
 There is a new input variable: doy_irr, which is the days that irrigation can occur(1d array)
 
 a number of inputs have been added to parameters:
@@ -120,16 +125,16 @@ New outputs have been added:
 * 'IRR_TRIG',  # irrigation trigger (fraction of field capacity at which to start irrigating
 * 'IRRIG_DEM',  # irrigation irrigation demand to field capacity * IRR_TARG # mm
 
-### How to run so that the results are backwards compatible with versions before V2.0.0
+#### How to run so that the results are backwards compatible with versions before V2.0.0
 To run the model in the original (no irrigation fashion) set both max_irr and irr_trig to zero, also set doy_irr = [0]
 
 
-## Harvest management and scheduling (v3.0.0+)
+### Harvest management and scheduling (v3.0.0+)
 As of version v3.0.0 harvest management has changed significantly to allow many more options for harvest management
 
 Importantly days_harvest is now a float array instead of an integer array as was the case in v.2.0.0
 
-### New Harvest processes 
+#### New Harvest processes 
 harvesting has been changed to allow:
 * automatic harvesting
 * time varient harvestable dry matter triggers
@@ -137,7 +142,7 @@ harvesting has been changed to allow:
 * time varient fixed weight harvesting
 * time varient allowing weed species to provide some fraction of the rye grass production
 
-#### Automatic harvesting process
+##### Automatic harvesting process
 In the automatic harvesting process 
 1. a harvest trigger is set for each time step
 2. at each time step harvestable Rye grass dry matter is calculated and reported by 
@@ -158,7 +163,7 @@ is related to a power function.  In some test runs without estimation, target 50
 actually removed c. 1000kg 
 7. harvesting then progresses as per V2.0.0
 
-#### Manual harvesting process
+##### Manual harvesting process
 As per automatic harvesting, however the dataframe is reshaped within the pyhon code so that the row count 
 is equal to n days.  all indexes where manual harvesting will not occur have the 'harv_trig' set to -1 so that no 
 harvesting will occur
@@ -171,7 +176,7 @@ must be defined sensibly for every day of the simulation.  Internally the python
 
 Note that if the dry matter value is below the trigger value for a given manual time step no harvesting will occur. 
 
-### New Harvest inputs/outputs
+#### New Harvest inputs/outputs
 New input parameters
 * 'fixed_removal',  # float boolean(1.0=True, 0.0=False) defines if auto_harv_targ is fixed amount or amount to harvest
  to
@@ -210,7 +215,7 @@ New format for havest dataframe,
     * 'harv_targ',  # dm to harvest to or to remove depending on 'fixed_removal'
     * 'weed_dm_frac',  # fraction of dm of ryegrass to attribute to weeds
 
-### How to run so that the results are backwards compatible with versions before V3.0.0
+#### How to run so that the results are backwards compatible with versions before V3.0.0
 * 'fixed_removal' = 0
 * 'opt_harvfrin' = 0
 * manual harvest (python auto_harvest=False)
@@ -222,12 +227,12 @@ New format for havest dataframe,
     * 'harv_targ', as 0
     * 'weed_dm_frac' as 0
     
-## Re-seeding module (V4.0.0+)
+### Re-seeding module (V4.0.0+)
 At times during a long term simulations weather events can push the BASAL coverage of the rye grass to well below the
 normal amount for the simulation.  The BASGRA model will slowly increase BASAL coverage, however this may not very 
 realistic.  Farmers may choose to re-seed pasture following an infrequent event.
 
-### Reseed process
+#### Reseed process
 The process very simplistic and does not model the physiological processes of seed germination and 
 young plant growth.  it simply allows the following parameters to be re-set and initiates a delay for harvesting:
 * BASAL
@@ -245,7 +250,7 @@ when the user defined parameter 'reseed_{var}' <0.
 4. set a user defined delay in harvesting ('reseed_harv_delay'), by setting the next n days harv_trig to -1
 
 
-### New re-seed inputs/outputs
+#### New re-seed inputs/outputs
 In order to very simply model this behaviour a new re-seed module was added. This module requires 5 new parameters and
 2 new inputs in the harvest matrix, and produces 1 new output
 
@@ -268,21 +273,107 @@ The new columns in the harvest matrix are:
 The new output is:
 * 'RESEEDED': reseeded flag, if ==1 then the simulation was reseeded on this day, if 0 then not reseeded
 
-### How to run so that the results are backwards compatible with versions V3.0.0 -
+#### How to run so that the results are backwards compatible with versions V3.0.0 -
 * set all 'reseed_trig' in the harvest matrix to -1.
 * set all 'reseed_basal' to 0 (can be set to anything between 0-1 as it will not be used)
 * set 'reseed_harv_delay' to 1 (to avoid python assertion error)
 * all other reseed parameters (reseed_{var}) must be set, but they can all be safely set to -1 
 
 
-# python developments
+## python developments
 
-## supporting functions (todo if I get time)
+### supporting functions
+there are several supporting functions developed within basgra_nz_py.  These are not all documented in this readme; 
+however there are decent docstrings. these include:
+* conversion from RH to vapour pressure and wind speed to wind speed at 2m (conversions.py)
+* plotting multiple results either on monthly timesteps or for the duration of the run (plotting.py)
+* access to the mean parameters that resulted from Woodward 2020's inverse calibration (woodward_2020_params.py)
+    * Parameters are avalible for the Scott Farm in the Waikato, Jordan Valley Farm in Northland, and the Lincoln Test Farm in Canterbury.
+    * Scott Farm and Jordan Valley Farm are dryland systems, while Lincoln Test Farm is irrigated.
+    * Plant parameters were calibrated for all three farms, while site parameters were calibrated for each specific site.
+    * see woodward, 2020 for more details.  it is in this repo at fortran_BASGRA_NZ/docs/Woodward et al 2020 Tiller Persistence GFS Final.pdf
+    
 
-## examples (todo if I get time)
+### testing regime and examples
+In order to ensure that future changes can be made backwards compatable with previous runs there are a suite of test in
+check_basgra_python/test_basgra_python.py.  These tests are not yet implemented in a framework; however simply running 
+the test_basgra_python.py will run all of the testing functions.  These functions can also be used as examples.
 
-## testing regime  (todo if I get time)
 
-## modifying outputs (todo if I get time)
+## Input and output parameter definitions
+# todo put in tables for the input and output parameters.
 
-# other/further documentation (todo if i get time)
+
+**varname**|**units**|**description**| | 
+:-----:|:-----:|:-----:|:-----:|:-----:
+'Time'|(y)|Time| | 
+'year'|(y)|Year| | 
+'doy'|(d)|Day of Year| | 
+'DAVTMP'|(degC)|Av. Temp.| | 
+'CLV'|(gC m-2)|Leaf C| | 
+'CLVD'|(gC m-2)|Dead Leaf C| | 
+'TRANRF'|(%)|Transpiration| | 
+'CRES'|(gC m-2)|Reserve C| | 
+'CRT'|(gC m-2)|Root C| | 
+'CST'|(gC m-2)|Stem C| | 
+'CSTUB'|(gC m-2)|Stubble C| | 
+'VERND'|(d)|Vern. Days| | 
+'PHOT'|(gC m-2 d-1)|Photosyn.| | 
+'LAI'|(m2 m-2)|LAI| | 
+'RESMOB'|(gC m-2 d-1)|Res. Mobil.| | 
+'RAIN'|(mm d-1)|Rain| | 
+'PHEN'|(-)|Phen. Stage| | 
+'LT50'|(degC)|Hardening| | 
+'DAYL'|(-)|Daylength| | 
+'TILG2'|(m-2)|Elong. Tillers| | 
+'TILG1'|(m-2)|Gen. Tillers| | 
+'TILV'|(m-2)|Veg. Tillers| | 
+'WAL'|(mm)|Soil Water| | 
+'WCLM'|(%)|Soil Moisture| | 
+'DAYLGE'|(-)|Daylength Fact.| | 
+'RDLVD'|(d-1)|Decomp. Rate| | 
+'HARVFR'|(-)|Harvest Frac.| | 
+'DM'|(kg DM ha-1)|Ryegrass Mass Note that this is after any harvest (e.g. at end of time stamp)| | 
+'RES'|(g g-1)|Reserve C| | 
+'LERG'|(m d-1)|Gen. Elong. Rate| | 
+'PHENRF'|(-)|Phen. Effect| | 
+'RLEAF'|(d-1)|Leaf App. Rate| | 
+'SLA'|(m2 gC-1)|Spec. Leaf Area| | 
+'TILTOT'|(m-2)|Total Tillers| | 
+'RGRTV'|(d-1)|Till. App. Rate| | 
+'RDRTIL'|(d-1)|Till. Death Rate| | 
+'GRT'|(gC m-2 d-1)|Root Growth| | 
+'RDRL'|(d-1)|Leaf Death Rate| | 
+'VERN'|(%)|Vernalisation| | 
+'DRAIN'|(mm d-1)|Drainage| | 
+'RUNOFF'|(mm d-1)|Runoff| | 
+'EVAP'|(mm d-1)|Evap.| | 
+'TRAN'|(mm d-1)|Trans.| | 
+'LINT'|(-)|Light Intercep.| | 
+'DEBUG'|(?)|Debug| | 
+'ROOTD'|(m)|Root Depth| | 
+'TSIZE'|(gC tiller-1)|Tiller Size| | 
+'LERV'|(m d-1)|Veg. Elong. Rate| | 
+'WCL'|(%)|Eff. Soil Moisture| | 
+'HARVFRIN'|(-)|Harvest Data| | 
+'SLANEW'|(m2 gC-1)|New SLA| | 
+'YIELD'|(tDM ha-1)|PRG Yield sum of YIELD\_RYE and YIELD\_WEED| | 
+'BASAL'|(%)|Basal Area| | 
+'GTILV'|(till m-2 d-1)|Till. Birth| | 
+'DTILV'|(till m-2 d-1)|Till. Death| | 
+'FS'|(till leaf-1)|Site Filling| | 
+'IRRIG'|mm d-1|Irrigation applied| | 
+'WAFC'|mm|Water in non-frozen root zone at field capacity| | 
+'IRR\_TARG'|fraction|irrigation Target (fraction of field capacity) to fill to also an input variable| | 
+'IRR\_TRIG'|fraction|irrigation trigger (fraction of field capacity at which to start irrigating| | 
+'IRRIG\_DEM'|mm|irrigation irrigation demand to field capacity * IRR\_TARG| | 
+'WAWP'|mm|Water in non-frozen root zone at wilting point| | 
+'MXPAW'|mm|maximum Profile available water| | 
+'PAW'|mm|Profile available water at the time step| | 
+'RYE\_YIELD'|(tDM ha-1)|PRG Yield from rye grass species note that this is the actual amount of material that has been removed| | 
+'WEED\_YIELD'|(tDM ha-1)|PRG Yield from weed (other) species note that this is the actual amount of material that has been removed| | 
+'DM\_RYE\_RM'|(kg DM ha-1)|dry matter of Rye species harvested in this time step Note that this is the calculated removal but if 'opt\_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yeild variable| | 
+'DM\_WEED\_RM'|(kg DM ha-1)|dry matter of weed species harvested in this time step; Note that this is the calculated removal but if 'opt\_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yeild variable| | 
+'DMH\_RYE'|(kg DM ha-1)|harvestable dry matter of rye species includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting| | 
+'DMH\_WEED'|(kg DM ha-1)|harvestable dry matter of weed specie includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting| | 
+'DMH'|(kg DM ha-1)|harvestable dry matter = DMH\_RYE + DMH\_WEED note that this is before any removal by harvesting| | 

@@ -11,7 +11,7 @@ import pandas as pd
 from subprocess import Popen
 from copy import deepcopy
 from input_output_keys import param_keys, out_cols, days_harvest_keys, matrix_weather_keys_pet, \
-    matrix_weather_keys_peyman
+    matrix_weather_keys_penman
 from warnings import warn
 
 # compiled with gfortran 64,
@@ -89,7 +89,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     if supply_pet:
         _matrix_weather_keys = matrix_weather_keys_pet
     else:
-        _matrix_weather_keys = matrix_weather_keys_peyman
+        _matrix_weather_keys = matrix_weather_keys_penman
 
     doy_irr = np.atleast_1d(doy_irr)
     # test the input variables
