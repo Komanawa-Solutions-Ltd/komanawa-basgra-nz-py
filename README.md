@@ -22,40 +22,39 @@ This repo diverged from Simon Woodward's
 [BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src) as of August 2020, 
 efforts will be made to incorporate further updates, but no assurances
 
-- [BASGRA_NZ](#basgra-nz)
-- [todo table of contents here!](#todo-table-of-contents-here-)
-  * [Python Implementation](#python-implementation)
-  * [package installation](#package-installation)
-  * [Fortran Installation](#fortran-installation)
-  * [Fortran compilation](#fortran-compilation)
-  * [new features implemented from [Simon Woodward's BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src)](#new-features-implemented-from--simon-woodward-s-basgra-nz--https---githubcom-woodwards-basgra-nz-tree-master-model-package-src-)
-    + [model documentation resources](#model-documentation-resources)
-    + [Maximum simulation length](#maximum-simulation-length)
-    + [Resource requirements](#resource-requirements)
-    + [irrigation triggering and demand modelling (v2.0.0+)](#irrigation-triggering-and-demand-modelling--v200--)
-      - [New Irrigation Process](#new-irrigation-process)
-      - [New irrigation input/outputs](#new-irrigation-input-outputs)
-      - [How to run so that the results are backwards compatible with versions before V2.0.0](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v200)
-    + [Harvest management and scheduling (v3.0.0+)](#harvest-management-and-scheduling--v300--)
-      - [New Harvest processes](#new-harvest-processes)
-        * [Automatic harvesting process](#automatic-harvesting-process)
-        * [Manual harvesting process](#manual-harvesting-process)
-      - [New Harvest inputs/outputs](#new-harvest-inputs-outputs)
-      - [How to run so that the results are backwards compatible with versions before V3.0.0](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v300)
-    + [Re-seeding module (V4.0.0+)](#re-seeding-module--v400--)
-      - [Reseed process](#reseed-process)
-      - [New re-seed inputs/outputs](#new-re-seed-inputs-outputs)
-      - [How to run so that the results are backwards compatible with versions V3.0.0 -](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v300--)
-  * [python developments](#python-developments)
-    + [supporting functions](#supporting-functions)
-    + [testing regime and examples](#testing-regime-and-examples)
-  * [Input and output parameter definitions](#input-and-output-parameter-definitions)
-    + [Days Harvest Keys description](#days-harvest-keys-description)
-    + [Matrix weather keys where pet is passed description](#matrix-weather-keys-where-pet-is-passed-description)
-    + [Matrix weather keys where pet is calculated via penman description](#matrix-weather-keys-where-pet-is-calculated-via-penman-description)
-    + [Site Parameters description](#site-parameters-description)
-    + [Plant Parameters description](#plant-parameters-description)
-    + [output description](#output-description)
+## Table of Contents
+- [Python Implementation](#python-implementation)
+- [package installation](#package-installation)
+- [Fortran Installation](#fortran-installation)
+- [Fortran compilation](#fortran-compilation)
+- [new features implemented from Simon Woodward's BASGRA](#new-features-implemented-from-simon-woodward-s-basgra)
+  * [model documentation resources](#model-documentation-resources)
+  * [Maximum simulation length](#maximum-simulation-length)
+  * [Resource requirements](#resource-requirements)
+  * [irrigation triggering and demand modelling (v2.0.0+)](#irrigation-triggering-and-demand-modelling--v200--)
+    + [New Irrigation Process](#new-irrigation-process)
+    + [New irrigation input/outputs](#new-irrigation-input-outputs)
+    + [How to run so that the results are backwards compatible with versions before V2.0.0](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v200)
+  * [Harvest management and scheduling (v3.0.0+)](#harvest-management-and-scheduling--v300--)
+    + [New Harvest processes](#new-harvest-processes)
+      - [Automatic harvesting process](#automatic-harvesting-process)
+      - [Manual harvesting process](#manual-harvesting-process)
+    + [New Harvest inputs/outputs](#new-harvest-inputs-outputs)
+    + [How to run so that the results are backwards compatible with versions before V3.0.0](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v300)
+  * [Re-seeding module (V4.0.0+)](#re-seeding-module--v400--)
+    + [Reseed process](#reseed-process)
+    + [New re-seed inputs/outputs](#new-re-seed-inputs-outputs)
+    + [How to run so that the results are backwards compatible with versions V3.0.0 -](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v300--)
+- [python developments](#python-developments)
+  * [supporting functions](#supporting-functions)
+  * [testing regime and examples](#testing-regime-and-examples)
+- [Input and output parameter definitions](#input-and-output-parameter-definitions)
+  * [Days Harvest Keys description](#days-harvest-keys-description)
+  * [Matrix weather keys where pet is passed description](#matrix-weather-keys-where-pet-is-passed-description)
+  * [Matrix weather keys where pet is calculated via penman description](#matrix-weather-keys-where-pet-is-calculated-via-penman-description)
+  * [Site Parameters description](#site-parameters-description)
+  * [Plant Parameters description](#plant-parameters-description)
+  * [output description](#output-description)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -91,7 +90,7 @@ The compilation code can be found in the following .bat file: fortran_BASGRA_NZ/
 The python wrapper will attempt to run the compilation bat if the DLL it required does not exist.
 
 
-## new features implemented from [Simon Woodward's BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src)
+## new features implemented from Simon Woodward's BASGRA
 
 A number of new features where necessary for futher modeling work. Specially more generalized irrigation 
 and harvest management.  This required changes to the fortran code, but tests were put in place to ensure backwards 
