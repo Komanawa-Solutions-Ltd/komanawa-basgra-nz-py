@@ -23,7 +23,8 @@ This repo diverged from Simon Woodward's
 efforts will be made to incorporate further updates, but no assurances
 
 # todo table of contents here! 
-
+* auto-gen TOC:
+{:toc}
 
 ## Python Implementation
 BASGRA_NZ requires python 3.7 or less (3.8 handles DLLs more securely but this causes some faults)
@@ -94,8 +95,8 @@ Irrigation modelling was developed to answer questions about pasture growth rate
  water restribtions; therefore the irrigation has been implemented as follows:
 
 * if the day of year is within the irrigation season (doy in doy_irr)
-    * if the fraction of soil water (e.g. WAL/WAFC) including the timestep modification to the soil water content
-     (e.g. transpriation, rainfall, etc) are BELOW the trigger for that day
+    * if the fraction of soil water (e.g. WAL/WAFC) including the time step modification to the soil water content
+     (e.g. transpiration, rainfall, etc) are BELOW the trigger for that day
         * irrigation is applied at a rate = max(IRRIGF* amount of water needed to fill to 
         irrigation target * field capacity, max_irr on the day)  
     
@@ -153,18 +154,18 @@ DMH_WEED =  WEED_DM_FRAC*DMH_RYE/BASAL*(1-BASAL)
 4. if the total harvestable dry matter is >= the dry matter target for that time step then harveting occurs
 5. the amount of Dry matter to remove is calculated
     1. if fixed_removal flag then the amount to remove is defined by DM_RM = HARV_TARG * FRAC_HARV
-    2. if not fixed_removal then the ammount to remove is defined by  
+    2. if not fixed_removal then the amount to remove is defined by  
     DM_RM = ((DMH_RYE + DMH_WEED) - HARV_TARG) * FRAC_HARV
-5. An inital fraction of dry mater to remove is calculated, HARVFRIN = DM_RYE_RM/DMH_RYE  Note that this means 
-that the weed species dry matter harvested is not removed from the ryegrass model
+5. An initial fraction of dry mater to remove is calculated, HARVFRIN = DM_RYE_RM/DMH_RYE  Note that this means 
+that the weed species dry matter harvested is not removed from the rye grass model
 6. iff 'opt_harvfrin'= True, the harvest fraction to remove is estimated by brent zero optimisation. This step 
-is recommended as the harvest fraction is non-linearly related to the harvest as the stem and reserve harvest fracion 
+is recommended as the harvest fraction is non-linearly related to the harvest as the stem and reserve harvest fraction 
 is related to a power function.  In some test runs without estimation, target 500kg removal has 
 actually removed c. 1000kg 
 7. harvesting then progresses as per V2.0.0
 
 ##### Manual harvesting process
-As per automatic harvesting, however the dataframe is reshaped within the pyhon code so that the row count 
+As per automatic harvesting, however the data frame is reshaped within the python code so that the row count 
 is equal to n days.  all indexes where manual harvesting will not occur have the 'harv_trig' set to -1 so that no 
 harvesting will occur
 
@@ -182,7 +183,7 @@ New input parameters
  to
 * 'opt_harvfrin',  # float boolean(1.0=True, 0.0=False) if True, harvest fraction is estimated by brent zero 
   optimisation if false, HARVFRIN = DM_RYE_RM/DMH_RYE.  As the harvest fraction is non-linearly related to the 
-  harvest, the amount harvested may be significantly greather than expected depending on CST. We would suggest 
+  harvest, the amount harvested may be significantly greater than expected depending on CST. We would suggest 
   always setting 'opt_harvfrin' to True unless trying to duplicate a previous run done under v2.0.0- 
 
 New outputs
@@ -201,13 +202,13 @@ the appropriate yield variable
 * 'DMH',  # harvestable dry matter = DMH_RYE + DMH_WEED  (kg DM ha-1)
 
 
-New format for havest dataframe, 
+New format for harvest data frame, 
 * Datatype transition from int(v2.0.0-) to float(v3.0.0)
-* Two allowable dataframe Lenghts:
-    * Manual harvest (n x 6 dataframe, where n=number of harvest events), python auto_harvest=False
-    * Automatic harvest (m x 6 dataframe, where m=ndays), python auto_harvest=True
+* Two allowable data frame lengths:
+    * Manual harvest (n x 6 data frame, where n=number of harvest events), python auto_harvest=False
+    * Automatic harvest (m x 6 data frame, where m=ndays), python auto_harvest=True
 * Note the fixed harvest size requirements of 100 days were fixed in V1.0.0
-* Dataframe columns
+* Data frame columns
     * 'year',  # e.g. 2002
     * 'doy',  # day of year 1 - 356 (366 for leap year)
     * 'frac_harv', # fraction (0-1) of material above target to harvest to maintain 'backward capabilities' with v2.0.0
@@ -219,7 +220,7 @@ New format for havest dataframe,
 * 'fixed_removal' = 0
 * 'opt_harvfrin' = 0
 * manual harvest (python auto_harvest=False)
-* set harvest dataframe as follows:
+* set harvest data frame as follows:
     *  'year', as per v2.0.0-
     * 'doy', as per v2.0.0-
     * 'frac_harv', as per v2.0.0- percent_harvest/100,  note that fraction harvest is now a float value
@@ -286,94 +287,267 @@ The new output is:
 there are several supporting functions developed within basgra_nz_py.  These are not all documented in this readme; 
 however there are decent docstrings. these include:
 * conversion from RH to vapour pressure and wind speed to wind speed at 2m (conversions.py)
-* plotting multiple results either on monthly timesteps or for the duration of the run (plotting.py)
+* plotting multiple results either on monthly time steps or for the duration of the run (plotting.py)
 * access to the mean parameters that resulted from Woodward 2020's inverse calibration (woodward_2020_params.py)
-    * Parameters are avalible for the Scott Farm in the Waikato, Jordan Valley Farm in Northland, and the Lincoln Test Farm in Canterbury.
+    * Parameters are available for the Scott Farm in the Waikato, Jordan Valley Farm in Northland, and the Lincoln Test Farm in Canterbury.
     * Scott Farm and Jordan Valley Farm are dryland systems, while Lincoln Test Farm is irrigated.
     * Plant parameters were calibrated for all three farms, while site parameters were calibrated for each specific site.
     * see woodward, 2020 for more details.  it is in this repo at fortran_BASGRA_NZ/docs/Woodward et al 2020 Tiller Persistence GFS Final.pdf
     
 
 ### testing regime and examples
-In order to ensure that future changes can be made backwards compatable with previous runs there are a suite of test in
+In order to ensure that future changes can be made backwards compatible with previous runs there are a suite of test in
 check_basgra_python/test_basgra_python.py.  These tests are not yet implemented in a framework; however simply running 
 the test_basgra_python.py will run all of the testing functions.  These functions can also be used as examples.
 
 
 ## Input and output parameter definitions
-# todo put in tables for the input and output parameters.
+### Days Harvest Keys description 
+|**Key**|**Unit**|**Description**|
+| --- | --- | ---|
+|'year'| |year e.g. 2002|
+|'doy'| |day of year 1 - 356 (366 for leap year)|
+|'frac\_harv'|fraction|fraction (0-1) of material above target to harvest to maintain 'backward capabilities' with v2.0.0|
+|'harv\_trig'|kgDM/ha|dm above which to initiate harvest if trigger is less than zero no harvest will take place|
+|'harv\_targ'|kgDM/ha|dm to harvest to or to remove depending on 'fixed\_removal'|
+|'weed\_dm\_frac'|fraction|fraction of dm of ryegrass to attribute to weeds|
+|'reseed\_trig'|fraction|when BASAL <= reseed\_trig trigger a reseeding. if <0 then do not reseed|
+|'reseed\_basal'|fraction|set BASAL = reseed\_basal when reseeding.|
 
 
-**varname**|**units**|**description**| | 
-:-----:|:-----:|:-----:|:-----:|:-----:
-'Time'|(y)|Time| | 
-'year'|(y)|Year| | 
-'doy'|(d)|Day of Year| | 
-'DAVTMP'|(degC)|Av. Temp.| | 
-'CLV'|(gC m-2)|Leaf C| | 
-'CLVD'|(gC m-2)|Dead Leaf C| | 
-'TRANRF'|(%)|Transpiration| | 
-'CRES'|(gC m-2)|Reserve C| | 
-'CRT'|(gC m-2)|Root C| | 
-'CST'|(gC m-2)|Stem C| | 
-'CSTUB'|(gC m-2)|Stubble C| | 
-'VERND'|(d)|Vern. Days| | 
-'PHOT'|(gC m-2 d-1)|Photosyn.| | 
-'LAI'|(m2 m-2)|LAI| | 
-'RESMOB'|(gC m-2 d-1)|Res. Mobil.| | 
-'RAIN'|(mm d-1)|Rain| | 
-'PHEN'|(-)|Phen. Stage| | 
-'LT50'|(degC)|Hardening| | 
-'DAYL'|(-)|Daylength| | 
-'TILG2'|(m-2)|Elong. Tillers| | 
-'TILG1'|(m-2)|Gen. Tillers| | 
-'TILV'|(m-2)|Veg. Tillers| | 
-'WAL'|(mm)|Soil Water| | 
-'WCLM'|(%)|Soil Moisture| | 
-'DAYLGE'|(-)|Daylength Fact.| | 
-'RDLVD'|(d-1)|Decomp. Rate| | 
-'HARVFR'|(-)|Harvest Frac.| | 
-'DM'|(kg DM ha-1)|Ryegrass Mass Note that this is after any harvest (e.g. at end of time stamp)| | 
-'RES'|(g g-1)|Reserve C| | 
-'LERG'|(m d-1)|Gen. Elong. Rate| | 
-'PHENRF'|(-)|Phen. Effect| | 
-'RLEAF'|(d-1)|Leaf App. Rate| | 
-'SLA'|(m2 gC-1)|Spec. Leaf Area| | 
-'TILTOT'|(m-2)|Total Tillers| | 
-'RGRTV'|(d-1)|Till. App. Rate| | 
-'RDRTIL'|(d-1)|Till. Death Rate| | 
-'GRT'|(gC m-2 d-1)|Root Growth| | 
-'RDRL'|(d-1)|Leaf Death Rate| | 
-'VERN'|(%)|Vernalisation| | 
-'DRAIN'|(mm d-1)|Drainage| | 
-'RUNOFF'|(mm d-1)|Runoff| | 
-'EVAP'|(mm d-1)|Evap.| | 
-'TRAN'|(mm d-1)|Trans.| | 
-'LINT'|(-)|Light Intercep.| | 
-'DEBUG'|(?)|Debug| | 
-'ROOTD'|(m)|Root Depth| | 
-'TSIZE'|(gC tiller-1)|Tiller Size| | 
-'LERV'|(m d-1)|Veg. Elong. Rate| | 
-'WCL'|(%)|Eff. Soil Moisture| | 
-'HARVFRIN'|(-)|Harvest Data| | 
-'SLANEW'|(m2 gC-1)|New SLA| | 
-'YIELD'|(tDM ha-1)|PRG Yield sum of YIELD\_RYE and YIELD\_WEED| | 
-'BASAL'|(%)|Basal Area| | 
-'GTILV'|(till m-2 d-1)|Till. Birth| | 
-'DTILV'|(till m-2 d-1)|Till. Death| | 
-'FS'|(till leaf-1)|Site Filling| | 
-'IRRIG'|mm d-1|Irrigation applied| | 
-'WAFC'|mm|Water in non-frozen root zone at field capacity| | 
-'IRR\_TARG'|fraction|irrigation Target (fraction of field capacity) to fill to also an input variable| | 
-'IRR\_TRIG'|fraction|irrigation trigger (fraction of field capacity at which to start irrigating| | 
-'IRRIG\_DEM'|mm|irrigation irrigation demand to field capacity * IRR\_TARG| | 
-'WAWP'|mm|Water in non-frozen root zone at wilting point| | 
-'MXPAW'|mm|maximum Profile available water| | 
-'PAW'|mm|Profile available water at the time step| | 
-'RYE\_YIELD'|(tDM ha-1)|PRG Yield from rye grass species note that this is the actual amount of material that has been removed| | 
-'WEED\_YIELD'|(tDM ha-1)|PRG Yield from weed (other) species note that this is the actual amount of material that has been removed| | 
-'DM\_RYE\_RM'|(kg DM ha-1)|dry matter of Rye species harvested in this time step Note that this is the calculated removal but if 'opt\_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yeild variable| | 
-'DM\_WEED\_RM'|(kg DM ha-1)|dry matter of weed species harvested in this time step; Note that this is the calculated removal but if 'opt\_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yeild variable| | 
-'DMH\_RYE'|(kg DM ha-1)|harvestable dry matter of rye species includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting| | 
-'DMH\_WEED'|(kg DM ha-1)|harvestable dry matter of weed specie includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting| | 
-'DMH'|(kg DM ha-1)|harvestable dry matter = DMH\_RYE + DMH\_WEED note that this is before any removal by harvesting| | 
+### Matrix weather keys where pet is passed description
+**Key**|**Unit**|**Description**
+| --- | --- | ---|
+'year'| year |e.g. 2002
+'doy'| day|day of year 1 - 356 or 366 for leap years
+'radn'|MJ/m2|daily solar radiation
+'tmin'|degrees C|daily min
+'tmax'|degrees C|daily max
+'rain'|mm|sum daily rainfall
+'pet'|mm|priestly/penman evapotransperation
+'max\_irr'|mm/d|maximum irrigation available
+'irr\_trig'|fraction|fraction of PAW/field (see irr\_frm\_paw) at or below which irrigation is triggered e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 of the appropriate variable
+'irr\_targ'|fraction|fraction of PAW/field (see irr\_frm\_paw) to irrigate up to.
+
+### Matrix weather keys where pet is calculated via penman description
+**Key**|**Unit**|**Description**
+| --- | --- | ---|
+'year'| |e.g. 2002
+'doy'| |day of year 1 - 356 or 366 for leap years
+'radn'|MJ/m2|daily solar radiation
+'tmin'|degrees C|daily min
+'tmax'|degrees C|daily max
+'rain'|mm|sum daily rainfall
+'vpa'|kPa|vapour pressure
+'wind'|m/s|mean wind speed at 2m
+'max\_irr'|mm/d|maximum irrigation available
+'irr\_trig'|fraction|fraction of PAW/field (see irr\_frm\_paw) at or below which irrigation is triggered e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 of the appropriate variable
+'irr\_targ'|fraction|fraction of PAW/field (see irr\_frm\_paw) to irrigate up to.
+
+### Site Parameters description
+**Key**|**Unit**|**Description**
+| --- | --- | ---|
+'BD'|   kg l-1|  Bulk density of soil
+'CO2A'|  ppm|   CO2 concentration in atmosphere woodward 2020 set to 350
+'DRATE'|    mm d-1| Maximum soil drainage rate   woodward 2020 set to 50
+'FGAS'|  -|  Fraction of soil volume that is gaseous
+'fixed\_removal'|   | sudo boolean(1=True 0=False) defines if auto\_harv\_targ is fixed amount or amount to harvest to
+'FO2MX'|   mol O2 mol-1 gas|  Maximum oxygen fraction of soil gas
+'FWCAD'|    m3 m-3|  Relative saturation at air dryness
+'FWCFC'|    m3 m-3|  Relative saturation at field capacity
+'FWCWET'|   m3 m-3|  Relative saturation above which transpiration is reduced
+'FWCWP'|    m3 m-3|  Relative saturation at wilting point
+'irr\_frm\_paw'|   |  are irrigation trigger/target the fraction of profile available water (1/True or the fraction of field capacity (0/False).
+'IRRIGF'|   fraction|   fraction of the needed irrigation to apply to bring water content up to field capacity
+'KRTOTAER'|     -|  Ratio of total to aerobic respiration
+'KSNOW'|      mm-1|  Light extinction coefficient of snow
+'KTSNOW'|   m-1|  Temperature extinction coefficient of snow
+'LAMBDAsoil'|    J m-1 degC-1 d-1|  Thermal conductivity of soil?
+'LAT'|   degN|  Latitude
+'opt\_harvfrin'|    | sudo boolean(1=True  0=False) if True  harvest fraction is estimated by brent zero optimisation if false  harvest fraction is estimated by brent zero optimisation if false  HARVFRIN = DM\_RYE\_RM/DMH\_RYE.  As the harvest fraction is non-linearly related to the harvest  the amount harvested may be significantly greather than expected depending on CST
+'poolInfilLimit'| m|   woodward set to  0.2  Soil frost depth limit for water infiltration
+'reseed\_CLV'|   (gC m-2)| Weight of leaves after reseed if >= 0 otherwise use current state of variable
+'reseed\_CRES'|   (gC m-2)| Weight of reserves after reseed if >= 0 otherwise use current state of variable
+'reseed\_CST'|   (gC m-2)| Weight of stems after reseed if >= 0 otherwise use current state of variable
+'reseed\_CSTUB'|   (gC m-2)| Weight of stubble after reseed if >= 0 otherwise use current state of variable
+'reseed\_harv\_delay'|  days| number of days to delay harvest after reseed  must be >=1
+'reseed\_LAI'|   (m2 m-2)|  >=0 the leaf area index to set after reseeding  if < 0 then simply use the current LAI
+'reseed\_TILG1'|   (m-2)| Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+'reseed\_TILG2'|   (m-2)| Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
+'reseed\_TILV'|   (m-2)| Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
+'RHOnewSnow'|    kg SWE m-3|  Density of newly fallen snow
+'RHOpack'|      d-1|  Relative packing rate of snow
+'SWret'|    mm mm-1 d-1|  Liquid water storage capacity of snow
+'SWrf'|   mm d-1 °C-1|  Maximum refreezing rate per degree below 'TmeltFreeze'
+'TmeltFreeze'|     Â°C|  Temperature above which snow melts
+'TrainSnow'|   Â°C|  Temperature below which precipitation is snow
+'WCI'|   m3 m-3|  Initial value of volumetric water content
+'WCST'|    m3 m-3|  Volumetric water content at saturation
+'WpoolMax'|  mm|  Maximum pool water (liquid plus ice)
+
+### Plant Parameters description
+**PARAMETER**|**units**|**Description**
+| --- | --- | ---|
+'ABASAL'|   d-1|  Grass basal area response rate
+'BASALI'|   -|  Grass basal area
+'CLAIV'|   m2 leaf m-2|  Maximum LAI remaining after harvest when no tillers elongate
+'COCRESMX'|   -|  Maximum concentration of reserves in aboveground biomass
+'CSTAVM'|   gC tiller-1|  Maximum stem mass of elongating tillers
+'CSTI'|   gC m-2|  Initial value of stems
+'DAYLA'|   -|  DAYL above which growth is prioritised over storage
+'DAYLB'|   d d-1|  Day length below which DAYLGE becomes 0 and phenological stage is reset to zero (must be < DLMXGE)
+'DAYLG1G2'|   d d-1|  Minimum day length above which generative tillers can start elongating
+'DAYLGEMN'|   -|  Minimum daylength growth effect
+'DAYLP'|   d d-1|  Day length below which phenological development slows down
+'DAYLRV'|   -|  DAYL at which vernalisation is reset
+'DELD'|   -|  Litter disappearance due to decomposition
+'DELE'|   -|  Litter disappearance due to earthworms
+'DLMXGE'|   d d-1|  Day length below which DAYLGE becomes less than 1 (should be < maximum DAYL?)
+'Dparam'|   °C-1 d-1|  Constant in the calculation of dehardening rate
+'EBIOMAX'|   -|  Earthworm biomass max
+'FCOCRESMN'|   -|  Minimum concentration of reserves in above ground biomass as fraction of COCRESMX
+'FGRESSI'|   -|  CRES sink strength factor
+'FRTILGG1I'|   -|  Initial fraction of generative tillers that is still in stage 1
+'FRTILGI'|   -|  Initial value of elongating tiller fraction
+'FSLAMIN'|   -|  Minimum SLA of new leaves as a fraction of maximum possible SLA (must be < 1)
+'FSMAX'|   -|  Maximum ratio of tiller and leaf appearance based on sward geometry (must be < 1)
+'HAGERE'|   -|  Parameter for proportion of stem harvested
+'HARVFRD'|   -|  Relative harvest fraction of CLVD
+'Hparam'|   °C-1 d-1|  Hardening parameter
+'KBASAL'|   ?|  Constant at half basal area
+'KCRT'|   gC m-2|  Root mass at which ROOTD is 67% of ROOTDM
+'KLAI'|   m2 m-2 leaf|  PAR extinction coefficient
+'KLUETILG'|   -|  LUE-increase with increasing fraction elongating tillers
+'KRDRANAER'|   d-1|  Maximum relative death rate due to anearobic conditions
+'KRESPHARD'|   gC gC-1 °C-1|  Carbohydrate requirement of hardening
+'KRSR3H'|   °C-1|  Constant in the logistic curve for frost survival
+'LAICR'|   m2 leaf m-2|  LAI above which shading induces leaf senescence
+'LAIEFT'|   m2 m-2 leaf|  Decrease in tillering with leaf area index
+'LAITIL'|   -|  Maximum ratio of tiller and leaf apearance at low leaf area index
+'LDT50A'|   d|  Intercept of linear dependence of LD50 on lT50
+'LDT50B'|   d °C-1|  Slope of linear dependence of LD50 on LT50
+'LERGA'|   °C|  Leaf elongation intercept generative
+'LERGB'|   mm d-1 °C-1|  Leaf elongation slope generative
+'LERVA'|   °C|  Leaf elongation intercept vegetative
+'LERVB'|   mm d-1 °C-1|  Leaf elongation slope vegetative
+'LFWIDG'|   m|  Leaf width on elongating tillers
+'LFWIDV'|   m|  Leaf width on non-elongating tillers
+'LOG10CLVI'|   gC m-2|   log10 of Initial value of leaves
+'LOG10CRESI'|   gC m-2|  log10 of Initial value of reserves
+'LOG10CRTI'|   gC m-2|   log10 of Initial value of roots
+'LOG10LAII'|   m2 m-2|  Initial value of leaf area index
+'LSHAPE'|   -|  Area of a leaf relative to a rectangle of same length and width (must be < 1)
+'LT50I'|   °C|  Initial value of LT50
+'LT50MN'|   °C|  Minimum LT50 (Lethal temperature at which 50% die)
+'LT50MX'|   °C|  Maximum LT50
+'NELLVM'|   tiller-1|  Number of elongating leaves per non-elongating tiller
+'PHENCR'|   -|  Phenological stage above which elongation and appearance of leaves on elongating tillers decreases
+'PHENI'|   -|  Initial value of phenological stage
+'PHY'|   °C d|  Phyllochron
+'RATEDMX'|   °C d-1|  Maximum dehardening rate
+'RDRHARVMAX'|   d-1|  Maximum relative death rate due to harvest
+'RDRROOT'|   d-1|  Relatuive death rate of root mass CRT
+'RDRSCO'|   d-1|  Increase in relative death rate of leaves and non-elongating tillers due to shading per unit of LAI above LAICR
+'RDRSMX'|   d-1|  Maximum relative death rate of leaves and non-elongating tillers due to shading
+'RDRSTUB'|   -|  Relative death rate of stubble/pseudostem
+'RDRTEM'|   d-1 °C-1|  Proportionality of leaf senescence with temperature
+'RDRTILMIN'|   d-1|  Background relative rate of tiller death
+'RDRTMIN'|   d-1|  Minimum relative death rate of foliage
+'RDRWMAX'|   d-1|  Maximum death rate due to water stress
+'reHardRedDay'|   d|  Duration of period over which rehardening capability disappears
+'RGENMX'|   d-1|  Maximum relative rate of tillers becoming elongating tillers
+'RGRTG1G2'|   d-1|  Relative rate of TILG1 becoming TILG2
+'ROOTDM'|   m|  Initial and maximum value rooting depth
+'RRDMAX'|   m d-1|  Maximum root depth growth rate
+'RUBISC'|   g m-2 leaf|  Rubisco content of upper leaves
+'SIMAX1T'|   gC tiller-1 d-1|  Sink strength of small elongating tillers
+'SLAMAX'|   m2 leaf gC-1|  Maximum SLA of new leaves (Note unusual units)
+'TBASE'|   °C|  Minimum value of effective temperature for leaf elongation
+'TCRES'|   d|  Time constant of mobilisation of reserves
+'THARDMX'|   °C|  Maximum surface temperature at which hardening is possible
+'TILTOTI'|   m-2|  Initial value of tiller density
+'TOPTGE'|   °C|  Optimum temperature for vegetative tillers to become generative (must be > TBASE)
+'TRANCO'|   mm d-1 g-1 m2|  Transpiration effect of PET
+'TRANRFCR'|   -|  Critical water stress for tiller death
+'TsurfDiff'|   °C|  Constant in the calculation of dehardening rate
+'TVERN'|   °C|  Temperature below which vernalisation advances
+'TVERND'|   d|  Days of cold after which vernalisation completed
+'TVERNDMN'|   d|  Minimum vernalisation days
+'VERNDI'|   d|  Initial value of cumulative vernalisation days
+'YG'|   gC gC-1|  Growth yield per unit expended carbohydrate (must be < 1)
+
+### output description
+**varname**|**units**|**description**
+| --- | --- | ---|
+'BASAL'|(%)|Basal Area
+'CLV'|(gC m-2)|Leaf C
+'CLVD'|(gC m-2)|Dead Leaf C
+'CRES'|(gC m-2)|Reserve C
+'CRT'|(gC m-2)|Root C
+'CST'|(gC m-2)|Stem C
+'CSTUB'|(gC m-2)|Stubble C
+'DAVTMP'|(degC)|Av. Temp.
+'DAYL'|(-)|Daylength
+'DAYLGE'|(-)|Daylength Fact.
+'DEBUG'|(?)|Debug
+'DM'|(kg DM ha-1)|Ryegrass Mass Note that this is after any harvest (e.g. at end of time stamp)
+'DM\_RYE\_RM'|(kg DM ha-1)|dry matter of Rye species harvested in this time step Note that this is the calculated removal but if 'opt\_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yield variable
+'DM\_WEED\_RM'|(kg DM ha-1)|dry matter of weed species harvested in this time step; Note that this is the calculated removal but if 'opt\_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yield variable
+'DMH'|(kg DM ha-1)|harvestable dry matter = DMH\_RYE + DMH\_WEED note that this is before any removal by harvesting
+'DMH\_RYE'|(kg DM ha-1)|harvestable dry matter of rye species includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting
+'DMH\_WEED'|(kg DM ha-1)|harvestable dry matter of weed specie includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting
+'doy'|(d)|Day of Year
+'DRAIN'|(mm d-1)|Drainage
+'DTILV'|(till m-2 d-1)|Till. Death
+'EVAP'|(mm d-1)|Evap.
+'FS'|(till leaf-1)|Site Filling
+'GRT'|(gC m-2 d-1)|Root Growth
+'GTILV'|(till m-2 d-1)|Till. Birth
+'HARVFR'|(-)|Harvest Frac.
+'HARVFRIN'|(-)|Harvest Data
+'IRR\_TARG'|fraction|irrigation Target (fraction of field capacity) to fill to also an input variable
+'IRR\_TRIG'|fraction|irrigation trigger (fraction of field capacity at which to start irrigating
+'IRRIG'|mm d-1|Irrigation applied
+'IRRIG\_DEM'|mm|irrigation irrigation demand to field capacity * IRR\_TARG
+'LAI'|(m2 m-2)|LAI
+'LERG'|(m d-1)|Gen. Elong. Rate
+'LERV'|(m d-1)|Veg. Elong. Rate
+'LINT'|(-)|Light Intercep.
+'LT50'|(degC)|Hardening
+'MXPAW'|mm|maximum Profile available water
+'PAW'|mm|Profile available water at the time step
+'PHEN'|(-)|Phen. Stage
+'PHENRF'|(-)|Phen. Effect
+'PHOT'|(gC m-2 d-1)|Photosyn.
+'RAIN'|(mm d-1)|Rain
+'RDLVD'|(d-1)|Decomp. Rate
+'RDRL'|(d-1)|Leaf Death Rate
+'RDRTIL'|(d-1)|Till. Death Rate
+'RES'|(g g-1)|Reserve C
+'RESEEDED'| |reseeded flag if ==1 then the simulation was reseeded on this day
+'RESMOB'|(gC m-2 d-1)|Res. Mobil.
+'RGRTV'|(d-1)|Till. App. Rate
+'RLEAF'|(d-1)|Leaf App. Rate
+'ROOTD'|(m)|Root Depth
+'RUNOFF'|(mm d-1)|Runoff
+'RYE\_YIELD'|(tDM ha-1)|PRG Yield from rye grass species note that this is the actual amount of material that has been removed
+'SLA'|(m2 gC-1)|Spec. Leaf Area
+'SLANEW'|(m2 gC-1)|New SLA
+'TILG1'|(m-2)|Gen. Tillers
+'TILG2'|(m-2)|Elong. Tillers
+'TILTOT'|(m-2)|Total Tillers
+'TILV'|(m-2)|Veg. Tillers
+'Time'|(y)|Time
+'TRAN'|(mm d-1)|Trans.
+'TRANRF'|(%)|Transpiration
+'TSIZE'|(gC tiller-1)|Tiller Size
+'VERN'|(%)|Vernalisation
+'VERND'|(d)|Vern. Days
+'WAFC'|mm|Water in non-frozen root zone at field capacity
+'WAL'|(mm)|Soil Water
+'WAWP'|mm|Water in non-frozen root zone at wilting point
+'WCL'|(%)|Eff. Soil Moisture
+'WCLM'|(%)|Soil Moisture
+'WEED\_YIELD'|(tDM ha-1)|PRG Yield from weed (other) species note that this is the actual amount of material that has been removed
+'year'|(y)|Year
+'YIELD'|(tDM ha-1)|PRG Yield sum of YIELD\_RYE and YIELD\_WEED
