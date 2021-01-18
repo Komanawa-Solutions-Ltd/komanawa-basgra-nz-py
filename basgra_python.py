@@ -33,23 +33,23 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
     runs the model for the period of the weather data
-    :param params: dictionary, see input_output_keys.py for more details
+    :param params: dictionary, see input_output_keys.py, README.md, or
+                   https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PYfor more details
     :param matrix_weather: pandas dataframe of weather data, maximum entries set in _max_weather_size in line 24
+                          of this file (currently 36600)
+                          see documentation for input columns at https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY
+                          or README.md
     :param days_harvest: days harvest dataframe must be same length as matrix_weather entries
-                        columns = (
-                        'year',
-                        'doy',
-                        'frac_harv',
-                        'harv_trig',
-                        'harv_targ',
-                        'weed_dm_frac',
-                        )
-
-    :param doy_irr: a list of the days of year to irrigate on
+                        see documentation for input columns at https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY
+                        or README.md
+    :param doy_irr: a list of the days of year to irrigate on, must be integers acceptable values: (0-366)
     :param verbose: boolean, if True the fortran function prints a number of statements for debugging purposes
-    :param dll_path: path to the compiled fortran DLL to use, default was made on windows 10 64 bit
+                   (depreciated)
+    :param dll_path: path to the compiled fortran DLL to use, default was made on windows 10 64 bit, if the path does
+                     not exist, this function will try to run the bat file to re-make the dll.
     :param supply_pet: boolean, if True BASGRA expects pet to be supplied, if False the parameters required to
-                       calculate pet from the peyman equation are expected
+                       calculate pet from the peyman equation are expected,
+                       the version must match the DLL if dll_path != 'default'
     :param auto_harvest: boolean, if True then assumes data is formated correctly for auto harvesting, if False, then
                          assumes data is formatted for manual harvesting (e.g. previous version) and re-formats
                          internally

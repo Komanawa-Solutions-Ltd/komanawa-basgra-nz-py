@@ -6,7 +6,7 @@ import os
 import numpy as np
 import pandas as pd
 from basgra_python import run_basgra_nz, _trans_manual_harv
-from input_output_keys import matrix_weather_keys_pet, matrix_weather_keys_penman
+from input_output_keys import matrix_weather_keys_pet
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
     test_dir, establish_peyman_input, _clean_harvest, base_auto_harvest_data, base_manual_harvest_data
 
@@ -91,10 +91,11 @@ def _output_checks(out, correct_out, dropable=True):
     :return:
     """
     if dropable:
-        drop_keys = [
+        # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
+        drop_keys_int = [
 
-        ] # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
-        out2 = out.drop(columns=drop_keys)
+        ]
+        out2 = out.drop(columns=drop_keys_int)
     else:
         out2 = out.copy(True)
     # check shapes
@@ -153,7 +154,7 @@ def test_irrigation_trigger(update_data=False):
 
     params['IRRIGF'] = 1  # irrigation to 100% of field capacity
 
-    doy_irr = list(range(305,367)) + list(range(1, 91))
+    doy_irr = list(range(305, 367)) + list(range(1, 91))
 
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
     out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
@@ -300,7 +301,8 @@ def test_pet_calculation(update_data=False):
     print('testing pet calculation')
     params, matrix_weather, days_harvest, doy_irr = establish_peyman_input()
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
-    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default', supply_pet=False)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default',
+                        supply_pet=False)
 
     data_path = os.path.join(test_dir, 'test_pet_calculation.csv')
     if update_data:
@@ -567,9 +569,75 @@ def test_weed_fixed_harv_auto(update_data=False):
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
-# todo create reseed test
+
+def test_reseed(update_data=False):
+    print('testing reseeding')
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
+
+    matrix_weather = get_lincoln_broadfield()
+    matrix_weather.loc[:, 'max_irr'] = 1
+    matrix_weather.loc[matrix_weather.index > '2015-08-01', 'max_irr'] = 15
+    matrix_weather.loc[:, 'irr_trig'] = 0.5
+    matrix_weather.loc[:, 'irr_targ'] = 1
+
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
+
+    params['IRRIGF'] = .90  # irrigation to 90% of field capacity
+    # these values are set to make observable changes in the results and are not reasonable values.
+    params['reseed_harv_delay'] = 120
+    params['reseed_LAI'] = 3
+    params['reseed_TILG2'] = 10
+    params['reseed_TILG1'] = 40
+    params['reseed_TILV'] = 5000
+    params['reseed_CLV'] = 100
+    params['reseed_CRES'] = 25
+    params['reseed_CST'] = 10
+    params['reseed_CSTUB'] = 0.5
+
+    doy_irr = list(range(305, 367)) + list(range(1, 91))
+    temp = pd.DataFrame(columns=days_harvest.keys())
+    for i, y in enumerate(days_harvest.year.unique()):
+        if y==2011:
+            continue
+        temp.loc[i, 'year'] = y
+        temp.loc[i, 'doy'] = 152
+        temp.loc[i, 'frac_harv'] = 0
+        temp.loc[i, 'harv_trig'] = -1
+        temp.loc[i, 'harv_targ'] = 0
+        temp.loc[i, 'weed_dm_frac'] = 0
+        temp.loc[i, 'reseed_trig'] = 0.75
+        temp.loc[i, 'reseed_basal'] = 0.88
+    days_harvest = pd.concat((days_harvest, temp)).sort_values(['year', 'doy'])
+    days_harvest.loc[:,'year'] = days_harvest.loc[:,'year'].astype(int)
+    days_harvest.loc[:,'doy'] = days_harvest.loc[:,'doy'].astype(int)
+    days_harvest = _clean_harvest(days_harvest, matrix_weather)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    to_plot = [  # used to check the test
+        'RESEEDED',
+        'PHEN',
+        'BASAL',
+        'YIELD',
+        'DM_RYE_RM',
+        'LAI',
+        'TILG2',
+        'TILG1',
+        'TILV',
+        'CLV',
+        'CRES',
+        'CST',
+        'CSTUB',
+    ]
+    data_path = os.path.join(test_dir, 'test_reseed.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out)
+
+
 
 if __name__ == '__main__':
+
     # input types tests
     test_org_basgra_nz()
     test_pet_calculation()
@@ -590,6 +658,9 @@ if __name__ == '__main__':
     test_weed_fixed_harv_auto()
     test_auto_harv_fixed()
     test_weed_fraction_man()
+
+    # test reseed
+    test_reseed()
 
     # input data for manual harvest check
     test_trans_manual_harv()

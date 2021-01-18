@@ -19,23 +19,30 @@ subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,nirr, doy_irr,y,
 ! 2019-06-09: Added C wrapper to allow model to be compiled into an R package
 ! 2020-08-19: Modified by Matt Hanson to allow python use, added documentation, set maximum weather size to 36600
 !             and unlimited harvest dates.
+! 2021-01-19: Modified by Matt Hanson to include multiple additional features, see github repo for details
+!             https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY
 !-------------------------------------------------------------------------------
 !INPUTS
   !PARAMS: double, set of model parameters for details and order please see ./input_paramaters_decriptors.csv
   !MATRIX_WEATHER: double, weather matrix with two formats:
-  !  1) internal calculation of PET size = (36,600 x 8) NDAYS rows must have valid data, null values set to 0
+  !  1) internal calculation of PET size = (36,600 x 11) NDAYS rows must have valid data, null values set to 0
   !     Columns:
   !                  year  # day of the year (d)
   !                  doy   # day of the year (d)
-  !                  RAIN  # precipitation (mm d-1)
-  !                  GR    # irradiation (MJ m-2 d-1)
-  !                  TMMN  # minimum (or average) temperature (degrees Celsius)
-  !                  TMMX  # maximum (or average) temperature (degrees Celsius)
-  !                  VP    # vapour pressure (kPa)
-  !                  WN    # mean wind speed (m s-1)
+  !                  rain  # precipitation (mm d-1)
+  !                  radn    # irradiation (MJ m-2 d-1)
+  !                  tmax  # minimum (or average) temperature (degrees Celsius)
+  !                  tmin  # maximum (or average) temperature (degrees Celsius)
+  !                  vpa    # vapour pressure (kPa)
+  !                  wind    # mean wind speed at 2m (m s-1)
+  !                  max_irr  # maximum irrigation available (mm)
+  !                  irr_trig  # fraction of PAW/field (see irr_frm_paw) at or below which irrigation is
+  !                              triggered e.g. 0.5 means that irrigation will only be applied when soil water
+  !                              content is at 1/2 of the appropriate variable (fraction)
+  !                  irr_targ  # fraction of PAW/field (see param irr_frm_paw) to irrigate up to (fraction)
 
 
-  !  2) external calculations/measurment of PET size = (36,600 x 7)NDAYS rows must have valid data, null values set to 0
+  !  2) external calculations/measurment of PET size = (36,600 x 10)NDAYS rows with null values set to 0
   !     Columns:
   !              year,  # e.g. 2002
   !              doy,  # day of year 1 - 356 or 366 for leap years
@@ -43,16 +50,32 @@ subroutine BASGRA(PARAMS,MATRIX_WEATHER,DAYS_HARVEST,NDAYS,NOUT,nirr, doy_irr,y,
   !              tmin,  # daily min (degrees C)
   !              tmax,  # daily max (degrees C)
   !              rain,  # sum daily rainfall (mm)
-  !              pet,  # Potential evapotransperation (mm), suggest priestly
+  !              pet,  # Potential evapotransperation (mm)
+  !              max_irr  # maximum irrigation available (mm)
+  !              irr_trig  # fraction of PAW/field (see irr_frm_paw) at or below which irrigation is
+  !                          triggered e.g. 0.5 means that irrigation will only be applied when soil water
+  !                          content is at 1/2 of the appropriate variable (fraction)
+  !              irr_targ  # fraction of PAW/field (see param irr_frm_paw) to irrigate up to (fraction)
+
   !  switching between modes requires different compiliations, to set to mode 2, -Dweathergen, must be called while
   !  compiling (e.g.gfortran -x f95-cpp-input -Dweathergen -O3 -c -fdefault-real-8 ....)
 
-  !DAYS_HARVEST: int, The harvest dates, size is (NDHARV,3) the columns are !todo update this documentation
-  !              1: year
-  !              2: the day of year(1-365 or 366(for leap years))
-  !              3: the percent harvest (e.g. 50 = 50%)
+  !DAYS_HARVEST: double, The harvest dates, size is (NDHARV,8) the columns are:
+  !           'year', # year e.g. 2002
+  !           'doy', # day of year 1 - 356 (366 for leap year)
+  !           'frac_harv', # fraction (0-1) of material above target to harvest to maintain 'backward capabilities'
+  !                        with v2.0.0 (fraction)
+  !           'harv_trig', # dm above which to initiate harvest if trigger is less than zero
+  !                        no harvest will take place (kgDM/ha)
+  !           'harv_targ', # dm to harvest to or to remove depending on 'fixed_removal' (kgDM/ha)
+  !           'weed_dm_frac', # fraction of dm of ryegrass to attribute to weeds (fraction)
+  !           'reseed_trig',  # when BASAL <= reseed_trig trigger a reseeding. if <0 then do not reseed (fraction)
+  !           'reseed_basal', # set BASAL = reseed_basal when reseeding. (fraction)
+
   !NDAYS: int, the number of days to simulate, this should match the number of days of real data in MATRIX_WEATHER
-  !NOUT: int, the number of output variables, at present this should be 56
+  !NOUT: int, the number of output variables, at present this should be 72
+  !NIIR: int, the length of the DOY_IRR array
+  !DOY_IRR: int, array of the days of the year on which to irrigate (0 (no irrigation) to 366 (leap year))
   !y: double, the output array, initialised as zeros
   !VERBOSE: boolean, if True print a number of debugging information
 
