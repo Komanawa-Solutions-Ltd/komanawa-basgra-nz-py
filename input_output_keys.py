@@ -3,7 +3,7 @@
  Created: 14/08/2020 8:53 AM
  """
 
-param_keys = ( #todo make a input output markdown file for ease of other users. (add to end of readme?)
+param_keys = (
     # PARAMETER   # Name,  # units   #  Description
     'LOG10CLVI',  # CLVI,  # gC m-2, # Initial value of leaves
     'LOG10CRESI',  # CRESI,  # gC m-2, # Initial value of reserves
