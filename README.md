@@ -5,7 +5,7 @@ BASGRA_NZ_PY is a python wrapper for the
 new features and is the first version of BASGRA to have purpose built tests to ensure that all changes can be made in a
 backwards compatible fashion (with some argument changes).
 
-WARNING: this is an experimental library and no guarantee on quality or accuracy is made
+WARNING: this library was developed for a specific project and no guarantee on quality or accuracy is made.
 
 The BASGRA NZ project tracks modifications to BASGRA for application to perennial ryegrass in New Zealand conditions.
 The test data comes from the Seed Rate Trial 2011-2017. Modifications to BASGRA were necessary to represent this data.
@@ -82,7 +82,7 @@ BASGRA is relatively light weight
 * memory tests were run with [memory_profiler 0.58.0](https://pypi.org/project/memory-profiler/) 
  to rerun these tests (supporting_functions/test_memory_use.py) requires installation of the memory profiler
 
-## irrigation triggering and demand modelling v2.0.0
+## irrigation triggering and demand modelling (v2.0.0+) 
 
 ### New Irrigation Process
 Irrigation modelling was developed to answer questions about pasture growth rates in the face of possible irrigation
@@ -124,7 +124,7 @@ New outputs have been added:
 To run the model in the original (no irrigation fashion) set both max_irr and irr_trig to zero, also set doy_irr = [0]
 
 
-## Harvest management and scheduling v3.0.0
+## Harvest management and scheduling (v3.0.0+)
 As of version v3.0.0 harvest management has changed significantly to allow many more options for harvest management
 
 Importantly days_harvest is now a float array instead of an integer array as was the case in v.2.0.0
@@ -222,7 +222,7 @@ New format for havest dataframe,
     * 'harv_targ', as 0
     * 'weed_dm_frac' as 0
     
-## Re-seeding module (experimental, bleeding edge repo)
+## Re-seeding module (V4.0.0+)
 At times during a long term simulations weather events can push the BASAL coverage of the rye grass to well below the
 normal amount for the simulation.  The BASGRA model will slowly increase BASAL coverage, however this may not very 
 realistic.  Farmers may choose to re-seed pasture following an infrequent event.
@@ -240,7 +240,7 @@ young plant growth.  it simply allows the following parameters to be re-set and 
 (the reseed trigger), if BASAL is <= 'reseed_trig', then reseed otherwise simply pass. if reseed_trig <0 then passes (flag for no reseed)
 2. set BASAL to 'reseed_basal'
 3. set the Phenological stage (PHEN) to 0 
-3. set [LAI, TILG2, TILG1, TILV] to either the user defined parameter 'reseed_{var}' or keep at current state value 
+3. set [LAI, TILG2, TILG1, TILV, CLV, CRES, CST, CSTUB] to either the user defined parameter 'reseed_{var}' or keep at current state value 
 when the user defined parameter 'reseed_{var}' <0.
 4. set a user defined delay in harvesting ('reseed_harv_delay'), by setting the next n days harv_trig to -1
 
@@ -249,13 +249,17 @@ when the user defined parameter 'reseed_{var}' <0.
 In order to very simply model this behaviour a new re-seed module was added. This module requires 5 new parameters and
 2 new inputs in the harvest matrix, and produces 1 new output
 
-he parameters are:
+the parameters are:
 * 'reseed_harv_delay':  number of days to delay harvest after reseed, must be >=1 and an integer 
 (value not type, within 1e-5)
 * 'reseed_LAI': >=0 the leaf area index to set after reseeding, if < 0 then simply use the current LAI
 * 'reseed_TILG2': Non-elongating generative tiller density after reseed if >=0 otherwise use current state of variable
 * 'reseed_TILG1': Elongating generative tiller density after reseed if >=0 otherwise use current state of variable
 * 'reseed_TILV': Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
+* 'reseed_CLV',  # Weight of leaves after reseed if >= 0 otherwise use current state of variable
+* 'reseed_CRES',  # Weight of reserves after reseed if >= 0 otherwise use current state of variable
+* 'reseed_CST',  # Weight of stems after reseed if >= 0 otherwise use current state of variable
+* 'reseed_CSTUB',  # Weight of stubble after reseed if >= 0 otherwise use current state of variable
 
 The new columns in the harvest matrix are:
 * 'reseed_trig': (-1 or 0 to 1) when BASAL <= reseed_trig, trigger a reseeding. if <0 then do not reseed
@@ -265,10 +269,10 @@ The new output is:
 * 'RESEEDED': reseeded flag, if ==1 then the simulation was reseeded on this day, if 0 then not reseeded
 
 ### How to run so that the results are backwards compatible with versions V3.0.0 -
-* set all 'reseed_basal' in the harvest matrix to -1.
+* set all 'reseed_trig' in the harvest matrix to -1.
 * set all 'reseed_basal' to 0 (can be set to anything between 0-1 as it will not be used)
 * set 'reseed_harv_delay' to 1 (to avoid python assertion error)
-* all other variables must be set, but they can all be safely set to -1 
+* all other reseed parameters (reseed_{var}) must be set, but they can all be safely set to -1 
 
 
 # python developments
