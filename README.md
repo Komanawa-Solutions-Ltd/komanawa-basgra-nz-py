@@ -586,3 +586,19 @@ the test_basgra_python.py will run all of the testing functions.  These function
 'WEED\_YIELD'|(tDM ha-1)|PRG Yield from weed (other) species note that this is the actual amount of material that has been removed
 'year'|(y)|Year
 'YIELD'|(tDM ha-1)|PRG Yield sum of YIELD\_RYE and YIELD\_WEED
+
+## References
+
+* [BASGRA_2014](https://github.com/davcam/BASGRA): original model repository
+* [BASGRA_NZ](https://github.com/woodwards/basgra_nz): update of the model to NZ conditions repository
+* [Identifying causes of low persistence of perennial ryegrass (Lolium perenne) dairy pasture using the Basic Grassland model (BASGRA)](https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464): update from BASGRA to BASGRA NZ
+* [BASGRA 2014 User guide]() or fortran_BASGRA_NZ/docs/BASGRA2014_USER_GUIDE.pdf
+* [Conceptual Basis, Formalisations and Parameterization of the Stics Crop Model](https://books.google.co.nz/books?id=YwfZFcWgAAMC&pg=PA34&lpg=PA34&dq=vernalisation+model&source=bl&ots=7euCE4tPBe&sig=za2fBGqFVpoR1jKqkVB2NtBK0nc&hl=en&sa=X&ved=2ahUKEwi4stOBi_rcAhXZzmEKHcK6DE0Q6AEwBXoECAQQAQ#v=onepage&q=vernalisation%20model&f=false)
+* [Irrigation Management for Cropping - A Grower’s Guide](https://www.far.org.nz/assets/files/uploads/Iss_04_Irrigation.pdf) or fortran_BASGRA_NZ/docs/FAR-Irrigation Management.pdf
+* [Estimation of field capacity and wilting point of some New Zealand soils from their saturation percentages](https://www.tandfonline.com/doi/abs/10.1080/01140671.1990.10428101)
+* [High perennial ryegrass seeding rates do not negatively impact pasture sward persistence](https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12335)
+* [Seasonal patterns of root, tiller and leaf production in a Grasslands Ruanui ryegrass sward](https://www.researchgate.net/profile/C-Matthew/publication/266180775_Seasonal_patterns_of_root_tiller_and_leaf_production_in_a_Grasslands_Ruanui_ryegrass_sward/links/56b2ecd408ae56d7b06cdb89/Seasonal-patterns-of-root-tiller-and-leaf-production-in-a-Grasslands-Ruanui-ryegrass-sward.pdf)
+* [Fertiliser Nitrogen and Factors Affecting Pasture Responses](https://benthamopen.com/ABSTRACT/TOASJ-2-35)
+* [Differential responses of tillers to floral induction in perennial ryegrass (Lolium perenne L.) : implications for perenniality](https://mro.massey.ac.nz/handle/10179/842)
+* [A practical model for predicting soil water deficit in New Zealand pastures](tandfonline.com/doi/abs/10.1080/00288233.2001.9513464)
+* A mathematical model of perennial grass-clover dairy pasture for control of post-reproductive pasture quality using water and grazing management (unpublished)
