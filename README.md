@@ -1,5 +1,7 @@
 # BASGRA_NZ
 
+BASGRA or The BASic GRAssland model is a simple pasture growth model.  This version, BASGRA_NZ has been specifically modified for use within New Zealand.
+
 BASGRA_NZ_PY is a python wrapper for the 
 [BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src) fortran code, contains several 
 new features and is the first version of BASGRA to have purpose built tests to ensure that all changes can be made in a
