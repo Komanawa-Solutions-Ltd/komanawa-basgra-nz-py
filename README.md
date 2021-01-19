@@ -58,6 +58,7 @@ efforts will be made to incorporate further updates, but no assurances
   * [Site Parameters description](#site-parameters-description)
   * [Plant Parameters description](#plant-parameters-description)
   * [output description](#output-description)
+- [References](#References)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
