@@ -14,7 +14,8 @@ The test data comes from the Seed Rate Trial 2011-2017. Modifications to BASGRA 
 
 see outstanding_issues.txt
 for original info on the model see docs
-for information on the changes made by Simon Woodward, see docs/Woodward et al 2020 Tiller Persistence GFS Final.pdf
+for information on the changes made by Simon Woodward, in 
+[Woodward, 2020](https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464)
 
 BASGRA_NZ_PY is modified from Simon Woodward's 
 [BASGRA_NZ](https://github.com/woodwards/basgra_nz/tree/master/model_package/src)
@@ -184,7 +185,7 @@ In the automatic harvesting process
 2. at each time step harvestable Rye grass dry matter is calculated and reported by 
 DMH_RYE = ((CLV+CST+CSTUB)/0.45 + CRES/0.40 + (CLVD * HARVFRD / 0.45)) * 10.0
 2. at each time step harvestable weed species dry matter is calculated and reported by 
-DMH_WEED =  WEED_DM_FRAC*DMH_RYE/BASAL*(1-BASAL)
+DMH_WEED =  WEED_DM_FRAC * DMH_RYE/BASAL * (1-BASAL)
 3. total harvestable dry matter is calculated and reported by DMH_RYE + DMH_WEED
 4. if the total harvestable dry matter is >= the dry matter target for that time step then harveting occurs
 5. the amount of Dry matter to remove is calculated
@@ -327,8 +328,7 @@ however there are decent docstrings. these include:
     * Parameters are available for the Scott Farm in the Waikato, Jordan Valley Farm in Northland, and the Lincoln Test Farm in Canterbury.
     * Scott Farm and Jordan Valley Farm are dryland systems, while Lincoln Test Farm is irrigated.
     * Plant parameters were calibrated for all three farms, while site parameters were calibrated for each specific site.
-    * see woodward, 2020 for more details.  it is in this repo at fortran_BASGRA_NZ/docs/Woodward et al 2020 Tiller Persistence GFS Final.pdf
-    
+    * [see woodward, 2020](https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464) for more details.  
 
 ### testing regime and examples
 In order to ensure that future changes can be made backwards compatible with previous runs there are a suite of test in

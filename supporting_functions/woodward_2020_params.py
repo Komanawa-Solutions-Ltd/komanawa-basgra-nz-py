@@ -10,7 +10,7 @@ from input_output_keys import plant_param_keys, site_param_keys
 
 def get_woodward_mean_site_param(site):
     """
-    get woodward 2020 site parameters see fortran_BASGRA_NZ/docs/Woodward et al 2020 Tiller Persistence GFS Final.pdf
+    get woodward 2020 site parameters see Woodward, 2020 https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464
     for more details
     :param site: one of {'waikato': scott farm in Waikato,
                          'scott': scott farm in Waikato, used for back compatibility
@@ -27,7 +27,7 @@ def get_woodward_mean_site_param(site):
 
 def get_woodward_mean_plant_params(site):
     """
-    get woodward 2020 plant parameters see fortran_BASGRA_NZ/docs/Woodward et al 2020 Tiller Persistence GFS Final.pdf
+    get woodward 2020 plant parameters see Woodward, 2020 https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464
     for more details
 
     Note that the plant parameters are identical across all sites other than [LOG10CLVI, LOG10CRTI, TILTOTI, BASALI]
@@ -46,7 +46,7 @@ def get_woodward_mean_plant_params(site):
 
 def get_woodward_mean_full_params(site):
     """
-    get woodward 2020 site parameters see fortran_BASGRA_NZ/docs/Woodward et al 2020 Tiller Persistence GFS Final.pdf
+    get woodward 2020 site parameters see Woodward, 2020 https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464
     for more details
     :param site: one of {'waikato': scott farm in Waikato,
                          'scott': scott farm in Waikato, used for back compatibility
