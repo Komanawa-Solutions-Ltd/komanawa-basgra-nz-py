@@ -1,0 +1,73 @@
+﻿key,unit,description
+BASAL,(%),Basal Area
+CLV,(gC m-2),Leaf C
+CLVD,(gC m-2),Dead Leaf C
+CRES,(gC m-2),Reserve C
+CRT,(gC m-2),Root C
+CST,(gC m-2),Stem C
+CSTUB,(gC m-2),Stubble C
+DAVTMP,(degC),Av. Temp.
+DAYL,(-),Daylength
+DAYLGE,(-),Daylength Fact.
+DEBUG,(?),Debug
+DM,(kg DM ha-1),Ryegrass Mass Note that this is after any harvest (e.g. at end of time stamp)
+DM_RYE_RM,(kg DM ha-1),dry matter of Rye species harvested in this time step Note that this is the calculated removal but if 'opt_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yield variable
+DM_WEED_RM,(kg DM ha-1),dry matter of weed species harvested in this time step; Note that this is the calculated removal but if 'opt_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yield variable
+DMH,(kg DM ha-1),harvestable dry matter = DMH_RYE + DMH_WEED note that this is before any removal by harvesting
+DMH_RYE,(kg DM ha-1),harvestable dry matter of rye species includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting
+DMH_WEED,(kg DM ha-1),harvestable dry matter of weed specie includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting
+doy,(d),Day of Year
+DRAIN,(mm d-1),Drainage
+DTILV,(till m-2 d-1),Till. Death
+EVAP,(mm d-1),Evap.
+FS,(till leaf-1),Site Filling
+GRT,(gC m-2 d-1),Root Growth
+GTILV,(till m-2 d-1),Till. Birth
+HARVFR,(-),Harvest Frac.
+HARVFRIN,(-),Harvest Data
+IRR_TARG,fraction,irrigation Target (fraction of field capacity) to fill to also an input variable
+IRR_TRIG,fraction,irrigation trigger (fraction of field capacity at which to start irrigating
+IRRIG,mm d-1,Irrigation applied
+IRRIG_DEM,mm,irrigation irrigation demand to field capacity * IRR_TARG
+LAI,(m2 m-2),LAI
+LERG,(m d-1),Gen. Elong. Rate
+LERV,(m d-1),Veg. Elong. Rate
+LINT,(-),Light Intercep.
+LT50,(degC),Hardening
+MXPAW,mm,maximum Profile available water
+PAW,mm,Profile available water at the time step
+PHEN,(-),Phen. Stage
+PHENRF,(-),Phen. Effect
+PHOT,(gC m-2 d-1),Photosyn.
+RAIN,(mm d-1),Rain
+RDLVD,(d-1),Decomp. Rate
+RDRL,(d-1),Leaf Death Rate
+RDRTIL,(d-1),Till. Death Rate
+RES,(g g-1),Reserve C
+RESEEDED,,reseeded flag if ==1 then the simulation was reseeded on this day
+RESMOB,(gC m-2 d-1),Res. Mobil.
+RGRTV,(d-1),Till. App. Rate
+RLEAF,(d-1),Leaf App. Rate
+ROOTD,(m),Root Depth
+RUNOFF,(mm d-1),Runoff
+RYE_YIELD,(tDM ha-1),PRG Yield from rye grass species note that this is the actual amount of material that has been removed
+SLA,(m2 gC-1),Spec. Leaf Area
+SLANEW,(m2 gC-1),New SLA
+TILG1,(m-2),Gen. Tillers
+TILG2,(m-2),Elong. Tillers
+TILTOT,(m-2),Total Tillers
+TILV,(m-2),Veg. Tillers
+Time,(y),Time
+TRAN,(mm d-1),Trans.
+TRANRF,(%),Transpiration
+TSIZE,(gC tiller-1),Tiller Size
+VERN,(%),Vernalisation
+VERND,(d),Vern. Days
+WAFC,mm,Water in non-frozen root zone at field capacity
+WAL,(mm),Soil Water
+WAWP,mm,Water in non-frozen root zone at wilting point
+WCL,(%),Eff. Soil Moisture
+WCLM,(%),Soil Moisture
+WEED_YIELD,(tDM ha-1),PRG Yield from weed (other) species note that this is the actual amount of material that has been removed
+year,(y),Year
+YIELD,(tDM ha-1),PRG Yield sum of YIELD_RYE and YIELD_WEED
