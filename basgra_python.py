@@ -241,17 +241,22 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     stop_year = matrix_weather['year'].max()
     stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
 
-    expected_datetimes = pd.date_range(start=pd.to_datetime('{}-{}'.format(start_year, start_day), format='%Y-%j'),
-                                       end=pd.to_datetime('{}-{}'.format(stop_year, stop_day), format='%Y-%j'))
     if run_365_calendar:
         assert matrix_weather.doy.max() <= 365, 'expected to have leap days removed, and all doy between 1-365'
         doy_day_mapper = get_month_day_to_nonleap_doy()
+        inv_doy_mapper = get_month_day_to_nonleap_doy(key_doy=True)
+        start_mon, start_dom = inv_doy_mapper[start_day]
+        stop_mon, stop_dom = inv_doy_mapper[stop_day]
+        expected_datetimes = pd.date_range(start=f'{start_year}-{start_mon:02d}-{start_dom:02d}',
+                                           end=f'{stop_year}-{stop_mon:02d}-{stop_dom:02d}')
         expected_datetimes = expected_datetimes[~((expected_datetimes.month == 2) & (expected_datetimes.day == 29))]
         expected_years = expected_datetimes.year.values
         expected_days = np.array(
             [doy_day_mapper[(m, d)] for m, d in zip(expected_datetimes.month, expected_datetimes.day)])
         addmess = ' note that leap days are expected to have been removed from matrix weather'
     else:
+        expected_datetimes = pd.date_range(start=pd.to_datetime('{}-{}'.format(start_year, start_day), format='%Y-%j'),
+                                           end=pd.to_datetime('{}-{}'.format(stop_year, stop_day), format='%Y-%j'))
         expected_years = expected_datetimes.year.values
         expected_days = expected_datetimes.dayofyear.values
         addmess = ''
