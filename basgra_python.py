@@ -246,7 +246,7 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     if expect_no_leap_days:
         assert matrix_weather.doy.max() <= 365, 'expected to have leap days removed, and all doy between 1-365'
         doy_day_mapper = get_month_day_to_nonleap_doy()
-        expected_datetimes = expected_datetimes.loc[~((expected_datetimes.month == 2) & (expected_datetimes.day == 29))]
+        expected_datetimes = expected_datetimes[~((expected_datetimes.month == 2) & (expected_datetimes.day == 29))]
         expected_years = expected_datetimes.dt.year.values
         expected_days = np.array(
             [doy_day_mapper[(m, d)] for m, d in zip(expected_datetimes.month, expected_datetimes.day)])
@@ -286,6 +286,7 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
             strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(days_harvest.year.values,
                                                                                        days_harvest.doy.values)]
             harvest_dt = pd.to_datetime(strs)
+
         else:
             strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in
                     days_harvest[['year', 'doy']].itertuples(False, None)]
