@@ -33,6 +33,7 @@ efforts will be made to incorporate further updates, but no assurances
 - [new features implemented from Simon Woodward's BASGRA](#new-features-implemented-from-simon-woodward-s-basgra)
   * [model documentation resources](#model-documentation-resources)
   * [Maximum simulation length](#maximum-simulation-length)
+  * [Calender](#Calender)
   * [Resource requirements](#resource-requirements)
   * [irrigation triggering and demand modelling (v2.0.0+)](#irrigation-triggering-and-demand-modelling--v200--)
     + [New Irrigation Process](#new-irrigation-process)
