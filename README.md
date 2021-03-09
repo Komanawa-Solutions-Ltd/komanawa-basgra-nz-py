@@ -111,6 +111,11 @@ It is set to 100 years (NMAXDAYS = 36600).  This was set at this length to allow
 without expending too many resources.  Note that internally the python code must make the weather matrix length to 
 nmaxdays.
 
+### Calender
+BASGRA_NZ_PY can be run with either the standard gregorian calendar (e.g. with leap years) or on a 365 day calendar
+In both cases BASGRA_NZ_PY runs checks to ensure that there are no missing or additional days in the simulation 
+relative to the expected calender. 
+
 ### Resource requirements
 BASGRA is fast!  The following baseline test are provided in supporting_functions/check_resource_use.py:
 

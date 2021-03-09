@@ -5,7 +5,7 @@
 import os
 import numpy as np
 import pandas as pd
-from basgra_python import run_basgra_nz, _trans_manual_harv
+from basgra_python import run_basgra_nz, _trans_manual_harv, get_month_day_to_nonleap_doy
 from input_output_keys import matrix_weather_keys_pet
 from check_basgra_python.support_for_tests import establish_org_input, get_org_correct_values, get_lincoln_broadfield, \
     test_dir, establish_peyman_input, _clean_harvest, base_auto_harvest_data, base_manual_harvest_data
@@ -143,6 +143,7 @@ def test_org_basgra_nz(update_data=False):
 
 def test_irrigation_trigger(update_data=False):
     print('testing irrigation trigger')
+    # note this is linked to test_leap, so any inputs changes there should be mapped here
     params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
 
     matrix_weather = get_lincoln_broadfield()
@@ -597,7 +598,7 @@ def test_reseed(update_data=False):
     doy_irr = list(range(305, 367)) + list(range(1, 91))
     temp = pd.DataFrame(columns=days_harvest.keys())
     for i, y in enumerate(days_harvest.year.unique()):
-        if y==2011:
+        if y == 2011:
             continue
         temp.loc[i, 'year'] = y
         temp.loc[i, 'doy'] = 152
@@ -608,8 +609,8 @@ def test_reseed(update_data=False):
         temp.loc[i, 'reseed_trig'] = 0.75
         temp.loc[i, 'reseed_basal'] = 0.88
     days_harvest = pd.concat((days_harvest, temp)).sort_values(['year', 'doy'])
-    days_harvest.loc[:,'year'] = days_harvest.loc[:,'year'].astype(int)
-    days_harvest.loc[:,'doy'] = days_harvest.loc[:,'doy'].astype(int)
+    days_harvest.loc[:, 'year'] = days_harvest.loc[:, 'year'].astype(int)
+    days_harvest.loc[:, 'doy'] = days_harvest.loc[:, 'doy'].astype(int)
     days_harvest = _clean_harvest(days_harvest, matrix_weather)
     out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
     to_plot = [  # used to check the test
@@ -635,7 +636,72 @@ def test_reseed(update_data=False):
     _output_checks(out, correct_out)
 
 
-# todo write test(s) for expecting no leap years
+def test_leap(update_data=False):
+    print('testing leap year')
+    passed_test = []
+    # note this is linked to test irrigation trigger, so any inputs changes there should be mapped here
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
+
+    matrix_weather = get_lincoln_broadfield()  # this has a leap year in 2012 and 2016
+    matrix_weather.loc[:, 'max_irr'] = 15
+    matrix_weather.loc[:, 'irr_trig'] = 0.5
+    matrix_weather.loc[:, 'irr_targ'] = 1
+
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
+
+    params['IRRIGF'] = 1  # irrigation to 100% of field capacity
+
+    doy_irr = list(range(305, 367)) + list(range(1, 91))
+
+    days_harvest = _clean_harvest(days_harvest, matrix_weather)
+
+    try:
+        out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, run_365_calendar=True)
+        passed_test.append(False)
+    except AssertionError as val:
+        passed_test.append(True)
+
+    matrix_weather = matrix_weather.loc[~((matrix_weather.index.day == 29) & (matrix_weather.index.month == 2))]
+    try:
+        out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, run_365_calendar=True)
+        passed_test.append(False)
+    except AssertionError as val:
+        passed_test.append(True)
+
+    mapper = get_month_day_to_nonleap_doy()
+    matrix_weather.loc[:, 'doy'] = [mapper[(m, d)] for m, d in
+                                    zip(matrix_weather.index.month, matrix_weather.index.day)]
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, run_365_calendar=True)
+
+    external_data_path = os.path.join(test_dir, 'test_irrigation_trigger_output.csv')
+    # note this is linked to test irrigation trigger
+
+    correct_out = pd.read_csv(external_data_path)
+    correct_out.loc[:, 'date'] = pd.to_datetime(correct_out.loc[:, 'date'])
+    correct_out.set_index('date', inplace=True)
+    _output_checks(out.loc[out.index.year == 2011], correct_out.loc[correct_out.index.year == 2011])
+
+    try:
+        _output_checks(out, correct_out)
+    except AssertionError:
+        passed_test.append(True)
+
+    # test doy and index.dayofyear do not match
+    idx = ~(out.doy == out.index.dayofyear)
+
+    # this should be off for all leap years as they have been shifted to a 365 calander
+    assert set(out.loc[idx].index.year) == {2012, 2016}, 'should only be a mismatch for leap years'
+    assert set(out.loc[idx].index.month) == {3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, 'should only affect days after 2 month'
+    assert idx.sum() == 612, 'there should only be 612 entries 2*(365-31-28)'
+
+    assert all(passed_test), f'one of the checks within basgra did not work, check try associated with {passed_test}'
+
+    data_path = os.path.join(test_dir, 'test_leap.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out)
 
 
 if __name__ == '__main__':
@@ -663,6 +729,9 @@ if __name__ == '__main__':
 
     # test reseed
     test_reseed()
+
+    # test 365 day calender run (no leap years)
+    test_leap()
 
     # input data for manual harvest check
     test_trans_manual_harv()

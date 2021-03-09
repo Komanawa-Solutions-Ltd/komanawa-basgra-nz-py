@@ -26,6 +26,7 @@ if __name__ == '__main__':
             test_weed_fraction_man,
             test_irr_paw,
             test_reseed,
+            test_leap,
 
         ]
         for f in functions:

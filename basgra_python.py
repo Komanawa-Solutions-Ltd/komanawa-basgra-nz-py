@@ -28,7 +28,7 @@ _max_weather_size = 36600
 
 
 def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
-                  dll_path='default', supply_pet=True, auto_harvest=False, expect_no_leap_days=False):
+                  dll_path='default', supply_pet=True, auto_harvest=False, run_365_calendar=False):
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
@@ -53,7 +53,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     :param auto_harvest: boolean, if True then assumes data is formated correctly for auto harvesting, if False, then
                          assumes data is formatted for manual harvesting (e.g. previous version) and re-formats
                          internally
-    :param expect_no_leap_days: boolean, if True then run on a 365 day calender
+    :param run_365_calendar: boolean, if True then run on a 365 day calender
                                 This expects that all leap days will be removed from matrix_weather and
                                 days_harvest. DOY is expected to be between 1 and 365.  This means that datetime
                                 objects defined by year and doy will be incorrect. instead use
@@ -70,7 +70,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
 
     assert isinstance(supply_pet, bool), 'supply_pet param must be boolean'
     assert isinstance(auto_harvest, bool), 'auto_harvest param must be boolean'
-    assert isinstance(expect_no_leap_days, bool), 'expect_no_leap_days must be boolean'
+    assert isinstance(run_365_calendar, bool), 'expect_no_leap_days must be boolean'
 
     # define DLL library path
     use_default_lib = False
@@ -107,7 +107,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     doy_irr = np.atleast_1d(doy_irr)
     # test the input variables
     _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
-                        auto_harvest, doy_irr, expect_no_leap_days=expect_no_leap_days)
+                        auto_harvest, doy_irr, run_365_calendar=run_365_calendar)
 
     nout = len(out_cols)
     ndays = len(matrix_weather)
@@ -163,10 +163,10 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
     y_p = y_p.flatten(order='C').reshape((ndays, nout), order='F')
     y_p = pd.DataFrame(y_p, out_index, out_cols)
-    if expect_no_leap_days:
+    if run_365_calendar:
         mapper = get_month_day_to_nonleap_doy(key_doy=True)
-        strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(y_p.year.values,
-                                                                                   y_p.doy.values)]
+        strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(y_p.year.values.astype(int),
+                                                                                   y_p.doy.values.astype(int))]
         y_p.loc[:, 'date'] = pd.to_datetime(strs)
     else:
         strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in y_p[['year', 'doy']].itertuples(False, None)]
@@ -216,7 +216,7 @@ def _trans_manual_harv(days_harvest, matrix_weather):
 
 
 def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
-                        auto_harvest, doy_irr, expect_no_leap_days):
+                        auto_harvest, doy_irr, run_365_calendar):
     # check parameters
     assert isinstance(verbose, bool), 'verbose must be boolean'
     assert isinstance(params, dict)
@@ -243,11 +243,11 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
 
     expected_datetimes = pd.date_range(start=pd.to_datetime('{}-{}'.format(start_year, start_day), format='%Y-%j'),
                                        end=pd.to_datetime('{}-{}'.format(stop_year, stop_day), format='%Y-%j'))
-    if expect_no_leap_days:
+    if run_365_calendar:
         assert matrix_weather.doy.max() <= 365, 'expected to have leap days removed, and all doy between 1-365'
         doy_day_mapper = get_month_day_to_nonleap_doy()
         expected_datetimes = expected_datetimes[~((expected_datetimes.month == 2) & (expected_datetimes.day == 29))]
-        expected_years = expected_datetimes.dt.year.values
+        expected_years = expected_datetimes.year.values
         expected_days = np.array(
             [doy_day_mapper[(m, d)] for m, d in zip(expected_datetimes.month, expected_datetimes.day)])
         addmess = ' note that leap days are expected to have been removed from matrix weather'
@@ -267,7 +267,7 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert pd.api.types.is_integer_dtype(days_harvest.year), 'year must be an integer datatype in days_harvest'
     assert not days_harvest.isna().any().any(), 'days_harvest cannot have na data'
     assert (days_harvest['frac_harv'] <= 1).all(), 'frac_harv cannot be greater than 1'
-    if expect_no_leap_days:
+    if run_365_calendar:
         assert days_harvest.doy.max() <= 365
     if params['fixed_removal'] > 0.9:
         assert (days_harvest['harv_trig'] >=
@@ -281,7 +281,7 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
                 days_harvest['doy'].values == matrix_weather.doy.values).all()
         assert check, 'the date range of days_harvest does not match matrix_weather' + addmess
     else:
-        if expect_no_leap_days:
+        if run_365_calendar:
             mapper = get_month_day_to_nonleap_doy(key_doy=True)
             strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(days_harvest.year.values,
                                                                                        days_harvest.doy.values)]
