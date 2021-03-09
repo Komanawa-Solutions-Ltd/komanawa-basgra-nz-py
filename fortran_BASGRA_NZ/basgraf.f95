@@ -430,7 +430,7 @@ do day = 1, NDAYS
 	                        - VERN * GTILV / TILV)
   else
 	VERN    = 0.
-  end if
+  end if !todo here is the point to specify WAL
   WAL     = WAL  + THAWS  - FREEZEL  + poolDrain + INFIL + EXPLOR + IRRIG - DRAIN - RUNOFF - EVAP - TRAN
   WALS    = max(0.0, min(25.0, WALS + THAWS - FREEZEL  + poolDrain + INFIL + IRRIG - DRAIN - RUNOFF - EVAP - TRAN)) ! Simon added WALS rapid surface pool
   WAPL    = WAPL + THAWPS - FREEZEPL + poolInfil - poolDrain

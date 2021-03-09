@@ -28,7 +28,7 @@ _max_weather_size = 36600
 
 
 def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
-                  dll_path='default', supply_pet=True, auto_harvest=False):
+                  dll_path='default', supply_pet=True, auto_harvest=False, expect_no_leap_days=False):
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
@@ -53,11 +53,14 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     :param auto_harvest: boolean, if True then assumes data is formated correctly for auto harvesting, if False, then
                          assumes data is formatted for manual harvesting (e.g. previous version) and re-formats
                          internally
+    :param expect_no_leap_days: boolean, if True then expect the leap days to be removed from matrix_weather and
+           days_harvest default False
     :return:
     """
 
     assert isinstance(supply_pet, bool), 'supply_pet param must be boolean'
     assert isinstance(auto_harvest, bool), 'auto_harvest param must be boolean'
+    assert isinstance(expect_no_leap_days, bool), 'expect_no_leap_days must be boolean'
 
     # define DLL library path
     use_default_lib = False
@@ -94,7 +97,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     doy_irr = np.atleast_1d(doy_irr)
     # test the input variables
     _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
-                        auto_harvest, doy_irr)
+                        auto_harvest, doy_irr, expect_no_leap_days=expect_no_leap_days)
 
     nout = len(out_cols)
     ndays = len(matrix_weather)
@@ -157,7 +160,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     return y_p
 
 
-def _trans_manual_harv(days_harvest, matrix_weather):
+def _trans_manual_harv(days_harvest, matrix_weather):  # todo check for leap year shit
     """
     translates manual harvest data to the format expected by fortran, check the details of the data in here.
     :param days_harvest: manual harvest data
@@ -170,8 +173,8 @@ def _trans_manual_harv(days_harvest, matrix_weather):
                                      'frac_harv': np.zeros(len(matrix_weather)),  # set filler values
                                      'harv_trig': np.zeros(len(matrix_weather)) - 1,  # set flag to not harvest
                                      'harv_targ': np.zeros(len(matrix_weather)),  # set filler values
-                                     'weed_dm_frac': np.zeros(len(matrix_weather))*np.nan,  # set nas, filled later
-                                     'reseed_trig': np.zeros(len(matrix_weather)) -1,  # set flag to not reseed
+                                     'weed_dm_frac': np.zeros(len(matrix_weather)) * np.nan,  # set nas, filled later
+                                     'reseed_trig': np.zeros(len(matrix_weather)) - 1,  # set flag to not reseed
                                      'reseed_basal': np.zeros(len(matrix_weather)),  # set filler values
                                      })
     days_harvest_out = days_harvest_out.set_index(['year', 'doy'])
@@ -196,7 +199,7 @@ def _trans_manual_harv(days_harvest, matrix_weather):
 
 
 def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_weather_keys,
-                        auto_harvest, doy_irr):
+                        auto_harvest, doy_irr, expect_no_leap_days):
     # check parameters
     assert isinstance(verbose, bool), 'verbose must be boolean'
     assert isinstance(params, dict)
@@ -205,7 +208,6 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
 
     assert params['reseed_harv_delay'] >= 1, 'harvest delay must be >=1'
     assert params['reseed_harv_delay'] % 1 < 1e5, 'harvest delay must effectively be an integer'
-
 
     # check matrix weather
     assert isinstance(matrix_weather, pd.DataFrame)
@@ -222,11 +224,24 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     stop_year = matrix_weather['year'].max()
     stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
 
-    expected_days = pd.Series(pd.date_range(start=pd.to_datetime('{}-{}'.format(start_year, start_day), format='%Y-%j'),
-                                            end=pd.to_datetime('{}-{}'.format(stop_year, stop_day), format='%Y-%j')))
-    check = (matrix_weather['year'].values == expected_days.dt.year.values).all() and (
-            matrix_weather['doy'].values == expected_days.dt.dayofyear.values).all()
-    assert check, 'the date range of matrix_weather contains missing or duplicate days'
+    expected_datetimes = pd.date_range(start=pd.to_datetime('{}-{}'.format(start_year, start_day), format='%Y-%j'),
+                                       end=pd.to_datetime('{}-{}'.format(stop_year, stop_day), format='%Y-%j'))
+    if expect_no_leap_days:
+        assert matrix_weather.doy.max() <= 365, 'expected to have leap days removed, and all doy between 1-365'
+        doy_day_mapper = get_month_day_to_nonleap_doy()
+        expected_datetimes = expected_datetimes.loc[~((expected_datetimes.month == 2) & (expected_datetimes.day == 29))]
+        expected_years = expected_datetimes.dt.year.values
+        expected_days = np.array(
+            [doy_day_mapper[(m, d)] for m, d in zip(expected_datetimes.month, expected_datetimes.day)])
+        addmess = ' note that leap days are expected to have been removed from matrix weather'
+    else:
+        expected_years = expected_datetimes.year.values
+        expected_days = expected_datetimes.dayofyear.values
+        addmess = ''
+
+    check = ((matrix_weather['year'].values == expected_years).all() and
+             (matrix_weather['doy'].values == expected_days).all())
+    assert check, 'the date range of matrix_weather contains missing or duplicate days' + addmess
 
     # check harvest data
     assert isinstance(days_harvest, pd.DataFrame)
@@ -235,6 +250,8 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert pd.api.types.is_integer_dtype(days_harvest.year), 'year must be an integer datatype in days_harvest'
     assert not days_harvest.isna().any().any(), 'days_harvest cannot have na data'
     assert (days_harvest['frac_harv'] <= 1).all(), 'frac_harv cannot be greater than 1'
+    if expect_no_leap_days:
+        assert days_harvest.doy.max() <= 365
     if params['fixed_removal'] > 0.9:
         assert (days_harvest['harv_trig'] >=
                 days_harvest['harv_targ']).all(), 'when using fixed harvest mode the harv_trig>=harv_targ'
@@ -243,15 +260,21 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
         assert len(matrix_weather) == len(
             days_harvest), 'days_harvest and matrix_weather must be the same length(ndays)'
 
-        check = (days_harvest['year'].values == expected_days.dt.year.values).all() and (
-                days_harvest['doy'].values == expected_days.dt.dayofyear.values).all()
-        assert check, 'the date range of matrix_weather contains missing or duplicate days'
+        check = (days_harvest['year'].values == matrix_weather.year.values).all() and (
+                days_harvest['doy'].values == matrix_weather.doy.values).all()
+        assert check, 'the date range of days_harvest does not match matrix_weather' + addmess
     else:
-
-        strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in days_harvest[['year', 'doy']].itertuples(False, None)]
-        harvest_dt = pd.to_datetime(strs, format='%Y-%j')
-        assert harvest_dt.min() >= expected_days.min(), 'days_harvest must start at or after first day of simulation'
-        assert harvest_dt.max() <= expected_days.max(), 'days_harvest must stop at or before last day of simulation'
+        if expect_no_leap_days:
+            mapper = {v: k for k, v in get_month_day_to_nonleap_doy().items()}
+            strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(days_harvest.year,
+                                                                                       days_harvest.doy)]
+            harvest_dt = pd.to_datetime(strs)
+        else:
+            strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in
+                    days_harvest[['year', 'doy']].itertuples(False, None)]
+            harvest_dt = pd.to_datetime(strs, format='%Y-%j')
+        assert harvest_dt.min() >= expected_datetimes.min(), 'days_harvest must start at or after first day of simulation'
+        assert harvest_dt.max() <= expected_datetimes.max(), 'days_harvest must stop at or before last day of simulation'
 
     # doy_irr tests
     assert isinstance(doy_irr, np.ndarray), 'doy_irr must be convertable to a numpy array'
@@ -259,6 +282,15 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert pd.api.types.is_integer_dtype(doy_irr), 'doy_irr must be integers'
     assert doy_irr.max() <= 366, 'entries doy_irr must not be greater than 366'
     assert doy_irr.min() >= 0, 'entries doy_irr must not be less than 0'
+
+
+def get_month_day_to_nonleap_doy():
+    temp = pd.date_range('2025-01-01', '2025-12-31')  # a random non leap year
+    day = temp.day
+    month = temp.month
+    doy = temp.dayofyear
+    out = {(m, d): dd for m, d, dd in zip(month, day, doy)}
+    return out
 
 
 if __name__ == '__main__':
