@@ -38,10 +38,10 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     :param matrix_weather: pandas dataframe of weather data, maximum entries set in _max_weather_size in line 24
                           of this file (currently 36600)
                           see documentation for input columns at https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY
-                          or README.md
+                          or README.md, note expected DOY will change depending on expect_no_leap_days
     :param days_harvest: days harvest dataframe must be same length as matrix_weather entries
                         see documentation for input columns at https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY
-                        or README.md
+                        or README.md, note expected DOY will change depending on expect_no_leap_days
     :param doy_irr: a list of the days of year to irrigate on, must be integers acceptable values: (0-366)
     :param verbose: boolean, if True the fortran function prints a number of statements for debugging purposes
                    (depreciated)
@@ -53,9 +53,19 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     :param auto_harvest: boolean, if True then assumes data is formated correctly for auto harvesting, if False, then
                          assumes data is formatted for manual harvesting (e.g. previous version) and re-formats
                          internally
-    :param expect_no_leap_days: boolean, if True then expect the leap days to be removed from matrix_weather and
-           days_harvest default False
-    :return:
+    :param expect_no_leap_days: boolean, if True then run on a 365 day calender
+                                This expects that all leap days will be removed from matrix_weather and
+                                days_harvest. DOY is expected to be between 1 and 365.  This means that datetime
+                                objects defined by year and doy will be incorrect. instead use
+                                get_month_day_to_nonleap_doy to map DOY to datetime via month and day. This is how
+                                the index of the returned datetime will be passed.  For example for date 2024-03-01
+                                (2024 is a leap year) the dayofyear via a datetime object will be 61, but if
+                                expect_no_leap_days=True basgra expects day of year to be 60. the index of the
+                                results will be a datetime object of equivalent to 2024-03-01, so  the output doy
+                                will not match the index doy and there will be no value on 2020-02-29.
+
+                                default False
+    :return: pd.DataFrame(index=datetime index, columns = out_cols)
     """
 
     assert isinstance(supply_pet, bool), 'supply_pet param must be boolean'
@@ -153,14 +163,21 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
     y_p = y_p.flatten(order='C').reshape((ndays, nout), order='F')
     y_p = pd.DataFrame(y_p, out_index, out_cols)
-    strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in y_p[['year', 'doy']].itertuples(False, None)]
-    y_p.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
+    if expect_no_leap_days:
+        mapper = get_month_day_to_nonleap_doy(key_doy=True)
+        strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(y_p.year.values,
+                                                                                   y_p.doy.values)]
+        y_p.loc[:, 'date'] = pd.to_datetime(strs)
+    else:
+        strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in y_p[['year', 'doy']].itertuples(False, None)]
+        y_p.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
+
     y_p.set_index('date', inplace=True)
 
     return y_p
 
 
-def _trans_manual_harv(days_harvest, matrix_weather):  # todo check for leap year shit
+def _trans_manual_harv(days_harvest, matrix_weather):
     """
     translates manual harvest data to the format expected by fortran, check the details of the data in here.
     :param days_harvest: manual harvest data
@@ -265,9 +282,9 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
         assert check, 'the date range of days_harvest does not match matrix_weather' + addmess
     else:
         if expect_no_leap_days:
-            mapper = {v: k for k, v in get_month_day_to_nonleap_doy().items()}
-            strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(days_harvest.year,
-                                                                                       days_harvest.doy)]
+            mapper = get_month_day_to_nonleap_doy(key_doy=True)
+            strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(days_harvest.year.values,
+                                                                                       days_harvest.doy.values)]
             harvest_dt = pd.to_datetime(strs)
         else:
             strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in
@@ -284,12 +301,21 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert doy_irr.min() >= 0, 'entries doy_irr must not be less than 0'
 
 
-def get_month_day_to_nonleap_doy():
+def get_month_day_to_nonleap_doy(key_doy=False):
+    """
+
+    :param key_doy: bool, if true the keys are doy, else keys are (month, dayofmonth)
+    :return: dictionary if not inverse: {(m,d}:doy} if inverse: {doy: (m,d)}
+    """
     temp = pd.date_range('2025-01-01', '2025-12-31')  # a random non leap year
     day = temp.day
     month = temp.month
     doy = temp.dayofyear
-    out = {(m, d): dd for m, d, dd in zip(month, day, doy)}
+    if key_doy:
+        out = {dd: (m, d) for m, d, dd in zip(month, day, doy)}
+    else:
+        out = {(m, d): dd for m, d, dd in zip(month, day, doy)}
+
     return out
 
 
