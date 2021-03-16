@@ -4,7 +4,7 @@ module parameters_site
 implicit none
 
 ! Simulation period and time step
-integer, parameter                                  :: NPAR     = 124
+integer, parameter                                  :: NPAR     = 125
   real, parameter       :: DELT   =   1.0 ! Model time step
 
 ! Geography
@@ -45,6 +45,7 @@ integer, parameter                                  :: NPAR     = 124
   real       :: IRR_TRIG ! irrigation trigger, fraction of field capacity to start irrigating at
   real       :: IRR_TARG ! irrigation target, fraction of field capacity to fill to
   logical    ::  Irr_frm_PAW ! are irrigation trigger/target the fraction of profile avalible water or field capcity.
+  logical    :: pass_soil_moist ! bool if TRUE then assumes that soil moisture is passed in max_irr
 
 ! Management: harvest
   logical    :: FIXED_REMOVAL

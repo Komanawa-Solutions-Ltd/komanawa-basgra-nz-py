@@ -49,6 +49,8 @@ efforts will be made to incorporate further updates, but no assurances
     + [Reseed process](#reseed-process)
     + [New re-seed inputs/outputs](#new-re-seed-inputs-outputs)
     + [How to run so that the results are backwards compatible with versions V3.0.0 -](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v300--)
+  * [passing external soil moisture to model (V5.0.0+)](#passing-external-soil-moisture-to-model--v500--)
+    + [How to run so that the results are backwards compatible with versions V4.0.0 -](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-V400--)
 - [python developments](#python-developments)
   * [supporting functions](#supporting-functions)
   * [testing regime and examples](#testing-regime-and-examples)
@@ -323,6 +325,25 @@ The new output is:
 * set 'reseed_harv_delay' to 1 (to avoid python assertion error)
 * all other reseed parameters (reseed_{var}) must be set, but they can all be safely set to -1 
 
+### passing external soil moisture to model (V5.0.0+)
+As of V5.0.0 it is possible to pass time series external soil moisture data into BASGRA to use rather than
+the internal soil moisture model. Soil moisture can be passed as a fraction (0-1) of either profile available
+water (PAW) or field capacity 
+
+Note V5.0.0 + has a slight change to fix an off by one error that occurs with PAW.  Now PAW will match WAL
+
+To do this:
+* set 'pass_soil_moist' to 1
+* set matrix_weather.max_irr to the soil moisture fraction
+* set 'irr_frm_paw' to 1 if soil moisture is fraction of PAW or 
+0 is soil moisture is a fraction of field capacity
+
+#### How to run so that the results are backwards compatible with versions V4.0.0 -
+Note PAW will not be identical with previous versions as Note V5.0.0 + has a slight change to fix an 
+off by one error that occurs with PAW.  Now PAW will match WAL
+Otherwise:
+* set 'pass_soil_moist' to 0
+* set max_irr as normal
 
 ## python developments
 
@@ -367,7 +388,7 @@ the test_basgra_python.py will run all of the testing functions.  These function
 'tmax'|degrees C|daily max
 'rain'|mm|sum daily rainfall
 'pet'|mm|priestly/penman evapotransperation
-'max\_irr'|mm/d|maximum irrigation available
+'max\_irr'|mm/d|maximum irrigation available when 'pass_soil_moist' is False or the fraction (0-1) PAW/Field capacity to be passed to the model when 'pass_soil_moist' is True, see 'pass_soil_moist' for more details
 'irr\_trig'|fraction|fraction of PAW/field (see irr\_frm\_paw) at or below which irrigation is triggered e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 of the appropriate variable
 'irr\_targ'|fraction|fraction of PAW/field (see irr\_frm\_paw) to irrigate up to.
 
@@ -382,7 +403,7 @@ the test_basgra_python.py will run all of the testing functions.  These function
 'rain'|mm|sum daily rainfall
 'vpa'|kPa|vapour pressure
 'wind'|m/s|mean wind speed at 2m
-'max\_irr'|mm/d|maximum irrigation available
+'max\_irr'|mm/d|maximum irrigation available when 'pass_soil_moist' is False or the fraction (0-1) PAW/Field capacity to be passed to the model when 'pass_soil_moist' is True, see 'pass_soil_moist' for more details
 'irr\_trig'|fraction|fraction of PAW/field (see irr\_frm\_paw) at or below which irrigation is triggered e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 of the appropriate variable
 'irr\_targ'|fraction|fraction of PAW/field (see irr\_frm\_paw) to irrigate up to.
 
@@ -399,7 +420,7 @@ the test_basgra_python.py will run all of the testing functions.  These function
 'FWCFC'|    m3 m-3|  Relative saturation at field capacity
 'FWCWET'|   m3 m-3|  Relative saturation above which transpiration is reduced
 'FWCWP'|    m3 m-3|  Relative saturation at wilting point
-'irr\_frm\_paw'|   |  are irrigation trigger/target the fraction of profile available water (1/True or the fraction of field capacity (0/False).
+'irr\_frm\_paw'|   |  are irrigation trigger/target the fraction of profile available water (1/True or the fraction of field capacity (0/False) also determines whether passed soil moisture data is from PAW or FC, see 'pass_soil_moist'.
 'IRRIGF'|   fraction|   fraction of the needed irrigation to apply to bring water content up to field capacity
 'KRTOTAER'|     -|  Ratio of total to aerobic respiration
 'KSNOW'|      mm-1|  Light extinction coefficient of snow
@@ -426,6 +447,7 @@ the test_basgra_python.py will run all of the testing functions.  These function
 'WCI'|   m3 m-3|  Initial value of volumetric water content
 'WCST'|    m3 m-3|  Volumetric water content at saturation
 'WpoolMax'|  mm|  Maximum pool water (liquid plus ice)
+'pass_soil_moist'|   |   sudo boolean 1=True, 0=False.  if True then do not calculate soil moisture instead soil moisture is passed to the model through max_irr as a fraction of either soil capacity when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True this prevent any irrigation scheduling or and soil moisture calculation in the model.
 
 ### Plant Parameters description
 **PARAMETER**|**units**|**Description**

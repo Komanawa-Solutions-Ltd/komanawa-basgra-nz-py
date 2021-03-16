@@ -81,6 +81,7 @@ def get_woodward_mean_full_params(site):
     params.loc['reseed_CRES'] = 0
     params.loc['reseed_CST'] = 0
     params.loc['reseed_CSTUB'] = 0
+    params.loc['pass_soil_moist'] = 0
 
     params = params.to_dict()
 

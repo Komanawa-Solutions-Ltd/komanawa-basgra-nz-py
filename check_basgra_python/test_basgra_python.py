@@ -704,6 +704,54 @@ def test_leap(update_data=False):
     _output_checks(out, correct_out)
 
 
+def test_pass_soil_mosit(update_data=False):
+    print('testing passing soil moisture data in')
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input()
+    params['irr_frm_paw'] = 1
+    params['pass_soil_moist'] = 1
+
+    per_data = pd.read_csv(os.path.join(test_dir, 'per_paw_fc.csv'))
+    matrix_weather.loc[:, 'max_irr'] = per_data.loc[:, 'per_paw']
+    # decrease soil moisture by 10% in Feb
+    month = pd.to_datetime([f'{y}-{j:03d}' for y, j in matrix_weather.loc[:, ['year', 'doy']].itertuples(False, None)],
+                           format='%Y-%j').month
+    matrix_weather.loc[month == 2, 'max_irr'] *= 0.90
+    matrix_weather.loc[month == 6, 'max_irr'] *= 0.80
+    matrix_weather.loc[0, 'max_irr'] = 0.5
+
+    days_harvest = _clean_harvest(days_harvest, matrix_weather)
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'in_per_paw'] = matrix_weather.loc[:, 'max_irr'].values
+    out.loc[:, 'per_paw'] = out.loc[:, 'PAW'] / out.loc[:, 'MXPAW']
+
+    # test against my saved version (simply to have all columns
+    data_path = os.path.join(test_dir, 'test_pass_soil_moist_paw.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out)
+
+    print('  testing percent fc')
+    matrix_weather.loc[:, 'max_irr'] = per_data.loc[:, 'per_fc']
+    # decrease soil moisture by 10% in Feb
+    matrix_weather.loc[month == 2, 'max_irr'] *= 0.90
+    matrix_weather.loc[month == 6, 'max_irr'] *= 0.80
+    matrix_weather.loc[0, 'max_irr'] = 0.5
+    params['irr_frm_paw'] = 0
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'in_per_fc'] = matrix_weather.loc[:, 'max_irr'].values
+    out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
+
+    data_path = os.path.join(test_dir, 'test_pass_soil_moist_fc.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    print('  testing against full dataset')
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out)
+
+
 if __name__ == '__main__':
 
     # input types tests
@@ -732,6 +780,9 @@ if __name__ == '__main__':
 
     # test 365 day calender run (no leap years)
     test_leap()
+
+    # test passing soil moisture data in
+    test_pass_soil_mosit()
 
     # input data for manual harvest check
     test_trans_manual_harv()

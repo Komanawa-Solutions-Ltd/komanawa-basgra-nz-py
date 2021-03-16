@@ -144,6 +144,11 @@ param_keys = (
     'reseed_CST',  # Weight of stems after reseed if >= 0 otherwise use current state of variable
     'reseed_CSTUB',  # Weight of stubble after reseed if >= 0 otherwise use current state of variable
 
+    'pass_soil_moist',  # sudo boolean 1=True, 0=False.  if True then do not calculate soil moisture instead
+    # soil moisture is passed to the model through max_irr as a fraction of either soil capacity
+    # when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True
+    # this prevent any irrigation scheduling or and soil moisture calculation in the model.
+
 )
 
 days_harvest_keys = (
@@ -167,7 +172,9 @@ matrix_weather_keys_pet = (
     'tmax',  # daily max (degrees C)
     'rain',  # sum daily rainfall (mm)
     'pet',  # priestly evapotransperation (mm)
-    'max_irr',  # maximum irrigation available (mm/d)
+    'max_irr',  # maximum irrigation available (mm/d) when 'pass_soil_moist' is False or the fraction (0-1)
+    # PAW/Field capacity to be passed to the model when 'pass_soil_moist' is True,
+    # see 'pass_soil_moist' for more details
     'irr_trig',  # fraction of PAW/field (see irr_frm_paw) at or below which irrigation is triggered (fraction 0-1)
     # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
     # field capacity (e.g. water holding capacity)
@@ -183,7 +190,9 @@ matrix_weather_keys_penman = (
     'vpa',  # vapour pressure (kPa)
     'rain',  # sum daily rainfall (mm/day)
     'wind',  # mean wind speed m/s at 2m
-    'max_irr',  # maximum irrigation available (mm/d)
+    'max_irr',  # maximum irrigation available (mm/d)  when 'pass_soil_moist' is False or the fraction (0-1)
+    # PAW/Field capacity to be passed to the model when 'pass_soil_moist' is True,
+    # see 'pass_soil_moist' for more details
     'irr_trig',  # fraction of field capacity at or below which irrigation is triggered (fraction 0-1)
     # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
     # field capacity (e.g. water holding capacity)
@@ -323,6 +332,9 @@ site_param_keys = (
     'reseed_CRES',  # Weight of reserves after reseed if >= 0 otherwise use current state of variable
     'reseed_CST',  # Weight of stems after reseed if >= 0 otherwise use current state of variable
     'reseed_CSTUB',  # Weight of stubble after reseed if >= 0 otherwise use current state of variable
+    'pass_soil_moist',  # sudo boolean 1=True, 0=False.  if True then do not calculate soil moisture instead
+    # soil moisture is passed to the model through max_irr as a fraction of either soil capacity
+    # when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True
 
 )
 plant_param_keys = (

@@ -205,12 +205,30 @@ VERN    = max(0.0, min(1.0, (VERND-TVERNDMN)/(TVERND-TVERNDMN))) ! FIXME does no
 YIELD_RYE   = YIELDI ! currently hard coded to zero
 YIELD_WEED   = YIELDI ! currently hard coded to zero
 YIELD   = YIELD_RYE + YIELD_WEED
-WAL     = 1000. * (ROOTDM - Fdepth) * WCFC        ! Simon set to WCFC
-WALS    = min(WAL, 25.0)                          ! Simon added WALS rapid surface layer (see manual section 4.3)
-WAPL    = WAPLI
-WAPS    = WAPSI
-WAS     = WASI
-WETSTOR = WETSTORI
+if (pass_soil_moist) then
+    WAFC = 1000. * WCFC * max(0., (ROOTDM - Fdepth))                      ! (mm) Field capacity, Simon modified to ROOTDM
+    WAWP = 1000. * WCWP * max(0., (ROOTDM - Fdepth))                      ! (mm) wilting point Simon modified to ROOTDM
+    MXPAW = WAFC-WAWP
+  if (Irr_frm_PAW) then
+    WAL     = (MAX_IRRI(1) * MXPAW) + WAWP
+  else
+     WAL  =  MAX_IRRI(1) * WAFC
+  end if
+  WALS    = 0
+  WAPL    = 0
+  WAPS    = 0
+  WAS     = 0
+  WETSTOR = 0
+
+else
+  WAL     = 1000. * (ROOTDM - Fdepth) * WCFC        ! Simon set to WCFC
+  WALS    = min(WAL, 25.0)                          ! Simon added WALS rapid surface layer (see manual section 4.3)
+  WAPL    = WAPLI
+  WAPS    = WAPSI
+  WAS     = WASI
+  WETSTOR = WETSTORI
+end if
+
 
 ! Loop through days
 do day = 1, NDAYS
@@ -218,7 +236,7 @@ do day = 1, NDAYS
   ! Calculate intermediate and rate variables (many variable and parameters are passed implicitly)
   !    SUBROUTINE      INPUTS                          OUTPUTS
 
-  call set_weather_day(day,DRYSTOR, year,doy) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
+  call set_weather_day(day,DRYSTOR, year,doy, NDAYS) ! set weather for the day, including DTR, PAR, which depend on DRYSTOR
 
   call Reseed(day, NDAYS, NHARVCOL, DAYS_HARVEST, BASAL, LAI, PHEN, TILG1, TILG2, TILV, & ! inputs
                     CLV, CRES, CST, CSTUB, &
@@ -266,10 +284,12 @@ do day = 1, NDAYS
   call Light          (DAYL,DTR,LAI,BASAL,PAR)                   ! calculate light interception DTRINT,PARINT,PARAV
   call EVAPTRTRF      (Fdepth,PEVAP,PTRAN,CRT,ROOTD,WAL,WCLM,WCL,EVAP,TRAN)! calculate EVAP,TRAN,TRANRF
 
+
   call FRDRUNIR       (EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
-                                                       DRAIN,FREEZEL,IRRIG, IRRIG_DEM, RUNOFF,THAWS, &
-                       MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, &
-                       WAFC, WAWP, MXPAW, PAW) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
+                                                         DRAIN,FREEZEL,IRRIG, IRRIG_DEM, RUNOFF,THAWS, &
+                         MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, &
+                         WAFC, WAWP, MXPAW, PAW) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
+
   call O2status       (O2,ROOTD)                                 ! calculate FO2
 
   call Vernalisation  (DAYL,PHEN,YDAYL,TMMN,TMMX,DAVTMP,Tsurf,VERN,VERND,DVERND) ! Simon calculate VERN,VERND,DVERND
@@ -381,7 +401,7 @@ do day = 1, NDAYS
   y(day,61) = IRRIG_DEM
   y(day,62) = WAWP
   y(day,63) = MXPAW
-  y(day,64) = PAW
+  y(day,64) = WAL - WAWP ! paw but fix off by one error with WAL
 
 
   y(day,65) = YIELD_RYE
@@ -430,13 +450,29 @@ do day = 1, NDAYS
 	                        - VERN * GTILV / TILV)
   else
 	VERN    = 0.
-  end if !todo here is the point to specify WAL
-  WAL     = WAL  + THAWS  - FREEZEL  + poolDrain + INFIL + EXPLOR + IRRIG - DRAIN - RUNOFF - EVAP - TRAN
-  WALS    = max(0.0, min(25.0, WALS + THAWS - FREEZEL  + poolDrain + INFIL + IRRIG - DRAIN - RUNOFF - EVAP - TRAN)) ! Simon added WALS rapid surface pool
-  WAPL    = WAPL + THAWPS - FREEZEPL + poolInfil - poolDrain
-  WAPS    = WAPS - THAWPS + FREEZEPL
-  WAS     = WAS  - THAWS  + FREEZEL
-  WETSTOR = WETSTOR + Wremain - WETSTOR
+  end if
+
+  if (pass_soil_moist) then
+    ! pass soil moisture in from external model via max_irr
+    if (Irr_frm_PAW) then
+      WAL     = (MAX_IRR * MXPAW) + WAWP
+    else
+      WAL  =  MAX_IRR * WAFC
+    end if
+    WALS    = 0
+    WAPL    = 0
+    WAPS    = 0
+    WAS     = 0
+    WETSTOR = 0
+  else
+    ! calculate soil mositure internally
+    WAL     = WAL  + THAWS  - FREEZEL  + poolDrain + INFIL + EXPLOR + IRRIG - DRAIN - RUNOFF - EVAP - TRAN
+    WALS    = max(0.0, min(25.0, WALS + THAWS - FREEZEL  + poolDrain + INFIL + IRRIG - DRAIN - RUNOFF - EVAP - TRAN)) ! Simon added WALS rapid surface pool
+    WAPL    = WAPL + THAWPS - FREEZEPL + poolInfil - poolDrain
+    WAPS    = WAPS - THAWPS + FREEZEPL
+    WAS     = WAS  - THAWS  + FREEZEL
+    WETSTOR = WETSTOR + Wremain - WETSTOR
+  end if
 
 enddo
 

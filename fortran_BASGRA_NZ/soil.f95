@@ -111,7 +111,11 @@ contains
         RUNOFF = max(0., (WAL - WAST) / DELT + &
                 (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN))          ! = mm d-1 Runoff, runs off to WAST !todo why is this always zero
 
-        PAW = max(0., ((WAL + (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF) * DELT) - WAWP))
+        if (pass_soil_moist) then ! no soil moisture calculated here
+            PAW = WAL - WAWP
+        else
+            PAW = max(0., ((WAL + (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF) * DELT) - WAWP))
+        end if
 
 
         if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from field capacity

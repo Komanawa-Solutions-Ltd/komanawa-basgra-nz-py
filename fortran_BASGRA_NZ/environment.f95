@@ -24,8 +24,9 @@ contains
 
 ! Set all time and weather variables for day
 #ifdef weathergen
-  Subroutine set_weather_day(day,DRYSTOR, year,doy)
-    integer :: day, doy, year
+  Subroutine set_weather_day(day,DRYSTOR, year,doy, NDAYS)
+
+    integer :: day, doy, year, NDAYS, temp
     real    :: DRYSTOR
     year   = YEARI(day) ! day of the year (d)
     doy    = DOYI(day)  ! day of the year (d)
@@ -37,13 +38,25 @@ contains
     DTR    = GR * exp(-KSNOW*DRYSTOR)  ! MJ GR m-2 d-1 Daily global radiation on leaves
     PAR    = 0.5*4.56*DTR              ! mol PAR m-2 d-1 Daily photosynthetically active radiation
     PET    = PETI(day)                 ! mm d-1 Daily potential evapotranspiration
-    MAX_IRR = MAX_IRRI(day)  ! maximum irrigation for the day mm d-1
+    if (pass_soil_moist) then ! fix off by one error for passing soil moisture (start vs end of day)
+      if (day == NDAYS) then
+        MAX_IRR = 0 ! does not get used
+
+      else
+        temp = day + 1
+        MAX_IRR = MAX_IRRI(temp)  ! maximum irrigation for the day mm d-1
+
+      end if
+    else
+      MAX_IRR = MAX_IRRI(day)  ! maximum irrigation for the day mm d-1
+    end if
+
     IRR_TRIG = IRR_TRIGI(day) ! irrigation trigger for the day fraction of field capacity
     IRR_TARG = IRR_TARGI(day) ! irrigation target for the day fraction of field capacity fill to target
   end Subroutine set_weather_day
 #else
-  Subroutine set_weather_day(day,DRYSTOR, year,doy)
-    integer :: day, doy, year
+  Subroutine set_weather_day(day,DRYSTOR, year,doy, NDAYS)
+    integer :: day, doy, year, NDAYS, temp
     real    :: DRYSTOR
     year   = YEARI(day) ! day of the year (d)
     doy    = DOYI(day)  ! day of the year (d)
@@ -56,7 +69,18 @@ contains
     DAVTMP = (TMMN + TMMX)/2.0
     DTR    = GR * exp(-KSNOW*DRYSTOR)
     PAR    = 0.5*4.56*DTR
-    MAX_IRR = MAX_IRRI(day)  ! maximum irrigation for the day mm d-1
+    if (pass_soil_moist) then ! fix off by one error for passing soil moisture (start vs end of day)
+      if (day == NDAYS) then
+        MAX_IRR = 0 ! does not get used
+
+      else
+        temp = day + 1
+        MAX_IRR = MAX_IRRI(temp)  ! maximum irrigation for the day mm d-1
+
+      end if
+    else
+      MAX_IRR = MAX_IRRI(day)  ! maximum irrigation for the day mm d-1
+    end if
     IRR_TRIG = IRR_TRIGI(day) ! irrigation trigger for the day fraction of field capacity
     IRR_TARG = IRR_TARGI(day) ! irrigation target for the day fraction of field capacity fill to target
   end Subroutine set_weather_day

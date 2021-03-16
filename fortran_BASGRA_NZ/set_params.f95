@@ -160,5 +160,12 @@ reseed_CRES        = pa(122)
 reseed_CST         = pa(123)
 reseed_CSTUB       = pa(124)
 
+
+if (pa(125)< 0.9) then
+    pass_soil_moist = .FALSE.
+else
+    pass_soil_moist = .TRUE.
+end if
+
 return
 end

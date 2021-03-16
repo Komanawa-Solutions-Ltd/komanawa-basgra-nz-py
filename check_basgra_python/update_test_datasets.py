@@ -27,6 +27,7 @@ if __name__ == '__main__':
             test_irr_paw,
             test_reseed,
             test_leap,
+            test_pass_soil_mosit,
 
         ]
         for f in functions:
