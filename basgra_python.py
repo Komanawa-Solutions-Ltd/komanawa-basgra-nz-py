@@ -27,7 +27,7 @@ _bat_path = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ\\compile_
 _max_weather_size = 36600
 
 
-def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
+def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False, #todo perhaps make a no check option...
                   dll_path='default', supply_pet=True, auto_harvest=False, run_365_calendar=False):
     """
     python wrapper for the fortran BASGRA code
