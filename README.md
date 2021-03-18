@@ -7,8 +7,6 @@ BASGRA_NZ_PY is a python wrapper for the
 new features and is the first version of BASGRA to have purpose built tests to ensure that all changes can be made in a
 backwards compatible fashion (with some argument changes).
 
-WARNING: this library was developed for a specific project and no guarantee on quality or accuracy is made.
-
 The BASGRA NZ project tracks modifications to BASGRA for application to perennial ryegrass in New Zealand conditions.
 The test data comes from the Seed Rate Trial 2011-2017. Modifications to BASGRA were necessary to represent this data.
 
