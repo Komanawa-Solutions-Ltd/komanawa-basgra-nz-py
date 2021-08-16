@@ -129,6 +129,7 @@ real :: O2OUT, PackMelt, poolDrain, poolInfil, Psnow, reFreeze, RGRTV, RDRHARV
 real :: RGRTVG1, RROOTD, RUNOFF, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN, Wremain, SP
 integer :: HARV
 
+real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme!
 ! Extra output variables (Simon)
 real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE, RESEEDED
 
@@ -288,7 +289,9 @@ do day = 1, NDAYS
   call FRDRUNIR       (EVAP,Fdepth,Frate,INFIL,poolDRAIN,ROOTD,TRAN,WAL,WAS, &
                                                          DRAIN,FREEZEL,IRRIG, IRRIG_DEM, RUNOFF,THAWS, &
                          MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, &
-                         WAFC, WAWP, MXPAW, PAW) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
+                         WAFC, WAWP, MXPAW, PAW, &
+                         IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, RAIN &
+                      ) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
 
   call O2status       (O2,ROOTD)                                 ! calculate FO2
 
@@ -413,6 +416,17 @@ do day = 1, NDAYS
   y(day,70) = DMH_WEED
   y(day,71) = DMH_RYE + DMH_WEED
   y(day, 72) = RESEEDED
+
+  ! todo below are new and need to be added to python implmentation
+  y(day,73) = irrig_dem_store
+  y(day,74) = irrig_store
+  y(day,75) = irrig_scheme
+  y(day,76) = h2o_store_vol ! m3
+  y(day,77) = (h2o_store_vol/(irrigated_area*10000))*1000 ! mm
+  y(day,78) = IRR_TRIG_store ! todo this needs to be input!
+  y(day,79) = IRR_TARG_store ! todo this needs to be input!
+  ! todo output outputs from losses etc., probably....
+
 
 
   ! Update state variables

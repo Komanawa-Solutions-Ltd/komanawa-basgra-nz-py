@@ -128,8 +128,11 @@ contains
     ! FIXME Why would ROOTD affect soil freezing? Uncouple Fdepth from ROOTD.
     Subroutine FRDRUNIR(EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS, &
             DRAIN, FREEZEL, IRRIG, IRRIG_DEM, RUNOFF, THAWS, &
-            MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW)
+            MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW, &
+            IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, RAIN)
 
+        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme! todo these are new varibles
+        real :: RAIN
         real :: EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS
         real :: DRAIN, FREEZEL, IRRIG, RUNOFF, THAWS
         real :: MAX_IRR, IRR_TRIG, IRR_TARG, IRRIG_DEM
@@ -167,10 +170,14 @@ contains
         end if
 
         if (use_storage) then
-            call calc_storage_volume_use () ! todo variables
+            call calc_storage_volume_use (RAIN, doy, PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM, irrig_store, irrig_scheme) ! todo variables
         else
             call irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
             WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM)
+            irrig_store = 0
+            irrig_dem_store = 0
+            irrig_scheme = IRRIG
         end if
 
     end Subroutine FRDRUNIR

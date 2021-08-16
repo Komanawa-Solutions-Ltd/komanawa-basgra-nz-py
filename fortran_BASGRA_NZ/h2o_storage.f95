@@ -17,8 +17,13 @@ contains
     End Subroutine storage_runoff
 
 
-    subroutine storage_refil_from_scheme()
-        !todo
+    subroutine storage_refil_from_scheme(MAX_IRR, irrig_scheme)
+        real    :: MAX_IRR, irrig_scheme
+
+        if ((MAX_IRR - irrig_scheme) >= stor_refill_min) then
+            h2o_store_vol = h2o_store_vol + (MAX_IRR - irrig_scheme) / 1000 * stor_refill_losses * (irrigated_area * 10000)
+        endif
+
     end subroutine storage_refil_from_scheme
 
     subroutine storage_full_refil(doy)
@@ -35,7 +40,7 @@ contains
 
     subroutine storage_evap()
         ! evaporation from the storage system
-        !todo
+        ! TODO This is a holder, storage evap is not implemented
     end subroutine storage_evap
 
     subroutine storage_loss_leakage()
@@ -44,12 +49,12 @@ contains
     end subroutine storage_loss_leakage
 
     subroutine irrigate_storage_usage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
-            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM)
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM, irrig_store, irrig_scheme)
         ! calculate the usage from storage ! todo
         integer :: doy, nirr
         integer, dimension(nirr)              :: doy_irr
         real :: IRRIG
-        real :: irrig_scheme, irrig_store ! todo these are new variables
+        real :: irrig_scheme, irrig_store
         real :: MAX_IRR, IRRIG_DEM
 
         real :: EVAP, TRAN, WAL
@@ -57,7 +62,7 @@ contains
         real :: IRR_TRIG, IRR_TARG, IRRIG_DEM
         real :: INFILTOT, WAFC, WAWP, MXPAW, PAW
         logical :: irrigate
-        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store ! todo these are new varibles
+        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store
 
         if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from PAW
             irrigate = (PAW <= irr_trig * MXPAW)
@@ -126,13 +131,12 @@ contains
                     irrig_store = min(irrig_store, abs_max_irr-irrig_scheme)
                     irrig_store = max(0, irrig_store)
 
-                    ! todo consier the storage irrigation losses
-                    if (h2o_store_vol < (irrig_store/1000) * (irrigated_area * 10000)) then ! not enough water
-                        irrig_store = h2o_store_vol * 1000 / (irrigated_area * 10000)
+                    if (h2o_store_vol/(1+stor_irr_ineff) < (irrig_store/1000) * (irrigated_area * 10000)) then ! not enough water
+                        irrig_store = (h2o_store_vol * 1000 / (irrigated_area * 10000))/(1+stor_irr_ineff)
                         h2o_store_vol = 0
 
                     else ! enough water in storage
-                        h2o_store_vol = h2o_store_vol - (irrig_store/1000) * (irrigated_area * 10000)
+                        h2o_store_vol = h2o_store_vol - (irrig_store/1000) * (irrigated_area * 10000) * (1 + stor_irr_ineff)
                     end if
 
 
@@ -151,7 +155,8 @@ contains
     end subroutine irrigate_storage_usage
 
     ! ##### full storage routine #####
-    Subroutine calc_storage_volume_use(RAIN, doy)
+    Subroutine calc_storage_volume_use(RAIN, doy, PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM, irrig_store, irrig_scheme)
         real  :: RAIN
         integer  :: doy
         integer :: nirr
@@ -162,6 +167,7 @@ contains
         real :: EVAP, TRAN, WAL
         real :: DRAIN, FREEZEL, RUNOFF, THAWS
         real :: IRR_TRIG, IRR_TARG, IRRIG_DEM
+        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme! todo these are new varibles
         real :: INFILTOT, WAFC, WAWP, MXPAW, PAW
         logical :: irrigate
 
@@ -172,15 +178,15 @@ contains
         call storage_runoff(RAIN)
 
         ! storage out (non irrigation scheme)
-        call storage_evap() ! todo
+        ! call storage_evap() ! TODO this is a holder, storage evaporation is not implmeneted
         call storage_loss_leakage()
 
         ! storage and irrigation scheme interaction
         call irrigate_storage_usage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
-            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM)
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM, irrig_store, irrig_scheme)
 
         if(.not. use_storage_today) then
-            call storage_refil_from_scheme() ! todo
+            call storage_refil_from_scheme(MAX_IRR, irrig_scheme)
         end if
     End Subroutine calc_storage_volume_use
 
