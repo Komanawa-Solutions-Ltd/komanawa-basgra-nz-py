@@ -76,8 +76,8 @@ contains
         end if
     end Subroutine FrozenSoil
 
-    subroutine irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
-            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM)
+    subroutine irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR)
         integer :: doy, nirr
         integer, dimension(nirr)              :: doy_irr
         real :: IRRIG
@@ -85,7 +85,7 @@ contains
 
         real :: EVAP, TRAN, WAL
         real :: DRAIN, FREEZEL, RUNOFF, THAWS
-        real :: IRR_TRIG, IRR_TARG, IRRIG_DEM
+        real :: IRR_TRIG, IRR_TARG
         real :: INFILTOT, WAFC, WAWP, MXPAW, PAW
         logical :: irrigate
 
@@ -112,22 +112,22 @@ contains
             if (irrigate) then
                 IRRIG = IRRIGF * IRRIG_DEM  ! = mm d-1 Irrigation
                 IRRIG = min(IRRIG, MAX_IRR, abs_max_irr)
-                IRRIG = max(0, IRRIG)
+                IRRIG = max(0.0, IRRIG)
             else
-                IRRIG = 0
+                IRRIG = 0.0
             end if
 
         else
-            IRRIG = 0 ! if the day of year is not
+            IRRIG = 0.0 ! if the day of year is not
         end if
 
         ! set storage values to 0
-        store_runoff_in = 0
-        store_leak_out = 0
-        store_irr_loss = 0
-        store_evap_out = 0
-        store_scheme_in = 0
-        store_scheme_in_loss = 0
+        store_runoff_in = 0.0
+        store_leak_out = 0.0
+        store_irr_loss = 0.0
+        store_evap_out = 0.0
+        store_scheme_in = 0.0
+        store_scheme_in_loss = 0.0
     end subroutine irrigate_no_storage
 
 
@@ -177,11 +177,11 @@ contains
         end if
 
         if (use_storage) then
-            call calc_storage_volume_use (RAIN, doy, PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
-            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM, irrig_store, irrig_scheme, external_inflow)
+            call calc_storage_volume_use (RAIN, doy, PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, nirr, doy_irr, IRRIG, MAX_IRR, irrig_store, irrig_scheme, external_inflow)
         else
-            call irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
-            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM)
+            call irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR)
             irrig_store = 0
             irrig_dem_store = 0
             irrig_scheme = IRRIG

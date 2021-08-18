@@ -129,7 +129,7 @@ real :: O2OUT, PackMelt, poolDrain, poolInfil, Psnow, reFreeze, RGRTV, RDRHARV
 real :: RGRTVG1, RROOTD, RUNOFF, SnowMelt, THAWPS, THAWS, TILVG1, TILG1G2, TRAN, Wremain, SP
 integer :: HARV
 
-real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme!
+real :: irrig_dem_store, irrig_store, irrig_scheme!
 ! Extra output variables (Simon)
 real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE, RESEEDED
 
@@ -166,6 +166,7 @@ TMMXI  = MATRIX_WEATHER(:,5)
   MAX_IRRI = MATRIX_WEATHER(:,9)
   IRR_TRIGI = MATRIX_WEATHER(:,10)
   IRR_TARGI = MATRIX_WEATHER(:,11)
+  ! todo below is not set in python
   IRR_TRIG_storeI = MATRIX_WEATHER(:,12)
   IRR_TARG_storeI = MATRIX_WEATHER(:,13)
   external_inflowI = MATRIX_WEATHER(:,14)
