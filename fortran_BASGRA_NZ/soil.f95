@@ -121,6 +121,13 @@ contains
             IRRIG = 0 ! if the day of year is not
         end if
 
+        ! set storage values to 0
+        store_runoff_in = 0
+        store_leak_out = 0
+        store_irr_loss = 0
+        store_evap_out = 0
+        store_scheme_in = 0
+        store_scheme_in_loss = 0
     end subroutine irrigate_no_storage
 
 
@@ -129,9 +136,9 @@ contains
     Subroutine FRDRUNIR(EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS, &
             DRAIN, FREEZEL, IRRIG, IRRIG_DEM, RUNOFF, THAWS, &
             MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW, &
-            IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, RAIN)
+            IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, RAIN, external_inflow)
 
-        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme! todo these are new varibles
+        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, external_inflow
         real :: RAIN
         real :: EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS
         real :: DRAIN, FREEZEL, IRRIG, RUNOFF, THAWS
@@ -171,7 +178,7 @@ contains
 
         if (use_storage) then
             call calc_storage_volume_use (RAIN, doy, PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
-            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM, irrig_store, irrig_scheme) ! todo variables
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM, irrig_store, irrig_scheme, external_inflow)
         else
             call irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, PAW, EVAP, TRAN, &
             WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, IRRIG_DEM)

@@ -101,9 +101,9 @@ real(kind = c_double), intent(in), dimension(NDAYS,NHARVCOL) :: DAYS_HARVEST
 
 ! BASGRA handles two types of weather files with different data columns
 #ifdef weathergen
-  integer, parameter                                :: NWEATHER =  10
+  integer, parameter                                :: NWEATHER =  13
 #else
-  integer, parameter                                :: NWEATHER =  11
+  integer, parameter                                :: NWEATHER =  14
 #endif
 real(kind = c_double), intent(in), dimension(NPAR)              :: PARAMS ! NPAR set in parameters_site.f90
 integer(kind = c_int), intent(in), dimension(nirr)              :: doy_irr
@@ -134,6 +134,14 @@ real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_sche
 real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE, RESEEDED
 
 
+  ! set inital values for storage outputs/ state variables
+  h2o_store_vol = I_h2o_store_vol ! set inital storage volume
+  store_runoff_in = 0
+  store_leak_out = 0
+  store_irr_loss = 0
+  store_evap_out = 0
+  store_scheme_in = 0
+  store_scheme_in_loss = 0
 
 ! Extract calendar and weather data
 YEARI  = MATRIX_WEATHER(:,1)
@@ -147,6 +155,10 @@ TMMXI  = MATRIX_WEATHER(:,5)
   MAX_IRRI = MATRIX_WEATHER(:,8)
   IRR_TRIGI = MATRIX_WEATHER(:,9)
   IRR_TARGI = MATRIX_WEATHER(:,10)
+  IRR_TRIG_storeI = MATRIX_WEATHER(:,11)
+  IRR_TARG_storeI = MATRIX_WEATHER(:,12)
+  external_inflowI = MATRIX_WEATHER(:,13)
+
 #else
   VPI   = MATRIX_WEATHER(:,6)
   RAINI = MATRIX_WEATHER(:,7)
@@ -154,6 +166,9 @@ TMMXI  = MATRIX_WEATHER(:,5)
   MAX_IRRI = MATRIX_WEATHER(:,9)
   IRR_TRIGI = MATRIX_WEATHER(:,10)
   IRR_TARGI = MATRIX_WEATHER(:,11)
+  IRR_TRIG_storeI = MATRIX_WEATHER(:,12)
+  IRR_TARG_storeI = MATRIX_WEATHER(:,13)
+  external_inflowI = MATRIX_WEATHER(:,14)
 #endif
 
 ! Extract parameters
@@ -290,7 +305,7 @@ do day = 1, NDAYS
                                                          DRAIN,FREEZEL,IRRIG, IRRIG_DEM, RUNOFF,THAWS, &
                          MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, &
                          WAFC, WAWP, MXPAW, PAW, &
-                         IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, RAIN &
+                         IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, RAIN, external_inflow &
                       ) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
 
   call O2status       (O2,ROOTD)                                 ! calculate FO2
@@ -422,10 +437,15 @@ do day = 1, NDAYS
   y(day,74) = irrig_store
   y(day,75) = irrig_scheme
   y(day,76) = h2o_store_vol ! m3
-  y(day,77) = (h2o_store_vol/(irrigated_area*10000))*1000 ! mm
-  y(day,78) = IRR_TRIG_store ! todo this needs to be input!
-  y(day,79) = IRR_TARG_store ! todo this needs to be input!
-  ! todo output outputs from losses etc., probably....
+  y(day,77) = (h2o_store_vol / (irrigated_area * 10000)) * 1000 ! mm
+  y(day,78) = IRR_TRIG_store
+  y(day,79) = IRR_TARG_store
+   y(day,80) = store_runoff_in
+   y(day,81) = store_leak_out
+   y(day,82) = store_irr_loss
+   y(day,83) = store_evap_out
+   y(day,84) = store_scheme_in
+   y(day,85) = store_scheme_in_loss
 
 
 

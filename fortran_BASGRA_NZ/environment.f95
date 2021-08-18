@@ -11,6 +11,7 @@ real :: GR, TMMN, TMMX, VP, WN
 real :: YEARI(NMAXDAYS), DOYI(NMAXDAYS) , RAINI(NMAXDAYS), GRI(NMAXDAYS)
 real :: TMMNI(NMAXDAYS), TMMXI(NMAXDAYS), VPI(NMAXDAYS)  , WNI(NMAXDAYS)
 real :: MAX_IRRI(NMAXDAYS), IRR_TRIGI(NMAXDAYS), IRR_TARGI(NMAXDAYS)
+real :: IRR_TRIG_storeI(NMAXDAYS), IRR_TARG_storeI(NMAXDAYS), external_inflowI(NMAXDAYS)
 #ifdef weathergen
 real :: PETI(NMAXDAYS)
 #endif
@@ -53,6 +54,9 @@ contains
 
     IRR_TRIG = IRR_TRIGI(day) ! irrigation trigger for the day fraction of field capacity
     IRR_TARG = IRR_TARGI(day) ! irrigation target for the day fraction of field capacity fill to target
+    irr_trig_store = IRR_TRIG_storeI(day)
+    irr_targ_store = IRR_TARG_storeI(day)
+    external_inflow = external_inflowI(day)
   end Subroutine set_weather_day
 #else
   Subroutine set_weather_day(day,DRYSTOR, year,doy, NDAYS)
@@ -83,6 +87,9 @@ contains
     end if
     IRR_TRIG = IRR_TRIGI(day) ! irrigation trigger for the day fraction of field capacity
     IRR_TARG = IRR_TARGI(day) ! irrigation target for the day fraction of field capacity fill to target
+    irr_trig_store = IRR_TRIG_storeI(day)
+    irr_targ_store = IRR_TARG_storeI(day)
+    external_inflow = external_inflowI(day)
   end Subroutine set_weather_day
 #endif
 

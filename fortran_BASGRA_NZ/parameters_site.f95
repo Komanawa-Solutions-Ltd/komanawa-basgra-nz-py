@@ -50,9 +50,15 @@ integer, parameter                                  :: NPAR     = 125
 
 ! managment: h2o storage ! todo these are not set
   logical   :: use_storage ! whether or not to include storage in the model
+  logical   :: runoff_from_rain ! if True then use a fraction of rainfall, otherwise proscrived refill data from an external model
   logical   :: use_storage_today ! whether or not storage will be used in a given day
+  logical   :: calc_ind_store_demand ! if true then calculate storage demand after scheme irrigation from triggers, targets,
+                                     ! if false then calcuate storage demeand as the remaining demand after scheme irrigation
   integer   :: stor_full_refil_doy ! the day of the year when storage will be set to full.
   real      :: irrigated_area ! the area irrigated (ha)
+  real      :: irr_trig_store
+  real      :: irr_targ_store
+  real      :: external_inflow
   real      :: h2o_store_vol ! h2o storage volume (m3)
   real      :: I_h2o_store_vol ! inital h2o storage volume (m3)
   real      :: h2o_store_max_vol ! h2o storage maximum volume (m3)
@@ -66,6 +72,16 @@ integer, parameter                                  :: NPAR     = 125
                               ! (e.g. 0 means a perfectly effcient system,
                               ! 1 means that 2x the storage volume is needed to irrigate x volume)
                               ! unitless
+
+! output storage components
+
+  real   ::  store_runoff_in
+  real   ::  store_leak_out
+  real   ::  store_irr_loss
+  real   ::  store_evap_out
+  real   ::  store_scheme_in
+  real   ::  store_scheme_in_loss
+
 
 ! Management: harvest
   logical    :: FIXED_REMOVAL
