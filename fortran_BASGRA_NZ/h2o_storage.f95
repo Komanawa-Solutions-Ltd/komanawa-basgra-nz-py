@@ -71,7 +71,7 @@ contains
     subroutine irrigate_storage_usage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
             WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, irrig_store, irrig_scheme)
         ! calculate the usage from storage
-        ! todo add a parameter for minimum volume if a farmer would keep some in reserve for stockwater.
+
         integer :: doy, nirr
         integer, dimension(nirr)              :: doy_irr
         real :: IRRIG
@@ -152,7 +152,7 @@ contains
 
             ! calculate the irrigation from storage)
             if (any(doy==doy_irr)) then
-
+            ! todo add a parameter for minimum volume if a farmer would keep some in reserve for stockwater.
             ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
                 if (use_storage_today) then
                     irrig_store = IRRIGF * irrig_dem_store  ! = mm d-1 Irrigation

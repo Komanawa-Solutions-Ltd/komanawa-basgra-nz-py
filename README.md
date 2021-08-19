@@ -390,18 +390,14 @@ Storage is turned on by setting parameter *'use_storage'* to 1.
 
 #### Irrigation storage process
 
-
-
-***storage water balance***
-
-The storage water balance occurs in the following order
+The storage water balance and irrigation process occurs in the following order
 
 1. Calculate non-scheme inflows to storage
    
         Non-scheme inflows are defined as runoff and a full refill at a (one) certain day of the year.  The latter is 
         provided for convenience if the modeller wishes to assume that the storage is always full at a certain time of
         the year. The runoff component can either be calculated internally (when 'runoff_from_rain' == 1) or can be 
-        specified by the modeller (when *'runoff_from_rain' == 0, e.g. from an external rainfall runoff model).  If 
+        specified by the modeller (when 'runoff_from_rain' == 0, e.g. from an external rainfall runoff model).  If 
         The runoff is specified by the modeller then the daily values are passed via the matrix_weather parameter
         'external_inflow'. 
 
@@ -411,36 +407,66 @@ The storage water balance occurs in the following order
 
 2. Calculate non-irrigation outflows from storage 
 
-        The non-irrigation
-        Finally a set amount of water can be removed from the storage on any given day (e.g. for stock water use). 
+        The non-irrigation outflows include a user defined leakage rate, fixed removal of storage water for other
+        purposes and finally evaporation from the storage body (NOT IMPLMENTED). 
+   
+        Leakage from the storage body is defined as a fixed user specified rate ('stor_leakage') which will be 
+        removed daily.  There is no head leakage relationship defined in the model
+   
+        A set amount of water can be removed from the storage on any given day (e.g. for stock water use). 
         This is achieved by setting the matrix_weather parameter 'external_inflow' to a negative value.  This feature
         is not avalible if runoff is calculated internally (when *'runoff_from_rain' == 0)
 
+        Finally, evaporation is planned to be implmented; however it is currently set to 0 as a place holder for
+        further development.
+
 3. Calculate irrigation and irrigate from scheme
 
-        TODO
+        Irrigation from the scheme is handled as per version V2.0.0+  (if soil water is below trigger, calculate 
+        irrigation demand, check water avalibility and then irrigate up to the target) with one minor modification. 
+        The maximum irrigation that can be applied on any given day is controlled by the new parameter 'abs_max_irr' 
+        this is envisioned as a limitation of equipment rather than water that of water availability. The amount 
+        of water that is to irrigate from a scheme on any given day is defined by the matrix_weather 
+        parameter 'max_irr'.  Note that if 'max_irr' is set higher than 'abs_max_irr' then the water is 
+        not available for irrigation, but depending on the parameterisation of the model may be available to 
+        re-fill storage. If there is no scheme available (e.g. isolated storage from runoff), scheme based 
+        irrigation can be effectively turned off by setting the matrix_weather parameter 'max_irr' to zero and 
+        passing dummy values to matrix_weather parameters 'irr_trig', 'irr_targ'
 
 4. Calculate irrigation and irrigate from storage
 
-        TODO
+        If storage is implemented ('use_storage' = 1), storage can either be used in one of two modes:
+          1. to make up the difference between the weather_matrix parameter 'max_irr' and the irrigation demand 
+             to the target (calculated in step 3) to the extent possible depending on storage water avalibility.
+          2. calculating a novel storage demand AFTER SHEME IRRIGATION IS APPLIED. This demand is calculated as
+             per the scheme demand, but from the matrix_weather parameters 'irr_trig_store' and 'irr_targ_store'
+             it is important to recall that this demand is calculated after scheme based irrigation has been applied
+             which means that the soil moisture may be below the storage trigger value before scheme irrigation, but
+             no storage irrigation is applied because the scheme irrigation increased the soil water content above
+             the trigger.
+        To implment mode 1 the parameter 'calc_ind_store_demand' is set to 0, mode 2 is implemented 
+        when 'calc_ind_store_demand' = 1
+
+        if storage irrigation occurs, then as much storage as is avalible is applied to reach the soil moisture target
+        or the maximum irrigation rate ('abs_max_irr'), whichever is less. Note that a volume of storage can be 
+        held in reserve (e.g. for stock water).  This volume is set in parameter 'stor_reserve_vol'.
+
+        Finally storage irrigation scheme ineffciency can be implmented with parameter 'stor_irr_ineff', which 
+        defines the fraction of the applied irrigation volume that is needed to compensate for losses in the 
+        process of irrigation.  a value of 0 means a perfecly effcient system, while a value of 1 means that for 
+        every m3 of water applied in irrigation from storage, 2 m3 is removed from the storage resevouir.
 
 5. refill storage from scheme (if allowed)
 
-        TODO
+        The storage resevouir can implmented to be refilled by the excess water from the scheme.  This process is 
+        implmented in a simple way:
+            1. calculate the amount of excess water
+            2. if the amount of water is greater than the minimum refill parameter ('stor_refill_min')
+            3. then refill the storage with the remaining water.
+            4. ineffciencies in the refilling process can be implmented with parameter 'stor_refill_losses' where
+               the volume that enters the storage resevouir is equal to 'stor_refill_losses' * the excess water.
 
-***irrigation***
-
-The maximum irrigation that can be applied on any given day is controlled by the new parameter *'abs_max_irr'* this is
-envisioned as a limitation of equipment rather than water that of water availability. The amount of water that is 
-to irrigate from a scheme on any given day is defined by the matrix_weather parameter *'max_irr'*.  Note that if 
-*'max_irr'* is set higher than *'abs_max_irr'* then the water is not available for irrigation, but depending on the
-parameterisation of the model may be available to re-fill storage. If there is no scheme available (e.g. isolated 
-storage from runoff), scheme based irrigation can be effectively turned off by setting the matrix_weather parameter
-*'max_irr'* to zero and passing dummy values to matrix_weather parameters *'irr_trig', 'irr_targ'*
-
-the model will always preferentially irrigate from a scheme rather than the storage volume.  
-
-TODO
+all components of the storage water budget is saved to the output. 
 
 #### new inputs/outputs
 
@@ -463,7 +489,7 @@ TODO
 'stor_refill_losses' |fraction | the losses incurred from re-filling storage from irrigation scheme (0-1)
 'stor_leakage' |m<sup>3</sup> | the losses from storage to leakage static (m3/day)
 'stor_irr_ineff' |fraction | the fraction of irrigation water that is lost when storage is used for irrigation (e.g. 0 means a perfectly efficient system, 1 means that 2x the storage volume is needed to irrigate x volume) unit less
-
+'stor_reserve_vol'|m<sup>3</sup>| the volume of storage to reserve (e.g. irrigation is cutoff at this volume)
 
 *matrix_weather additions*
 
@@ -644,6 +670,7 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'stor_leakage' |m<sup>3</sup> | the losses from storage to leakage static (m3/day)
 'stor_refill_losses' |fraction | the losses incurred from re-filling storage from irrigation scheme (0-1)
 'stor_refill_min' | mm | the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
+'stor_reserve_vol'|m<sup>3</sup>| the volume of storage to reserve (e.g. irrigation is cutoff at this volume)
 'SWret'|    mm mm-1 d-1|  Liquid water storage capacity of snow
 'SWrf'|   mm d-1 °C-1|  Maximum refreezing rate per degree below 'TmeltFreeze'
 'TmeltFreeze'|     Â°C|  Temperature above which snow melts

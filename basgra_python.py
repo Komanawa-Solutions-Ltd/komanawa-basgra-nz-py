@@ -235,6 +235,7 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert not matrix_weather.isna().any().any(), 'matrix_weather cannot have na values'
 
     # todo set checks on things like fractions????, yes probably should do....
+    # todo pass a warning if max_irr is greater than abs_max_irr
 
     # check to make sure there are no missing days in matrix_weather
     start_year = matrix_weather['year'].min()
