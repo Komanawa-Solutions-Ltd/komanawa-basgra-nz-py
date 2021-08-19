@@ -50,6 +50,11 @@ made to incorporate further updates, but no assurances
         + [How to run so that the results are backwards compatible with versions V3.0.0 -](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v300--)
     * [passing external soil moisture to model (V5.0.0+)](#passing-external-soil-moisture-to-model--v500--)
         + [How to run so that the results are backwards compatible with versions V4.0.0 -](#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-V400--)
+    * [Irrigation water storage (V6.0.0+)](#Irrigation-water-storage-(V6.0.0+))
+        + [Irrigation storage process](#Irrigation-storage-process)
+        + [new inputs/outputs](#new-inputs/outputs)
+        + [How to run so that the results are backwards compatible with versions V5.0.0 -](#How-to-run-so-that-the-results-are-backwards-compatible-with-versions-V5.0.0-)
+
 - [python developments](#python-developments)
     * [supporting functions](#supporting-functions)
     * [testing regime and examples](#testing-regime-and-examples)
@@ -376,6 +381,144 @@ that occurs with PAW. Now PAW will match WAL Otherwise:
 * set 'pass_soil_moist' to 0
 * set max_irr as normal
 
+### Irrigation water storage (V6.0.0+)
+
+As of V6.0.0 it is possible to model local storage of water for irrigation in addition to a larger scheme irrigation
+system. We define a scheme irrigation as something which is not volume limited, but may be limited based on other 
+factors (e.g. restrictions in a river). Storage irrigation in contrast is irrigation that is only limited by volume. 
+Storage is turned on by setting parameter *'use_storage'* to 1. 
+
+#### Irrigation storage process
+
+
+
+***storage water balance***
+
+The storage water balance occurs in the following order
+
+1. Calculate non-scheme inflows to storage
+   
+        Non-scheme inflows are defined as runoff and a full refill at a (one) certain day of the year.  The latter is 
+        provided for convenience if the modeller wishes to assume that the storage is always full at a certain time of
+        the year. The runoff component can either be calculated internally (when 'runoff_from_rain' == 1) or can be 
+        specified by the modeller (when *'runoff_from_rain' == 0, e.g. from an external rainfall runoff model).  If 
+        The runoff is specified by the modeller then the daily values are passed via the matrix_weather parameter
+        'external_inflow'. 
+
+        The internal calculation of rainfall runoff is very simplistic the user specified a catchment area 
+        (parameter 'runoff_area') of which a user specified fraction of the rainfall (parameter 'runoff_frac') 
+        runs off to storage.
+
+2. Calculate non-irrigation outflows from storage 
+
+        The non-irrigation
+        Finally a set amount of water can be removed from the storage on any given day (e.g. for stock water use). 
+        This is achieved by setting the matrix_weather parameter 'external_inflow' to a negative value.  This feature
+        is not avalible if runoff is calculated internally (when *'runoff_from_rain' == 0)
+
+3. Calculate irrigation and irrigate from scheme
+
+        TODO
+
+4. Calculate irrigation and irrigate from storage
+
+        TODO
+
+5. refill storage from scheme (if allowed)
+
+        TODO
+
+***irrigation***
+
+The maximum irrigation that can be applied on any given day is controlled by the new parameter *'abs_max_irr'* this is
+envisioned as a limitation of equipment rather than water that of water availability. The amount of water that is 
+to irrigate from a scheme on any given day is defined by the matrix_weather parameter *'max_irr'*.  Note that if 
+*'max_irr'* is set higher than *'abs_max_irr'* then the water is not available for irrigation, but depending on the
+parameterisation of the model may be available to re-fill storage. If there is no scheme available (e.g. isolated 
+storage from runoff), scheme based irrigation can be effectively turned off by setting the matrix_weather parameter
+*'max_irr'* to zero and passing dummy values to matrix_weather parameters *'irr_trig', 'irr_targ'*
+
+the model will always preferentially irrigate from a scheme rather than the storage volume.  
+
+TODO
+
+#### new inputs/outputs
+
+*parameter additions*
+
+**Key**|**Unit**|**Description**
+| --- | --- | ---|
+'use_storage' |sudo boolean 1=True, 0=False   | whether or not to include storage in the model
+'runoff_from_rain' |sudo boolean 1=True, 0=False   | if True then use a fraction of rainfall, otherwise proscribed refill data from an external model
+'calc_ind_store_demand' |sudo boolean 1=True, 0=False   | if true then calculate storage demand after scheme irrigation from triggers, targets, if false then calculate storage demand as the remaining demand after scheme irrigation,
+'stor_full_refil_doy' |day of year (1-366)   | the day of the year (0-366) when storage will be set to full. set to -1 to never fully refill storage
+'abs_max_irr' | mm | the maximum irrigation that can be applied per day (e.g. equipment limits) mm/day note that if matrix weather prescribed max_irr for a given day is larger then abs_max_irr, that water may still be avalible to refill storage.
+'irrigated_area' |ha | the area irrigated (ha)
+'I_h2o_store_vol' |fraction | initial h2o storage fraction
+'h2o_store_max_vol' | m<sup>3</sup>| h2o storage maximum volume (m3)
+'h2o_store_SA' | m<sup>2</sup> | h2o storage surface area (m2)
+'runoff_area' |m<sup>2</sup> | the area that can provide runoff to the storage (ha)
+'runoff_frac' | fraction | the fraction of precipitation that becomes runoff to recharge storage (0-1, unit less)
+'stor_refill_min' | mm | the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
+'stor_refill_losses' |fraction | the losses incurred from re-filling storage from irrigation scheme (0-1)
+'stor_leakage' |m<sup>3</sup> | the losses from storage to leakage static (m3/day)
+'stor_irr_ineff' |fraction | the fraction of irrigation water that is lost when storage is used for irrigation (e.g. 0 means a perfectly efficient system, 1 means that 2x the storage volume is needed to irrigate x volume) unit less
+
+
+*matrix_weather additions*
+
+**Key**|**Unit**|**Description**
+| --- | --- | ---|
+'irr\_trig\_store'|fraction|the irrigation trigger value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
+'irr\_targ\_store'|fraction| the irrigation target value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
+'external\_inflow'|m<sup>3</sup>| only used if not runoff_from_rain, the volume (m3) of water to add to storage (allows external rainfall runoff model for storage management) can be negative
+
+
+*output additions*
+
+**Key**|**Unit**|**Description**
+| --- | --- | ---|
+'irrig_dem_store'| mm | irrigation demand from storage (mm)
+'irrig_store'| mm | irrigation applied from storage (mm)
+'irrig_scheme'| mm | irrigation applied from the scheme (mm)
+'h2o_store_vol'| m<sup>3</sup>| volume of water in storage (m3)
+'h2o_store_per_area'| mm | h2o storage per irrigated area (mm)
+'IRR_TRIG_store'|fraction | irrigation trigger for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+'IRR_TARG_store'|fraction | irrigation target for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+'store_runoff_in'| m<sup>3</sup>| storage budget in from runoff or external model (m3)
+'store_leak_out'| m<sup>3</sup> | storage budget out from leakage (m3)
+'store_irr_loss'| m<sup>3</sup> | storage budget out from losses incurred with irrigation (m3)
+'store_evap_out'| m<sup>3</sup> | storage budget out from evaporation (NOTIMPLEMENTED) (m3)
+'store_scheme_in'| m<sup>3</sup> | storage budget in from the irrigation scheme (m3)
+'store_scheme_in_loss'| m<sup>3</sup> | storage budget out losses from the scheme to the storage basin (m3)
+
+
+#### How to run so that the results are backwards compatible with versions V5.0.0 -
+
+ * set parameter 'use_storage' to 0, which turns off storage
+ * set parameter 'abs_max_irr' to the max(matrix_weather\['max_irr']) or greater
+   
+You will also need to pass dummy values to:
+
+**Parameter location**|**Parameter name**|**Suggested dummy value**
+| --- | --- | ---|
+ parameter| 'runoff_from_rain'| 1
+ parameter| 'calc_ind_store_demand'| 0
+ parameter| 'stor_full_refil_doy'| -1
+ parameter| 'irrigated_area'| 0
+ parameter| 'I_h2o_store_vol'| 0
+ parameter| 'h2o_store_max_vol'| 0
+ parameter| 'h2o_store_SA'| 0
+ parameter| 'runoff_area'| 0
+ parameter| 'runoff_frac'| 0
+ parameter| 'stor_refill_min'| 0
+ parameter| 'stor_refill_losses'| 0
+ parameter| 'stor_leakage'| 0
+ parameter| 'stor_irr_ineff'| 0
+ matrix_weather|values| 'irr_trig_store'|0
+ matrix_weather|values| 'irr_targ_store'|1
+ matrix_weather|values| 'external_inflow'|0
+
 ## python developments
 
 ### supporting functions
@@ -392,6 +535,7 @@ however there are decent docstrings. these include:
     * Plant parameters were calibrated for all three farms, while site parameters were calibrated for each specific
       site.
     * [see woodward, 2020](https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464) for more details.
+    * Note that the parameters provided here provide the correct parameters to run the model in a way that is consistent with version V1.0.0 
 
 ### testing regime and examples
 
@@ -430,7 +574,7 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'irr\_targ'|fraction|fraction of PAW/field (see irr\_frm\_paw) to irrigate up to.
 'irr\_trig\_store'|fraction|the irrigation trigger value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
 'irr\_targ\_store'|fraction| the irrigation target value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
-'external\_inflow'|m<sup>3</sup>| only used if not runoff_from_rain, the volume (m3) of water to add to storage (allows external rainfall runoff model for storage management)
+'external\_inflow'|m<sup>3</sup>| only used if not runoff_from_rain, the volume (m3) of water to add to storage (allows external rainfall runoff model for storage management) can be negative
 
 ### Matrix weather keys where pet is calculated via penman description
 
@@ -444,18 +588,20 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'rain'|mm|sum daily rainfall
 'vpa'|kPa|vapour pressure
 'wind'|m/s|mean wind speed at 2m
-'max\_irr'|mm/d|maximum irrigation available when 'pass_soil_moist' is False or the fraction (0-1) PAW/Field capacity to be passed to the model when 'pass_soil_moist' is True, see 'pass_soil_moist' for more details
-'irr\_trig'|fraction|fraction of PAW/field (see irr\_frm\_paw) at or below which irrigation is triggered e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 of the appropriate variable
-'irr\_targ'|fraction|fraction of PAW/field (see irr\_frm\_paw) to irrigate up to.
+'max\_irr'|mm/d|maximum irrigation available (from scheme) when 'pass_soil_moist' is False or the fraction (0-1) PAW/Field capacity to be passed to the model when 'pass_soil_moist' is True, see 'pass_soil_moist' for more details
+'irr\_trig'|fraction|fraction of PAW/field (see irr\_frm\_paw) at or below which irrigation (from scheme) is triggered e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2 of the appropriate variable
+'irr\_targ'|fraction|fraction of PAW/field (see irr\_frm\_paw) to irrigate (from scheme) up to.
 'irr\_trig\_store'|fraction|the irrigation trigger value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
 'irr\_targ\_store'|fraction| the irrigation target value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
-'external\_inflow'|m<sup>3</sup>| only used if not runoff_from_rain, the volume (m3) of water to add to storage (allows external rainfall runoff model for storage management)
+'external\_inflow'|m<sup>3</sup>| only used if not runoff_from_rain, the volume (m3) of water to add to storage (allows external rainfall runoff model for storage management) can be negative
 
 ### Site Parameters description
 
 **Key**|**Unit**|**Description**
 | --- | --- | ---|
+'abs_max_irr' | mm | the maximum irrigation that can be applied per day (e.g. equipment limits) mm/day note that if matrix weather prescribed max_irr for a given day is larger then abs_max_irr, that water may still be avalible to refill storage.
 'BD'|   kg l-1|  Bulk density of soil
+'calc_ind_store_demand' |sudo boolean 1=True, 0=False   | if true then calculate storage demand after scheme irrigation from triggers, targets, if false then calculate storage demand as the remaining demand after scheme irrigation,
 'CO2A'|  ppm|   CO2 concentration in atmosphere woodward 2020 set to 350
 'DRATE'|    mm d-1| Maximum soil drainage rate   woodward 2020 set to 50
 'FGAS'|  -|  Fraction of soil volume that is gaseous
@@ -465,7 +611,11 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'FWCFC'|    m3 m-3|  Relative saturation at field capacity
 'FWCWET'|   m3 m-3|  Relative saturation above which transpiration is reduced
 'FWCWP'|    m3 m-3|  Relative saturation at wilting point
+'h2o_store_max_vol' | m<sup>3</sup>| h2o storage maximum volume (m3)
+'h2o_store_SA' | m<sup>2</sup> | h2o storage surface area (m2)
+'I_h2o_store_vol' |fraction | initial h2o storage fraction
 'irr\_frm\_paw'|   |  are irrigation trigger/target the fraction of profile available water (1/True or the fraction of field capacity (0/False) also determines whether passed soil moisture data is from PAW or FC, see 'pass_soil_moist'.
+'irrigated_area' |ha | the area irrigated (ha)
 'IRRIGF'|   fraction|   fraction of the needed irrigation to apply to bring water content up to field capacity
 'KRTOTAER'|     -|  Ratio of total to aerobic respiration
 'KSNOW'|      mm-1|  Light extinction coefficient of snow
@@ -473,6 +623,7 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'LAMBDAsoil'|    J m-1 degC-1 d-1|  Thermal conductivity of soil?
 'LAT'|   degN|  Latitude
 'opt\_harvfrin'|    | sudo boolean(1=True  0=False) if True  harvest fraction is estimated by brent zero optimisation if false  harvest fraction is estimated by brent zero optimisation if false  HARVFRIN = DM\_RYE\_RM/DMH\_RYE. As the harvest fraction is non-linearly related to the harvest  the amount harvested may be significantly greather than expected depending on CST
+'pass_soil_moist'|sudo boolean 1=True, 0=False   | if True then do not calculate soil moisture instead soil moisture is passed to the model through max_irr as a fraction of either soil capacity when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True this prevent any irrigation scheduling or and soil moisture calculation in the model.
 'poolInfilLimit'| m|   woodward set to  0.2  Soil frost depth limit for water infiltration
 'reseed\_CLV'|   (gC m-2)| Weight of leaves after reseed if >= 0 otherwise use current state of variable
 'reseed\_CRES'|   (gC m-2)| Weight of reserves after reseed if >= 0 otherwise use current state of variable
@@ -485,29 +636,22 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'reseed\_TILV'|   (m-2)| Non-elongating tiller density after reseed if >=0 otherwise use current state of variable
 'RHOnewSnow'|    kg SWE m-3|  Density of newly fallen snow
 'RHOpack'|      d-1|  Relative packing rate of snow
+'runoff_area' |m<sup>2</sup> | the area that can provide runoff to the storage (ha)
+'runoff_frac' | fraction | the fraction of precipitation that becomes runoff to recharge storage (0-1, unit less)
+'runoff_from_rain' |sudo boolean 1=True, 0=False   | if True then use a fraction of rainfall, otherwise proscribed refill data from an external model
+'stor_full_refil_doy' |day of year (1-366)   | the day of the year (0-366) when storage will be set to full. set to -1 to never fully refill storage
+'stor_irr_ineff' |fraction | the fraction of irrigation water that is lost when storage is used for irrigation (e.g. 0 means a perfectly efficient system, 1 means that 2x the storage volume is needed to irrigate x volume) unit less
+'stor_leakage' |m<sup>3</sup> | the losses from storage to leakage static (m3/day)
+'stor_refill_losses' |fraction | the losses incurred from re-filling storage from irrigation scheme (0-1)
+'stor_refill_min' | mm | the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
 'SWret'|    mm mm-1 d-1|  Liquid water storage capacity of snow
 'SWrf'|   mm d-1 °C-1|  Maximum refreezing rate per degree below 'TmeltFreeze'
 'TmeltFreeze'|     Â°C|  Temperature above which snow melts
 'TrainSnow'|   Â°C|  Temperature below which precipitation is snow
+'use_storage' |sudo boolean 1=True, 0=False   | whether or not to include storage in the model
 'WCI'|   m3 m-3|  Initial value of volumetric water content
 'WCST'|    m3 m-3|  Volumetric water content at saturation
 'WpoolMax'|  mm|  Maximum pool water (liquid plus ice)
-'pass_soil_moist'|sudo boolean 1=True, 0=False   | if True then do not calculate soil moisture instead soil moisture is passed to the model through max_irr as a fraction of either soil capacity when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True this prevent any irrigation scheduling or and soil moisture calculation in the model.
-'use_storage' |sudo boolean 1=True, 0=False   | whether or not to include storage in the model
-'runoff_from_rain' |sudo boolean 1=True, 0=False   | if True then use a fraction of rainfall, otherwise proscribed refill data from an external model
-'calc_ind_store_demand' |sudo boolean 1=True, 0=False   | if true then calculate storage demand after scheme irrigation from triggers, targets, if false then calculate storage demand as the remaining demand after scheme irrigation,
-'stor_full_refil_doy' |day of year (1-366)   | the day of the year (0-366) when storage will be set to full. set to -1 to never fully refill storage
-'abs_max_irr' | mm | the maximum irrigation that can be applied per day (e.g. equipment limits) mm/day note that if matrix weather prescribed max_irr for a given day is larger then abs_max_irr, that water may still be avalible to refill storage.
-'irrigated_area' |ha | the area irrigated (ha)
-'I_h2o_store_vol' |fraction | initial h2o storage fraction
-'h2o_store_max_vol' | m<sup>3</sup>| h2o storage maximum volume (m3)
-'h2o_store_SA' | m<sup>2</sup> | h2o storage surface area (m2)
-'runoff_area' |m<sup>2</sup> | the area that can provide runoff to the storage (ha)
-'runoff_frac' | fraction | the fraction of precipitation that becomes runoff to recharge storage (0-1, unit less)
-'stor_refill_min' | mm | the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
-'stor_refill_losses' |fraction | the losses incurred from re-filling storage from irrigation scheme (0-1)
-'stor_leakage' |m<sup>3</sup> | the losses from storage to leakage static (m3/day)
-'stor_irr_ineff' |fraction | the fraction of irrigation water that is lost when storage is used for irrigation (e.g. 0 means a perfectly efficient system, 1 means that 2x the storage volume is needed to irrigate x volume) unit less
 
 ### Plant Parameters description
 
@@ -616,12 +760,12 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'DAYL'|(-)|Daylength
 'DAYLGE'|(-)|Daylength Fact.
 'DEBUG'|(?)|Debug
-'DM'|(kg DM ha-1)|Ryegrass Mass Note that this is after any harvest (e.g. at end of time stamp)
 'DM\_RYE\_RM'|(kg DM ha-1)|dry matter of Rye species harvested in this time step Note that this is the calculated removal but if 'opt\_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yield variable
 'DM\_WEED\_RM'|(kg DM ha-1)|dry matter of weed species harvested in this time step; Note that this is the calculated removal but if 'opt\_harvfrin' = False then it may be significantly different to the actual removal which is show by the appropriate yield variable
-'DMH'|(kg DM ha-1)|harvestable dry matter = DMH\_RYE + DMH\_WEED note that this is before any removal by harvesting
+'DM'|(kg DM ha-1)|Ryegrass Mass Note that this is after any harvest (e.g. at end of time stamp)
 'DMH\_RYE'|(kg DM ha-1)|harvestable dry matter of rye species includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting
 'DMH\_WEED'|(kg DM ha-1)|harvestable dry matter of weed specie includes harvestable fraction of dead (HARVFRD) note that this is before any removal by harvesting
+'DMH'|(kg DM ha-1)|harvestable dry matter = DMH\_RYE + DMH\_WEED note that this is before any removal by harvesting
 'doy'|(d)|Day of Year
 'DRAIN'|(mm d-1)|Drainage
 'DTILV'|(till m-2 d-1)|Till. Death
@@ -629,12 +773,19 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'FS'|(till leaf-1)|Site Filling
 'GRT'|(gC m-2 d-1)|Root Growth
 'GTILV'|(till m-2 d-1)|Till. Birth
+'h2o_store_per_area'| mm | h2o storage per irrigated area (mm)
+'h2o_store_vol'| m<sup>3</sup>| volume of water in storage (m3)
 'HARVFR'|(-)|Harvest Frac.
 'HARVFRIN'|(-)|Harvest Data
 'IRR\_TARG'|fraction|irrigation Target (fraction of field capacity) to fill to also an input variable
 'IRR\_TRIG'|fraction|irrigation trigger (fraction of field capacity at which to start irrigating
-'IRRIG'|mm d-1|Irrigation applied
+'IRR_TARG_store'|fraction | irrigation target for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+'IRR_TRIG_store'|fraction | irrigation trigger for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
 'IRRIG\_DEM'|mm|irrigation irrigation demand to field capacity * IRR\_TARG
+'irrig_dem_store'| mm | irrigation demand from storage (mm)
+'irrig_scheme'| mm | irrigation applied from the scheme (mm)
+'irrig_store'| mm | irrigation applied from storage (mm)
+'IRRIG'|mm d-1|Irrigation applied
 'LAI'|(m2 m-2)|LAI
 'LERG'|(m d-1)|Gen. Elong. Rate
 'LERV'|(m d-1)|Veg. Elong. Rate
@@ -659,6 +810,12 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'RYE\_YIELD'|(tDM ha-1)|PRG Yield from rye grass species note that this is the actual amount of material that has been removed
 'SLA'|(m2 gC-1)|Spec. Leaf Area
 'SLANEW'|(m2 gC-1)|New SLA
+'store_evap_out'| m<sup>3</sup> | storage budget out from evaporation (NOTIMPLEMENTED) (m3)
+'store_irr_loss'| m<sup>3</sup> | storage budget out from losses incurred with irrigation (m3)
+'store_leak_out'| m<sup>3</sup> | storage budget out from leakage (m3)
+'store_runoff_in'| m<sup>3</sup>| storage budget in from runoff or external model (m3)
+'store_scheme_in_loss'| m<sup>3</sup> | storage budget out losses from the scheme to the storage basin (m3)
+'store_scheme_in'| m<sup>3</sup> | storage budget in from the irrigation scheme (m3)
 'TILG1'|(m-2)|Gen. Tillers
 'TILG2'|(m-2)|Elong. Tillers
 'TILTOT'|(m-2)|Total Tillers
@@ -677,19 +834,6 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'WEED\_YIELD'|(tDM ha-1)|PRG Yield from weed (other) species note that this is the actual amount of material that has been removed
 'year'|(y)|Year
 'YIELD'|(tDM ha-1)|PRG Yield sum of YIELD\_RYE and YIELD\_WEED
-'irrig_dem_store'| mm | irrigation demand from storage (mm)
-'irrig_store'| mm | irrigation applied from storage (mm)
-'irrig_scheme'| mm | irrigation applied from the scheme (mm)
-'h2o_store_vol'| m<sup>3</sup>| volume of water in storage (m3)
-'h2o_store_per_area'| mm | h2o storage per irrigated area (mm)
-'IRR_TRIG_store'|fraction | irrigation trigger for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
-'IRR_TARG_store'|fraction | irrigation target for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
-'store_runoff_in'| m<sup>3</sup>| storage budget in from runoff or external model (m3)
-'store_leak_out'| m<sup>3</sup> | storage budget out from leakage (m3)
-'store_irr_loss'| m<sup>3</sup> | storage budget out from losses incurred with irrigation (m3)
-'store_evap_out'| m<sup>3</sup> | storage budget out from evaporation (NOTIMPLEMENTED) (m3)
-'store_scheme_in'| m<sup>3</sup> | storage budget in from the irrigation scheme (m3)
-'store_scheme_in_loss'| m<sup>3</sup> | storage budget out losses from the scheme to the storage basin (m3)
 
 
 

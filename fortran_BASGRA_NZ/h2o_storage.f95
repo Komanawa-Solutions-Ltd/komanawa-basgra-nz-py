@@ -17,6 +17,7 @@ contains
         else
             store_runoff_in = external_inflow
             h2o_store_vol = h2o_store_vol + external_inflow
+            h2o_store_vol = max(0.0, h2o_store_vol) ! prevent negative storage if external inflow is used to remove water
         end if
         if (h2o_store_vol > h2o_store_max_vol) then
             store_runoff_in = store_runoff_in - (h2o_store_vol - h2o_store_max_vol)
@@ -70,6 +71,7 @@ contains
     subroutine irrigate_storage_usage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
             WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, irrig_store, irrig_scheme)
         ! calculate the usage from storage
+        ! todo add a parameter for minimum volume if a farmer would keep some in reserve for stockwater.
         integer :: doy, nirr
         integer, dimension(nirr)              :: doy_irr
         real :: IRRIG

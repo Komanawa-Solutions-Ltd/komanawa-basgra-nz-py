@@ -234,6 +234,8 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert len(matrix_weather) <= _max_weather_size, 'maximum run size is {} days'.format(_max_weather_size)
     assert not matrix_weather.isna().any().any(), 'matrix_weather cannot have na values'
 
+    # todo set checks on things like fractions????, yes probably should do....
+
     # check to make sure there are no missing days in matrix_weather
     start_year = matrix_weather['year'].min()
     start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
