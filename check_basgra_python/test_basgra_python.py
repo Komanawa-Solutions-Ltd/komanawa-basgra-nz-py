@@ -33,28 +33,6 @@ drop_keys = [  # newly added keys that must be dropped initially to manage tests
 
 ]
 
-view_keys = [
-    'WAL',
-    'WCL',
-    'DM',
-    'YIELD',
-    'BASAL',
-    'ROOTD',
-    'IRRIG_DEM',
-    'HARVFR',
-    'RYE_YIELD',
-    'WEED_YIELD',
-    'DM_RYE_RM',
-    'DM_WEED_RM',
-    'DMH_RYE',
-    'DMH_WEED',
-    'DMH',
-    'WAWP',  # # mm # Water in non-frozen root zone at wilting point
-    'MXPAW',  # mm # maximum Profile available water
-    'PAW',  # mm Profile available water at the time step
-
-]
-
 
 def test_trans_manual_harv(update_data=False):
     test_nm = 'test_trans_manual_harv'
@@ -92,7 +70,37 @@ def _output_checks(out, correct_out, dropable=True):
     """
     if dropable:
         # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
-        drop_keys_int = [
+        drop_keys_int = [ # todo empty and add to drop_keys
+
+            'use_storage',  # whether or not to include storage in the model, sudo boolean 1=True, 0=False
+            'runoff_from_rain',  # if True then use a fraction of rainfall, otherwise proscribed refill data from an
+            # external model, sudo boolean 1=True, 0=False
+            'calc_ind_store_demand',
+            # if true then calculate storage demand after scheme irrigation from triggers, targets,
+            # =  if false then calculate storage demand as the remaining demand after scheme irrigation,
+            # sudo boolean 1=True, 0=False
+
+            # integer
+            'stor_full_refil_doy',
+            # the day of the year when storage will be set to full., set to -1 to never fully refill
+            # storage
+
+            # float
+            'abs_max_irr',
+            # the maximum irrigation that can be applied per day (e.g. equipment limits) mm/day note that if
+            # matrix weather prescribed max_irr for a given day is larger then abs_max_irr, that water may still be avalible
+            # to refill storage.
+            'irrigated_area',  # the area irrigated (ha)
+            'I_h2o_store_vol',  # initial h2o storage volume (m3)
+            'h2o_store_max_vol',  # h2o storage maximum volume (m3)
+            'h2o_store_SA',  # h2o storage surface area (m2)
+            'runoff_area',  # the area that can provide runoff to the storage (ha)
+            'runoff_frac',  # the fraction of precipitation that becomes runoff to recharge storage (0-1, unit less)
+            'stor_refill_min',
+            # the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
+            'stor_refill_losses',  # the losses incurred from re-filling storage from irrigation scheme (0-1)
+            'stor_leakage',  # the losses from storage to leakage static (m3/day)
+            'stor_irr_ineff',  # the fraction of irrigation water that is lost when storage is used for irrigation
 
         ]
         out2 = out.drop(columns=drop_keys_int)
@@ -753,7 +761,6 @@ def test_pass_soil_mosit(update_data=False):
 
 
 if __name__ == '__main__':
-
     # input types tests
     test_org_basgra_nz()
     test_pet_calculation()

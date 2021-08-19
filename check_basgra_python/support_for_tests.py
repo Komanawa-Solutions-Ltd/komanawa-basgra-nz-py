@@ -73,6 +73,12 @@ def establish_peyman_input(return_pet=False):
     matrix_weather.loc[:, 'max_irr'] = 10.
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
+    matrix_weather.loc[:, 'irr_trig_store'] = 0
+    matrix_weather.loc[:, 'irr_targ_store'] = 1
+    matrix_weather.loc[:, 'external_inflow'] = 0
+
+
+
     matrix_weather.reset_index(inplace=True)
 
     # load harvest data from Simon woodward's paper
@@ -152,6 +158,10 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'max_irr'] = 10.
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
+    matrix_weather.loc[:, 'irr_trig_store'] = 0
+    matrix_weather.loc[:, 'irr_targ_store'] = 1
+    matrix_weather.loc[:, 'external_inflow'] = 0
+
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,
@@ -214,6 +224,10 @@ def get_woodward_weather():
     matrix_weather.loc[:, 'max_irr'] = 10.
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
+    matrix_weather.loc[:, 'irr_trig_store'] = 0
+    matrix_weather.loc[:, 'irr_targ_store'] = 1
+    matrix_weather.loc[:, 'external_inflow'] = 0
+
 
     return matrix_weather
 

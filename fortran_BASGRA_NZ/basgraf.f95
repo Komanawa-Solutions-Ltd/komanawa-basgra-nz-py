@@ -166,7 +166,6 @@ TMMXI  = MATRIX_WEATHER(:,5)
   MAX_IRRI = MATRIX_WEATHER(:,9)
   IRR_TRIGI = MATRIX_WEATHER(:,10)
   IRR_TARGI = MATRIX_WEATHER(:,11)
-  ! todo below is not set in python
   IRR_TRIG_storeI = MATRIX_WEATHER(:,12)
   IRR_TARG_storeI = MATRIX_WEATHER(:,13)
   external_inflowI = MATRIX_WEATHER(:,14)
@@ -433,7 +432,7 @@ do day = 1, NDAYS
   y(day,71) = DMH_RYE + DMH_WEED
   y(day, 72) = RESEEDED
 
-  ! todo below are new and need to be added to python implmentation
+  ! storage based outputs
   y(day,73) = irrig_dem_store
   y(day,74) = irrig_store
   y(day,75) = irrig_scheme

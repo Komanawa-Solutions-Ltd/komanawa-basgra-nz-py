@@ -167,9 +167,8 @@ else
     pass_soil_moist = .TRUE.
 end if
 
-! todo new parameter for storage, these are not set up in python
 ! boolean
-use_storage = (pa(126)> 0.9) ! whether or not to include storage in the model
+ use_storage = (pa(126)> 0.9) ! whether or not to include storage in the model
  runoff_from_rain = (pa(127)> 0.9)  ! if True then use a fraction of rainfall, otherwise proscrived refill data from an external model
  calc_ind_store_demand = (pa(128)> 0.9) ! if true then calculate storage demand after scheme irrigation from triggers, targets,
                        ! =  if false then calcuate storage demeand as the remaining demand after scheme irrigation

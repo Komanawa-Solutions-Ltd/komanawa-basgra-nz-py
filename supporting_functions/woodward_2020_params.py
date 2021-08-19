@@ -83,6 +83,25 @@ def get_woodward_mean_full_params(site):
     params.loc['reseed_CSTUB'] = 0
     params.loc['pass_soil_moist'] = 0
 
+    # todo new parameters
+    params.loc['use_storage'] = 0
+    # the following storage parameters should not matter if use_storage == 0
+    params.loc['runoff_from_rain'] = 1
+    params.loc['calc_ind_store_demand'] = 0
+
+    params.loc['stor_full_refil_doy'] = 240
+    params.loc['abs_max_irr'] = 1000  # non-sensically high
+    params.loc['irrigated_area'] = 100  # set to ensure that use_storage=0 cuts storage
+    params.loc['I_h2o_store_vol'] = 1
+    params.loc['h2o_store_max_vol'] = 10000
+    params.loc['h2o_store_SA'] = 0
+    params.loc['runoff_area'] = 0
+    params.loc['runoff_frac'] = 0
+    params.loc['stor_refill_min'] = 0
+    params.loc['stor_refill_losses'] = 0
+    params.loc['stor_leakage'] = 0
+    params.loc['stor_irr_ineff'] = 0
+
     params = params.to_dict()
 
     return params

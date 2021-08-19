@@ -149,6 +149,37 @@ param_keys = (
     # when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True
     # this prevent any irrigation scheduling or and soil moisture calculation in the model.
 
+    # todo new parameters, add to readme
+    'use_storage',  # whether or not to include storage in the model, sudo boolean 1=True, 0=False
+    'runoff_from_rain',  # if True then use a fraction of rainfall, otherwise proscribed refill data from an
+    # external model, sudo boolean 1=True, 0=False
+    'calc_ind_store_demand',  # if true then calculate storage demand after scheme irrigation from triggers, targets,
+    # =  if false then calculate storage demand as the remaining demand after scheme irrigation,
+    # sudo boolean 1=True, 0=False
+
+    # integer
+    'stor_full_refil_doy',  # the day of the year (0-366) when storage will be set to full.,
+    # set to -1 to never fully refill storage
+
+    # float
+    'abs_max_irr',  # the maximum irrigation that can be applied per day (e.g. equipment limits) mm/day note that if
+    # matrix weather prescribed max_irr for a given day is larger then abs_max_irr, that water may still be avalible
+    # to refill storage.
+    'irrigated_area',  # the area irrigated (ha)
+    'I_h2o_store_vol',  # initial h2o storage fraction
+    'h2o_store_max_vol',  # h2o storage maximum volume (m3)
+    'h2o_store_SA',  # h2o storage surface area (m2)
+    'runoff_area',  # the area that can provide runoff to the storage (ha)
+    'runoff_frac',  # the fraction of precipitation that becomes runoff to recharge storage (0-1, unit less)
+    'stor_refill_min',  # the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
+    'stor_refill_losses',  # the losses incurred from re-filling storage from irrigation scheme (0-1)
+    'stor_leakage',  # the losses from storage to leakage static (m3/day)
+    'stor_irr_ineff',  # the fraction of irrigation water that is lost when storage is used for irrigation
+    # (e.g. 0 means a perfectly efficient system,
+    # 1 means that 2x the storage volume is needed to irrigate x volume)
+    # unit less
+    # todo end of new parameters
+
 )
 
 days_harvest_keys = (
@@ -179,6 +210,14 @@ matrix_weather_keys_pet = (
     # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
     # field capacity (e.g. water holding capacity)
     'irr_targ',  # fraction of PAW/field (see irr_frm_paw) to irrigate to (fraction 0-1)
+    # todo new keys, add to readme
+    'irr_trig_store',  # the irrigation trigger value (if calc_ind_store_demand)
+    # for the storage based irrigation either fraction of PAW or field capacity
+    'irr_targ_store',  # the irrigation target value (if calc_ind_store_demand)
+    # for the storage based irrigation either fraction of PAW or field capacity
+    'external_inflow',  # only used if not runoff_from_rain, the volume (m3) of water to add
+    # to storage (allows external rainfall runoff model for storage management)
+    # todo end new keys
 )
 
 matrix_weather_keys_penman = (
@@ -197,6 +236,12 @@ matrix_weather_keys_penman = (
     # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
     # field capacity (e.g. water holding capacity)
     'irr_targ',  # fraction of field capacity to irrigate to (fraction 0-1)
+    'irr_trig_store',  # the irrigation trigger value (if calc_ind_store_demand)
+    # for the storage based irrigation either fraction of PAW or field capacity
+    'irr_targ_store',  # the irrigation target value (if calc_ind_store_demand)
+    # for the storage based irrigation either fraction of PAW or field capacity
+    'external_inflow',  # only used if not runoff_from_rain, the volume (m3) of water to add
+    # to storage (allows external rainfall runoff model for storage management)
 )
 
 out_cols = (
@@ -287,6 +332,22 @@ out_cols = (
 
     'RESEEDED',  # reseeded flag, if ==1 then the simulation was reseeded on this day
 
+    # todo new outputs add to readme and test datasets
+    'irrig_dem_store',  # irrigation demand from storage (mm)
+    'irrig_store',  # irrigation applied from storage (mm)
+    'irrig_scheme',  # irrigation applied from the scheme (mm)
+    'h2o_store_vol',  # volume of water in storage (m3)
+    'h2o_store_per_area',  # h2o storage per irrigated area (mm)
+    'IRR_TRIG_store',  # irrigation trigger for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+    'IRR_TARG_store',  # irrigation target for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+    'store_runoff_in',  # storage budget in from runoff or external model (m3)
+    'store_leak_out',  # storage budget out from leakage (m3)
+    'store_irr_loss',  # storage budget out from losses incurred with irrigation (m3)
+    'store_evap_out',  # storage budget out from evaporation (NOTIMPLEMENTED) (m3)
+    'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
+    'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
+    # todo end of new outputs
+
 )
 
 site_param_keys = (
@@ -335,6 +396,36 @@ site_param_keys = (
     'pass_soil_moist',  # sudo boolean 1=True, 0=False.  if True then do not calculate soil moisture instead
     # soil moisture is passed to the model through max_irr as a fraction of either soil capacity
     # when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True
+    # todo new outputs, add to readme
+    'use_storage',  # whether or not to include storage in the model, sudo boolean 1=True, 0=False
+    'runoff_from_rain',  # if True then use a fraction of rainfall, otherwise proscribed refill data from an
+    # external model, sudo boolean 1=True, 0=False
+    'calc_ind_store_demand',  # if true then calculate storage demand after scheme irrigation from triggers, targets,
+    # =  if false then calculate storage demand as the remaining demand after scheme irrigation,
+    # sudo boolean 1=True, 0=False
+
+    # integer
+    'stor_full_refil_doy',  # the day of the year when storage will be set to full., set to -1 to never fully refill
+    # storage
+
+    # float
+    'abs_max_irr',  # the maximum irrigation that can be applied per day (e.g. equipment limits) mm/day note that if
+    # matrix weather prescribed max_irr for a given day is larger then abs_max_irr, that water may still be avalible
+    # to refill storage.
+    'irrigated_area',  # the area irrigated (ha)
+    'I_h2o_store_vol',  # initial h2o storage volume (m3)
+    'h2o_store_max_vol',  # h2o storage maximum volume (m3)
+    'h2o_store_SA',  # h2o storage surface area (m2)
+    'runoff_area',  # the area that can provide runoff to the storage (ha)
+    'runoff_frac',  # the fraction of precipitation that becomes runoff to recharge storage (0-1, unit less)
+    'stor_refill_min',  # the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
+    'stor_refill_losses',  # the losses incurred from re-filling storage from irrigation scheme (0-1)
+    'stor_leakage',  # the losses from storage to leakage static (m3/day)
+    'stor_irr_ineff',  # the fraction of irrigation water that is lost when storage is used for irrigation
+    # (e.g. 0 means a perfectly efficient system,
+    # 1 means that 2x the storage volume is needed to irrigate x volume)
+    # unit less
+    # todo end of new parameters
 
 )
 plant_param_keys = (
