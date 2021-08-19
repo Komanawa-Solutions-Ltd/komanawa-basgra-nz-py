@@ -30,6 +30,21 @@ drop_keys = [  # newly added keys that must be dropped initially to manage tests
     'MXPAW',
     'PAW',
     'RESEEDED',
+    'irrig_dem_store',  # irrigation demand from storage (mm)
+    'irrig_store',  # irrigation applied from storage (mm)
+    'irrig_scheme',  # irrigation applied from the scheme (mm)
+    'h2o_store_vol',  # volume of water in storage (m3)
+    'h2o_store_per_area',  # h2o storage per irrigated area (mm)
+    'IRR_TRIG_store',
+    # irrigation trigger for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+    'IRR_TARG_store',
+    # irrigation target for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+    'store_runoff_in',  # storage budget in from runoff or external model (m3)
+    'store_leak_out',  # storage budget out from leakage (m3)
+    'store_irr_loss',  # storage budget out from losses incurred with irrigation (m3)
+    'store_evap_out',  # storage budget out from evaporation (NOTIMPLEMENTED) (m3)
+    'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
+    'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
 
 ]
 
@@ -70,23 +85,7 @@ def _output_checks(out, correct_out, dropable=True):
     """
     if dropable:
         # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
-        drop_keys_int = [  # todo empty and add to drop_keys
-
-            'irrig_dem_store',  # irrigation demand from storage (mm)
-            'irrig_store',  # irrigation applied from storage (mm)
-            'irrig_scheme',  # irrigation applied from the scheme (mm)
-            'h2o_store_vol',  # volume of water in storage (m3)
-            'h2o_store_per_area',  # h2o storage per irrigated area (mm)
-            'IRR_TRIG_store',
-            # irrigation trigger for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
-            'IRR_TARG_store',
-            # irrigation target for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
-            'store_runoff_in',  # storage budget in from runoff or external model (m3)
-            'store_leak_out',  # storage budget out from leakage (m3)
-            'store_irr_loss',  # storage budget out from losses incurred with irrigation (m3)
-            'store_evap_out',  # storage budget out from evaporation (NOTIMPLEMENTED) (m3)
-            'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
-            'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
+        drop_keys_int = [
 
         ]
         out2 = out.drop(columns=drop_keys_int)
