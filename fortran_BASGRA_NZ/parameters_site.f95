@@ -4,7 +4,7 @@ module parameters_site
 implicit none
 
 ! Simulation period and time step
-integer, parameter                                  :: NPAR     = 140
+integer, parameter                                  :: NPAR     = 141
   real, parameter       :: DELT   =   1.0 ! Model time step
 
 ! Geography
@@ -55,7 +55,7 @@ integer, parameter                                  :: NPAR     = 140
   logical   :: calc_ind_store_demand ! if true then calculate storage demand after scheme irrigation from triggers, targets,
                                      ! if false then calcuate storage demeand as the remaining demand after scheme irrigation
   integer   :: stor_full_refil_doy ! the day of the year when storage will be set to full.
-  real      :: stor_reserve_vol ! the minimum volume to reserve for storage ! todo not set, or in python,
+  real      :: stor_reserve_vol ! the minimum volume to reserve for storage
   real      :: irrigated_area ! the area irrigated (ha)
   real      :: irr_trig_store ! the irrigation trigger value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
   real      :: irr_targ_store ! the irrigation target value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity

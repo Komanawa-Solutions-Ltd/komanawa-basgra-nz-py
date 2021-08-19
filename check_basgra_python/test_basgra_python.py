@@ -745,8 +745,6 @@ def test_pass_soil_mosit(update_data=False):
     _output_checks(out, correct_out)
 
     # todo write storage tests
-
-    # todo document new features
     # todo make new version
 
 

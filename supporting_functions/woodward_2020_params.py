@@ -83,7 +83,6 @@ def get_woodward_mean_full_params(site):
     params.loc['reseed_CSTUB'] = 0
     params.loc['pass_soil_moist'] = 0
 
-    # todo new parameters
     params.loc['use_storage'] = 0
     # the following storage parameters should not matter if use_storage == 0
     params.loc['runoff_from_rain'] = 1
@@ -101,6 +100,7 @@ def get_woodward_mean_full_params(site):
     params.loc['stor_refill_losses'] = 0
     params.loc['stor_leakage'] = 0
     params.loc['stor_irr_ineff'] = 0
+    params.loc['stor_reserve_vol'] = 0
 
     params = params.to_dict()
 

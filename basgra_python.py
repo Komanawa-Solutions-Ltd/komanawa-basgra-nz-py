@@ -27,7 +27,7 @@ _bat_path = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ\\compile_
 _max_weather_size = 36600
 
 
-def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False, #todo perhaps make a no check option...
+def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
                   dll_path='default', supply_pet=True, auto_harvest=False, run_365_calendar=False):
     """
     python wrapper for the fortran BASGRA code
@@ -234,9 +234,6 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert len(matrix_weather) <= _max_weather_size, 'maximum run size is {} days'.format(_max_weather_size)
     assert not matrix_weather.isna().any().any(), 'matrix_weather cannot have na values'
 
-    # todo set checks on things like fractions????, yes probably should do....
-    # todo pass a warning if max_irr is greater than abs_max_irr
-
     # check to make sure there are no missing days in matrix_weather
     start_year = matrix_weather['year'].min()
     start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
@@ -308,6 +305,12 @@ def _test_basgra_inputs(params, matrix_weather, days_harvest, verbose, _matrix_w
     assert pd.api.types.is_integer_dtype(doy_irr), 'doy_irr must be integers'
     assert doy_irr.max() <= 366, 'entries doy_irr must not be greater than 366'
     assert doy_irr.min() >= 0, 'entries doy_irr must not be less than 0'
+
+    # pass a warning if max_irr is greater than abs_max_irr
+    if matrix_weather.loc[:, 'max_irr'].max() > params['abs_max_irr']:
+        warn(f'maximum weather_matrix max_irr ({matrix_weather.loc[:, "max_irr"].max()}) > absolute maximum '
+             f'irrigation {params["abs_max_irr"]}.  The extra irrigation can never be applied but may be available for '
+             f'storage.')
 
 
 def get_month_day_to_nonleap_doy(key_doy=False):

@@ -191,6 +191,7 @@ end if
                               ! (e.g. 0 means a perfectly effcient system,
                               ! 1 means that 2x the storage volume is needed to irrigate x volume)
                               ! unitless
+stor_reserve_vol = pa(141)
 
 
 return

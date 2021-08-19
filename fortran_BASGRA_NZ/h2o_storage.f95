@@ -84,6 +84,7 @@ contains
         real :: INFILTOT, WAFC, WAWP, MXPAW, PAW
         logical :: irrigate
         real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store
+        real :: temp_stor_vol
 
         if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from PAW
             irrigate = (PAW <= irr_trig * MXPAW)
@@ -152,18 +153,20 @@ contains
 
             ! calculate the irrigation from storage)
             if (any(doy==doy_irr)) then
-            ! todo add a parameter for minimum volume if a farmer would keep some in reserve for stockwater.
             ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
                 if (use_storage_today) then
                     irrig_store = IRRIGF * irrig_dem_store  ! = mm d-1 Irrigation
 
                     irrig_store = min(irrig_store, abs_max_irr-irrig_scheme)
                     irrig_store = max(0., irrig_store)
+                    temp_stor_vol = max(0., h2o_store_vol-stor_reserve_vol)
 
-                    if (h2o_store_vol/(1+stor_irr_ineff) < (irrig_store/1000) * (irrigated_area * 10000)) then ! not enough water
-                        irrig_store = (h2o_store_vol * 1000 / (irrigated_area * 10000))/(1+stor_irr_ineff)
-                        store_irr_loss = (h2o_store_vol * 1000 / (irrigated_area * 10000))/(stor_irr_ineff)
-                        h2o_store_vol = 0.
+                    if (temp_stor_vol/(1+stor_irr_ineff) < (irrig_store/1000) * (irrigated_area * 10000)) then ! not enough water
+
+
+                        irrig_store = (temp_stor_vol * 1000 / (irrigated_area * 10000))/(1+stor_irr_ineff)
+                        store_irr_loss = (temp_stor_vol * 1000 / (irrigated_area * 10000))/(stor_irr_ineff)
+                        h2o_store_vol = h2o_store_vol - (irrig_store + store_irr_loss)/1000 * (irrigated_area * 10000)
 
                     else ! enough water in storage
                         h2o_store_vol = h2o_store_vol - (irrig_store/1000) * (irrigated_area * 10000) * (1 + stor_irr_ineff)
