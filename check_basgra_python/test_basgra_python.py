@@ -744,6 +744,11 @@ def test_pass_soil_mosit(update_data=False):
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
 
+    # todo write storage tests
+
+    # todo document new features
+    # todo make new version
+
 
 if __name__ == '__main__':
     # input types tests
@@ -778,5 +783,6 @@ if __name__ == '__main__':
 
     # input data for manual harvest check
     test_trans_manual_harv()
+
 
     print('\n\nall established tests passed')

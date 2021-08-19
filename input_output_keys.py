@@ -149,7 +149,6 @@ param_keys = (
     # when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True
     # this prevent any irrigation scheduling or and soil moisture calculation in the model.
 
-    # todo new parameters, add to readme
     'use_storage',  # whether or not to include storage in the model, sudo boolean 1=True, 0=False
     'runoff_from_rain',  # if True then use a fraction of rainfall, otherwise proscribed refill data from an
     # external model, sudo boolean 1=True, 0=False
@@ -178,7 +177,6 @@ param_keys = (
     # (e.g. 0 means a perfectly efficient system,
     # 1 means that 2x the storage volume is needed to irrigate x volume)
     # unit less
-    # todo end of new parameters
 
 )
 
@@ -210,14 +208,12 @@ matrix_weather_keys_pet = (
     # e.g. 0.5 means that irrigation will only be applied when soil water content is at 1/2
     # field capacity (e.g. water holding capacity)
     'irr_targ',  # fraction of PAW/field (see irr_frm_paw) to irrigate to (fraction 0-1)
-    # todo new keys, add to readme
     'irr_trig_store',  # the irrigation trigger value (if calc_ind_store_demand)
     # for the storage based irrigation either fraction of PAW or field capacity
     'irr_targ_store',  # the irrigation target value (if calc_ind_store_demand)
     # for the storage based irrigation either fraction of PAW or field capacity
     'external_inflow',  # only used if not runoff_from_rain, the volume (m3) of water to add
     # to storage (allows external rainfall runoff model for storage management)
-    # todo end new keys
 )
 
 matrix_weather_keys_penman = (
@@ -332,7 +328,6 @@ out_cols = (
 
     'RESEEDED',  # reseeded flag, if ==1 then the simulation was reseeded on this day
 
-    # todo new outputs add to readme and test datasets
     'irrig_dem_store',  # irrigation demand from storage (mm)
     'irrig_store',  # irrigation applied from storage (mm)
     'irrig_scheme',  # irrigation applied from the scheme (mm)
@@ -346,7 +341,6 @@ out_cols = (
     'store_evap_out',  # storage budget out from evaporation (NOTIMPLEMENTED) (m3)
     'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
     'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
-    # todo end of new outputs
 
 )
 
