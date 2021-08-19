@@ -396,7 +396,7 @@ site_param_keys = (
     'pass_soil_moist',  # sudo boolean 1=True, 0=False.  if True then do not calculate soil moisture instead
     # soil moisture is passed to the model through max_irr as a fraction of either soil capacity
     # when 'irr_frm_paw' is False, or as a fraction (0-1) of PAW when 'irr_frm_paw' is True
-    # todo new outputs, add to readme
+    # todo new parameters, add to readme
     'use_storage',  # whether or not to include storage in the model, sudo boolean 1=True, 0=False
     'runoff_from_rain',  # if True then use a fraction of rainfall, otherwise proscribed refill data from an
     # external model, sudo boolean 1=True, 0=False

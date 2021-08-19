@@ -275,6 +275,14 @@ def get_lincoln_broadfield():
     outdata.set_index('date', inplace=True)
     outdata = outdata.loc[outdata.index > '2011-08-01']
 
+    outdata.loc[:, 'max_irr'] = 10.
+    outdata.loc[:, 'irr_trig'] = 0
+    outdata.loc[:, 'irr_targ'] = 1
+    outdata.loc[:, 'irr_trig_store'] = 0
+    outdata.loc[:, 'irr_targ_store'] = 1
+    outdata.loc[:, 'external_inflow'] = 0
+
+
     return outdata
 
 

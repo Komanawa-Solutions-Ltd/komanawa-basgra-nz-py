@@ -70,37 +70,23 @@ def _output_checks(out, correct_out, dropable=True):
     """
     if dropable:
         # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
-        drop_keys_int = [ # todo empty and add to drop_keys
+        drop_keys_int = [  # todo empty and add to drop_keys
 
-            'use_storage',  # whether or not to include storage in the model, sudo boolean 1=True, 0=False
-            'runoff_from_rain',  # if True then use a fraction of rainfall, otherwise proscribed refill data from an
-            # external model, sudo boolean 1=True, 0=False
-            'calc_ind_store_demand',
-            # if true then calculate storage demand after scheme irrigation from triggers, targets,
-            # =  if false then calculate storage demand as the remaining demand after scheme irrigation,
-            # sudo boolean 1=True, 0=False
-
-            # integer
-            'stor_full_refil_doy',
-            # the day of the year when storage will be set to full., set to -1 to never fully refill
-            # storage
-
-            # float
-            'abs_max_irr',
-            # the maximum irrigation that can be applied per day (e.g. equipment limits) mm/day note that if
-            # matrix weather prescribed max_irr for a given day is larger then abs_max_irr, that water may still be avalible
-            # to refill storage.
-            'irrigated_area',  # the area irrigated (ha)
-            'I_h2o_store_vol',  # initial h2o storage volume (m3)
-            'h2o_store_max_vol',  # h2o storage maximum volume (m3)
-            'h2o_store_SA',  # h2o storage surface area (m2)
-            'runoff_area',  # the area that can provide runoff to the storage (ha)
-            'runoff_frac',  # the fraction of precipitation that becomes runoff to recharge storage (0-1, unit less)
-            'stor_refill_min',
-            # the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
-            'stor_refill_losses',  # the losses incurred from re-filling storage from irrigation scheme (0-1)
-            'stor_leakage',  # the losses from storage to leakage static (m3/day)
-            'stor_irr_ineff',  # the fraction of irrigation water that is lost when storage is used for irrigation
+            'irrig_dem_store',  # irrigation demand from storage (mm)
+            'irrig_store',  # irrigation applied from storage (mm)
+            'irrig_scheme',  # irrigation applied from the scheme (mm)
+            'h2o_store_vol',  # volume of water in storage (m3)
+            'h2o_store_per_area',  # h2o storage per irrigated area (mm)
+            'IRR_TRIG_store',
+            # irrigation trigger for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+            'IRR_TARG_store',
+            # irrigation target for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
+            'store_runoff_in',  # storage budget in from runoff or external model (m3)
+            'store_leak_out',  # storage budget out from leakage (m3)
+            'store_irr_loss',  # storage budget out from losses incurred with irrigation (m3)
+            'store_evap_out',  # storage budget out from evaporation (NOTIMPLEMENTED) (m3)
+            'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
+            'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
 
         ]
         out2 = out.drop(columns=drop_keys_int)
