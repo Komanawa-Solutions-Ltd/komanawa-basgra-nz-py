@@ -136,10 +136,9 @@ contains
     Subroutine FRDRUNIR(EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS, &
             DRAIN, FREEZEL, IRRIG, IRRIG_DEM, RUNOFF, THAWS, &
             MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW, &
-            IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, RAIN, external_inflow)
+            IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme)
 
-        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, external_inflow
-        real :: RAIN
+        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme
         real :: EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS
         real :: DRAIN, FREEZEL, IRRIG, RUNOFF, THAWS
         real :: MAX_IRR, IRR_TRIG, IRR_TARG, IRRIG_DEM
@@ -177,8 +176,8 @@ contains
         end if
 
         if (use_storage) then
-            call calc_storage_volume_use (RAIN, doy, PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
-            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, nirr, doy_irr, IRRIG, MAX_IRR, irrig_store, irrig_scheme, external_inflow)
+            call calc_storage_volume_use (doy, PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, nirr, doy_irr, IRRIG, MAX_IRR, irrig_store, irrig_scheme)
         else
             call irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
             WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR)

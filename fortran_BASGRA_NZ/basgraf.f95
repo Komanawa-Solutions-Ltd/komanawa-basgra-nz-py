@@ -135,7 +135,7 @@ real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE
 
 
   ! set inital values for storage outputs/ state variables
-  h2o_store_vol = I_h2o_store_vol ! set inital storage volume
+
   store_runoff_in = 0
   store_leak_out = 0
   store_irr_loss = 0
@@ -305,7 +305,7 @@ do day = 1, NDAYS
                                                          DRAIN,FREEZEL,IRRIG, IRRIG_DEM, RUNOFF,THAWS, &
                          MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, &
                          WAFC, WAWP, MXPAW, PAW, &
-                         IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme, RAIN, external_inflow &
+                         IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme &
                       ) ! calculate water movement etc DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
 
   call O2status       (O2,ROOTD)                                 ! calculate FO2

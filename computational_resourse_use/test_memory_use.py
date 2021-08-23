@@ -7,7 +7,7 @@ $ pip install -U memory_profiler
  Created: 23/11/2020 9:50 AM
  """
 from basgra_python import run_basgra_nz
-from check_basgra_python.support_for_tests import establish_org_input, _clean_harvest
+from check_basgra_python.support_for_tests import establish_org_input, clean_harvest
 import numpy as np
 import pandas as pd
 from memory_profiler import profile
@@ -20,7 +20,7 @@ def test():
 @profile
 def run_example_basgra():
     params, matrix_weather, days_harvest, doy_irr = establish_org_input()
-    days_harvest = _clean_harvest(days_harvest, matrix_weather)
+    days_harvest = clean_harvest(days_harvest, matrix_weather)
     out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False)
 
 @profile
@@ -37,7 +37,7 @@ def support_for_memory_usage():
     matrix_weather.loc[:, 'year'] = expected_days.dt.year.values
     matrix_weather.loc[:, 'doy'] = expected_days.dt.dayofyear.values
 
-    days_harvest = _clean_harvest(days_harvest, matrix_weather)
+    days_harvest = clean_harvest(days_harvest, matrix_weather)
     out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False)
 
 

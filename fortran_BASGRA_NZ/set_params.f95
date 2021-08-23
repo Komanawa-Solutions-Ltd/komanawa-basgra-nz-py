@@ -192,7 +192,7 @@ end if
                               ! 1 means that 2x the storage volume is needed to irrigate x volume)
                               ! unitless
 stor_reserve_vol = pa(141)
-
+h2o_store_vol = I_h2o_store_vol * h2o_store_max_vol ! set inital storage volume
 
 return
 end

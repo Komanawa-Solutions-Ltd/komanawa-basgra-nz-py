@@ -91,7 +91,7 @@ def get_woodward_mean_full_params(site):
     params.loc['stor_full_refil_doy'] = 240
     params.loc['abs_max_irr'] = 1000  # non-sensically high
     params.loc['irrigated_area'] = 100  # set to ensure that use_storage=0 cuts storage
-    params.loc['I_h2o_store_vol'] = 1
+    params.loc['I_h2o_store_vol'] = 0
     params.loc['h2o_store_max_vol'] = 10000
     params.loc['h2o_store_SA'] = 0
     params.loc['runoff_area'] = 0
