@@ -91,7 +91,7 @@ def _output_checks(out, correct_out, dropable=True):
     """
     if dropable:
         # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
-        drop_keys_int = [ # todo remove and re-save everything once done!
+        drop_keys_int = [  # todo remove and re-save everything once done!
             'irrig_dem_store',  # irrigation demand from storage (mm)
             'irrig_store',  # irrigation applied from storage (mm)
             'irrig_scheme',  # irrigation applied from the scheme (mm)
@@ -922,7 +922,8 @@ def test_leakage_prescribed_outflow(update_data=False):
     matrix_weather.loc[:, 'irr_targ_store'] = 0
     matrix_weather.loc[:, 'external_inflow'] = 20
     specified_data = [
-        20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, -50, 20, 20, -25, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, -50, 20, 20, -25, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        20,
         -10, -10, -10, -10, -10, -10, -10, -10, -20, -20, -20, -20, -20, -100,
     ]
     matrix_weather.loc[matrix_weather.index[:len(specified_data)], 'external_inflow'] = specified_data
@@ -939,30 +940,263 @@ def test_leakage_prescribed_outflow(update_data=False):
     _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
 
 
-
 def test_store_irr_org_demand(update_data=False):
-    # todo include irrigation ineffciency
     test_nm = inspect.currentframe().f_code.co_name
     print('testing: ' + test_nm)
 
-    raise NotImplementedError
+    params, matrix_weather, days_harvest, doy_irr = get_input_for_storage_tests()
+
+    params['runoff_from_rain'] = 1
+    params['calc_ind_store_demand'] = 0
+    params['stor_full_refil_doy'] = 240  # refill on day 240 each year
+    params['abs_max_irr'] = 15
+    params['I_h2o_store_vol'] = 0.75
+    params['runoff_area'] = 10
+    params['runoff_frac'] = 0.5
+    params['stor_refill_min'] = 1000  # no refill from scheme
+    params['stor_refill_losses'] = 0
+    params['stor_leakage'] = 10  # slow leakage so fill is observable
+    params['stor_irr_ineff'] = 0.1
+    params['stor_reserve_vol'] = 2000
+
+    matrix_weather.loc[:, 'max_irr'] = 5
+    matrix_weather.loc[:, 'irr_trig_store'] = 1  # not used for this test
+    matrix_weather.loc[:, 'irr_targ_store'] = 0  # not used for this test
+    matrix_weather.loc[:, 'external_inflow'] = 0  # not used for this test
+
+    days_harvest = clean_harvest(days_harvest, matrix_weather)
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+
+    data_path = os.path.join(test_dir, f'{test_nm}.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+
+    # re-run without storage
+    params['use_storage'] = 0
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+
+    data_path = os.path.join(test_dir, f'{test_nm}_no_store.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
 
 
-def test_store_irr_ind_demand():
-    # todo include irrigation ineffciency
+def test_store_irr_ind_demand(update_data=False):
     test_nm = inspect.currentframe().f_code.co_name
     print('testing: ' + test_nm)
 
-    raise NotImplementedError
+    params, matrix_weather, days_harvest, doy_irr = get_input_for_storage_tests()
+
+    params['runoff_from_rain'] = 1
+    params['calc_ind_store_demand'] = 1
+    params['stor_full_refil_doy'] = 240  # refill on day 240 each year
+    params['abs_max_irr'] = 15
+    params['I_h2o_store_vol'] = 0.75
+    params['runoff_area'] = 10
+    params['runoff_frac'] = 0.5
+    params['stor_refill_min'] = 1000  # no refill from scheme
+    params['stor_refill_losses'] = 0
+    params['stor_leakage'] = 10  # slow leakage so fill is observable
+    params['stor_irr_ineff'] = 0.1
+    params['stor_reserve_vol'] = 2000
+
+    np.random.seed(1)
+    matrix_weather.loc[:, 'max_irr'] = 5 + np.random.random_integers(-2, 5, len(matrix_weather))
+    matrix_weather.loc[:, 'irr_trig_store'] = 0.80
+    matrix_weather.loc[:, 'irr_targ_store'] = 0.90
+    matrix_weather.loc[:, 'external_inflow'] = 0  # not used for this test
+
+    days_harvest = clean_harvest(days_harvest, matrix_weather)
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+    out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
+
+    data_path = os.path.join(test_dir, f'{test_nm}.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+
+    np.random.seed(1)
+    matrix_weather.loc[:, 'max_irr'] = 5 + np.random.random_integers(-5, 5, len(matrix_weather))
+    matrix_weather.loc[:, 'irr_trig_store'] = 0.70
+    matrix_weather.loc[:, 'irr_targ_store'] = 0.85
+    matrix_weather.loc[:, 'external_inflow'] = 0  # not used for this test
+
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+    out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
+
+    data_path = os.path.join(test_dir, f'{test_nm}_2.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+
+
+def test_store_irr_org_demand_paw(update_data=False):
+    test_nm = inspect.currentframe().f_code.co_name
+    print('testing: ' + test_nm)
+
+    params, matrix_weather, days_harvest, doy_irr = get_input_for_storage_tests()
+
+    params['irr_frm_paw'] = 1
+    params['runoff_from_rain'] = 1
+    params['calc_ind_store_demand'] = 0
+    params['stor_full_refil_doy'] = 240  # refill on day 240 each year
+    params['abs_max_irr'] = 15
+    params['I_h2o_store_vol'] = 0.75
+    params['runoff_area'] = 10
+    params['runoff_frac'] = 0.5
+    params['stor_refill_min'] = 1000  # no refill from scheme
+    params['stor_refill_losses'] = 0
+    params['stor_leakage'] = 10  # slow leakage so fill is observable
+    params['stor_irr_ineff'] = 0.1
+    params['stor_reserve_vol'] = 2000
+
+    matrix_weather.loc[:, 'max_irr'] = 5
+    matrix_weather.loc[:, 'irr_trig_store'] = 1  # not used for this test
+    matrix_weather.loc[:, 'irr_targ_store'] = 0  # not used for this test
+    matrix_weather.loc[:, 'external_inflow'] = 0  # not used for this test
+
+    days_harvest = clean_harvest(days_harvest, matrix_weather)
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'per_paw'] = out.loc[:, 'PAW'] / out.loc[:, 'MXPAW']
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+
+    data_path = os.path.join(test_dir, f'{test_nm}.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+
+    # re-run without storage
+    params['use_storage'] = 0
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+
+    data_path = os.path.join(test_dir, f'{test_nm}_no_store.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+
+
+def test_store_irr_ind_demand_paw(update_data=False):
+    test_nm = inspect.currentframe().f_code.co_name
+    print('testing: ' + test_nm)
+
+    params, matrix_weather, days_harvest, doy_irr = get_input_for_storage_tests()
+
+    params['irr_frm_paw'] = 1
+    params['runoff_from_rain'] = 1
+    params['calc_ind_store_demand'] = 1
+    params['stor_full_refil_doy'] = 240  # refill on day 240 each year
+    params['abs_max_irr'] = 15
+    params['I_h2o_store_vol'] = 0.75
+    params['runoff_area'] = 10
+    params['runoff_frac'] = 0.5
+    params['stor_refill_min'] = 1000  # no refill from scheme
+    params['stor_refill_losses'] = 0
+    params['stor_leakage'] = 10  # slow leakage so fill is observable
+    params['stor_irr_ineff'] = 0.1
+    params['stor_reserve_vol'] = 2000
+
+    np.random.seed(1)
+    matrix_weather.loc[:, 'max_irr'] = 5 + np.random.random_integers(-2, 5, len(matrix_weather))
+    matrix_weather.loc[:, 'irr_trig_store'] = 0.80
+    matrix_weather.loc[:, 'irr_targ_store'] = 0.90
+    matrix_weather.loc[:, 'external_inflow'] = 0  # not used for this test
+
+    days_harvest = clean_harvest(days_harvest, matrix_weather)
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'per_paw'] = out.loc[:, 'PAW'] / out.loc[:, 'MXPAW']
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+    out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
+
+    data_path = os.path.join(test_dir, f'{test_nm}.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+
+    np.random.seed(1)
+    matrix_weather.loc[:, 'max_irr'] = 5 + np.random.random_integers(-5, 5, len(matrix_weather))
+    matrix_weather.loc[:, 'irr_trig_store'] = 0.70
+    matrix_weather.loc[:, 'irr_targ_store'] = 0.85
+    matrix_weather.loc[:, 'external_inflow'] = 0  # not used for this test
+
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'per_paw'] = out.loc[:, 'PAW'] / out.loc[:, 'MXPAW']
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+    out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
+
+    data_path = os.path.join(test_dir, f'{test_nm}_2.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
 
 
 def test_store_refill_from_scheme(update_data=False):
-    # todo minimumn refill parameter
-    # todo refill losses
     test_nm = inspect.currentframe().f_code.co_name
     print('testing: ' + test_nm)
 
-    raise NotImplementedError
+    params, matrix_weather, days_harvest, doy_irr = get_input_for_storage_tests()
+
+    params['runoff_from_rain'] = 1
+    params['calc_ind_store_demand'] = 0
+    params['stor_full_refil_doy'] = 240  # refill on day 240 each year
+    params['abs_max_irr'] = 15
+    params['I_h2o_store_vol'] = 0.75
+    params['runoff_area'] = 10
+    params['runoff_frac'] = 0.5
+    params['stor_refill_min'] = 1  # no refill from scheme
+    params['stor_refill_losses'] = 0.5
+    params['stor_leakage'] = 10  # slow leakage so fill is observable
+    params['stor_irr_ineff'] = 0.1
+    params['stor_reserve_vol'] = 2000
+
+    np.random.seed(1)
+    matrix_weather.loc[:, 'max_irr'] = 5 + np.random.random_integers(-5, 5, len(matrix_weather))
+    matrix_weather.loc[:, 'irr_trig_store'] = 1  # not used for this test
+    matrix_weather.loc[:, 'irr_targ_store'] = 0  # not used for this test
+    matrix_weather.loc[:, 'external_inflow'] = 0  # not used for this test
+
+    days_harvest = clean_harvest(days_harvest, matrix_weather)
+    matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
+    out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
+    out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
+    out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
+    out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
+
+    data_path = os.path.join(test_dir, f'{test_nm}.csv')
+    if update_data:
+        out.to_csv(data_path)
+
+    correct_out = pd.read_csv(data_path, index_col=0)
+    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
 
 
 # todo write storage tests
@@ -975,7 +1209,12 @@ if __name__ == '__main__':
     test_runoff_from_rain()
     test_external_rainfall_runoff()
     test_leakage_prescribed_outflow()
-    test_store_irr_org_demand(True) # todo start here
+    test_store_irr_org_demand()
+    test_store_irr_ind_demand()
+
+    test_store_irr_org_demand_paw(True)  # todo have not checked these
+    test_store_irr_ind_demand_paw(True)  # todo have not checked these
+    test_store_refill_from_scheme(True)  # todo have not checked these
 
     # input types tests
     test_org_basgra_nz()

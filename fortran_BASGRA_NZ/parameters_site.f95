@@ -73,6 +73,7 @@ integer, parameter                                  :: NPAR     = 141
                               ! (e.g. 0 means a perfectly effcient system,
                               ! 1 means that 2x the storage volume is needed to irrigate x volume)
                               ! unitless
+  real     :: irrig_dem_store
 
 ! output storage components
 

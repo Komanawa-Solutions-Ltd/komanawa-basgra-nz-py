@@ -85,7 +85,6 @@ contains
         real :: IRR_TRIG, IRR_TARG
         real :: INFILTOT, WAFC, WAWP, MXPAW, PAW
         logical :: irrigate
-        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store
         real :: temp_stor_vol
 
         if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from PAW
@@ -122,64 +121,67 @@ contains
         end if
 
         ! now calculate additional irigation from storage
-        if (irrig_scheme<abs_max_irr) then
 
-            ! calculate further irrigation demand from storage
-            if (calc_ind_store_demand) then
-                if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from PAW
-                    use_storage_today = (PAW + irrig_scheme <= irr_trig_store * MXPAW)
 
-                    irrig_dem_store = ((MXPAW * IRR_TARG_store + WAWP - WAL) / DELT - &
-                            (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF + irrig_scheme))  ! = mm d-1 Irrigation demand to IRR_TARG
+        ! calculate further irrigation demand from storage
+        if (calc_ind_store_demand) then
+            if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from PAW
+                use_storage_today = (PAW + irrig_scheme <= irr_trig_store * MXPAW)
 
-                else ! calculate irrigation demand and trigger from field capacity
-                    temp = (INFILTOT - EVAP - TRAN - FREEZEL + THAWS + irrig_scheme - DRAIN - RUNOFF) * DELT
-                    use_storage_today = ((WAL + temp) / WAFC <= irr_trig_store)
+                temp = (INFILTOT - EVAP - TRAN - FREEZEL + THAWS + irrig_scheme - DRAIN - RUNOFF) * DELT
+                irrig_dem_store = MXPAW * IRR_TARG_store + WAWP - (WAL+temp)  ! = mm d-1 Irrigation demand to IRR_TARG_store
 
-                    irrig_dem_store = ((WAFC * IRR_TARG_store - WAL) / DELT - &
-                            (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF + irrig_scheme))  ! = mm d-1 Irrigation demand to IRR_TARG
+            else ! calculate irrigation demand and trigger from field capacity
+                temp = (INFILTOT - EVAP - TRAN - FREEZEL + THAWS + irrig_scheme - DRAIN - RUNOFF) * DELT
+                use_storage_today = ((WAL + temp) / WAFC <= irr_trig_store)
 
-                end if
-            else
-                use_storage_today = .TRUE.
-                irrig_dem_store = IRRIG_DEM - irrig_scheme
+                irrig_dem_store = WAFC * IRR_TARG_store - (WAL+ temp) ! = mm d-1 Irrigation demand to IRR_TARG_store
+
             end if
+        else ! the remainaing irrigation demand from scheme irrigation
+            use_storage_today = irrigate
+            irrig_dem_store = IRRIG_DEM - irrig_scheme
+        end if
 
-            if (h2o_store_vol<=0) then
-                use_storage_today = .FALSE.
-            end if
 
-            irrig_dem_store = max(0.0, irrig_dem_store)
+        irrig_dem_store = max(0.0, irrig_dem_store)
 
-            ! calculate the irrigation from storage)
-            if (any(doy==doy_irr)) then
-                ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
-                if (use_storage_today) then
-                    irrig_store = IRRIGF * irrig_dem_store  ! = mm d-1 Irrigation
+        if (irrig_scheme>=abs_max_irr) then
+            irrig_store = 0.
+            store_irr_loss = 0.
+            use_storage_today = .FALSE.
+        end if
+        if (h2o_store_vol<=stor_reserve_vol) then
+            use_storage_today = .FALSE.
+        end if
 
-                    irrig_store = min(irrig_store, abs_max_irr - irrig_scheme)
-                    irrig_store = max(0., irrig_store)
-                    temp_stor_vol = max(0., h2o_store_vol - stor_reserve_vol)
+        ! calculate the irrigation from storage)
+        if (any(doy==doy_irr)) then
+            ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
+            if (use_storage_today) then
+                irrig_store = IRRIGF * irrig_dem_store  ! = mm d-1 Irrigation
 
-                    if (temp_stor_vol / (1 + stor_irr_ineff) < (irrig_store / 1000) * (irrigated_area * 10000)) then ! not enough water
+                irrig_store = min(irrig_store, abs_max_irr - irrig_scheme)
+                irrig_store = max(0., irrig_store)
+                temp_stor_vol = max(0., h2o_store_vol - stor_reserve_vol)
 
-                        irrig_store = (temp_stor_vol * 1000 / (irrigated_area * 10000)) / (1 + stor_irr_ineff)
-                        store_irr_loss = (temp_stor_vol * 1000 / (irrigated_area * 10000)) / (stor_irr_ineff)
-                        h2o_store_vol = h2o_store_vol - (irrig_store + store_irr_loss) / 1000 * (irrigated_area * 10000)
+                if (temp_stor_vol / (1 + stor_irr_ineff) < (irrig_store / 1000) * (irrigated_area * 10000)) then ! not enough water
 
-                    else ! enough water in storage
-                        h2o_store_vol = h2o_store_vol - (irrig_store / 1000) * (irrigated_area * 10000) * (1 + stor_irr_ineff)
-                        store_irr_loss = (irrig_store / 1000) * (irrigated_area * 10000) * (stor_irr_ineff)
-                    end if
+                    irrig_store = (temp_stor_vol * 1000 / (irrigated_area * 10000)) / (1 + stor_irr_ineff)
+                    store_irr_loss = (irrig_store / 1000) * (irrigated_area * 10000) * stor_irr_ineff
 
-                else
-                    irrig_store = 0.
+                else ! enough water in storage
+                    store_irr_loss = (irrig_store / 1000) * (irrigated_area * 10000) * (stor_irr_ineff)
                 end if
+                h2o_store_vol = h2o_store_vol - (irrig_store / 1000 * (irrigated_area * 10000)) - store_irr_loss
+
             else
-                irrig_store = 0. ! if the day of year is not
-                use_storage_today = .FALSE.
+                irrig_store = 0.
+                store_irr_loss = 0.
             end if
         else
+            irrig_store = 0. ! if the day of year is not
+            store_irr_loss = 0.
             use_storage_today = .FALSE.
         end if
 
@@ -200,7 +202,7 @@ contains
         real :: EVAP, TRAN, WAL
         real :: DRAIN, FREEZEL, RUNOFF, THAWS
         real :: IRR_TRIG, IRR_TARG
-        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme
+        real :: irrig_store, irrig_scheme
         real :: INFILTOT, WAFC, WAWP, MXPAW, PAW
         logical :: irrigate
 

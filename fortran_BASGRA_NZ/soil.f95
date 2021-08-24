@@ -136,9 +136,9 @@ contains
     Subroutine FRDRUNIR(EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS, &
             DRAIN, FREEZEL, IRRIG, IRRIG_DEM, RUNOFF, THAWS, &
             MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW, &
-            IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme)
+            irrig_store, irrig_scheme)
 
-        real :: IRR_TRIG_store, IRR_TARG_store, irrig_dem_store, irrig_store, irrig_scheme
+        real :: irrig_store, irrig_scheme
         real :: EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS
         real :: DRAIN, FREEZEL, IRRIG, RUNOFF, THAWS
         real :: MAX_IRR, IRR_TRIG, IRR_TARG, IRRIG_DEM
