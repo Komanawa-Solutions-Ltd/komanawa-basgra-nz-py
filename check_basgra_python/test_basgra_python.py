@@ -1172,14 +1172,14 @@ def test_store_refill_from_scheme(update_data=False):
     params['I_h2o_store_vol'] = 0.75
     params['runoff_area'] = 10
     params['runoff_frac'] = 0.5
-    params['stor_refill_min'] = 1  # no refill from scheme
-    params['stor_refill_losses'] = 0.5
+    params['stor_refill_min'] = 1  #
+    params['stor_refill_losses'] = 0.2
     params['stor_leakage'] = 10  # slow leakage so fill is observable
     params['stor_irr_ineff'] = 0.1
     params['stor_reserve_vol'] = 2000
 
     np.random.seed(1)
-    matrix_weather.loc[:, 'max_irr'] = 5 + np.random.random_integers(-5, 5, len(matrix_weather))
+    matrix_weather.loc[:, 'max_irr'] = np.random.choice([5, 15, 17], len(matrix_weather), p=[0.5, .25, .25])
     matrix_weather.loc[:, 'irr_trig_store'] = 1  # not used for this test
     matrix_weather.loc[:, 'irr_targ_store'] = 0  # not used for this test
     matrix_weather.loc[:, 'external_inflow'] = 0  # not used for this test
@@ -1199,7 +1199,6 @@ def test_store_refill_from_scheme(update_data=False):
     _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
 
 
-# todo write storage tests
 # todo make new version
 
 
@@ -1214,7 +1213,7 @@ if __name__ == '__main__':
 
     test_store_irr_org_demand_paw(True)  # todo have not checked these
     test_store_irr_ind_demand_paw(True)  # todo have not checked these
-    test_store_refill_from_scheme(True)  # todo have not checked these
+    test_store_refill_from_scheme()
 
     # input types tests
     test_org_basgra_nz()

@@ -32,7 +32,7 @@ contains
             store_scheme_in_loss = (MAX_IRR - irrig_scheme) / 1000 * (stor_refill_losses) * (irrigated_area * 10000)
             h2o_store_vol = h2o_store_vol + store_scheme_in
             if (h2o_store_vol > h2o_store_max_vol) then
-                store_runoff_in = store_scheme_in - (h2o_store_vol - h2o_store_max_vol)
+                store_scheme_in_loss = store_scheme_in - (h2o_store_vol - h2o_store_max_vol)
                 h2o_store_vol = min(h2o_store_max_vol, h2o_store_vol)
             end if
         else
@@ -129,20 +129,19 @@ contains
                 use_storage_today = (PAW + irrig_scheme <= irr_trig_store * MXPAW)
 
                 temp = (INFILTOT - EVAP - TRAN - FREEZEL + THAWS + irrig_scheme - DRAIN - RUNOFF) * DELT
-                irrig_dem_store = MXPAW * IRR_TARG_store + WAWP - (WAL+temp)  ! = mm d-1 Irrigation demand to IRR_TARG_store
+                irrig_dem_store = MXPAW * IRR_TARG_store + WAWP - (WAL + temp)  ! = mm d-1 Irrigation demand to IRR_TARG_store
 
             else ! calculate irrigation demand and trigger from field capacity
                 temp = (INFILTOT - EVAP - TRAN - FREEZEL + THAWS + irrig_scheme - DRAIN - RUNOFF) * DELT
                 use_storage_today = ((WAL + temp) / WAFC <= irr_trig_store)
 
-                irrig_dem_store = WAFC * IRR_TARG_store - (WAL+ temp) ! = mm d-1 Irrigation demand to IRR_TARG_store
+                irrig_dem_store = WAFC * IRR_TARG_store - (WAL + temp) ! = mm d-1 Irrigation demand to IRR_TARG_store
 
             end if
         else ! the remainaing irrigation demand from scheme irrigation
             use_storage_today = irrigate
             irrig_dem_store = IRRIG_DEM - irrig_scheme
         end if
-
 
         irrig_dem_store = max(0.0, irrig_dem_store)
 
@@ -219,7 +218,10 @@ contains
         call irrigate_storage_usage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
                 WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR, irrig_store, irrig_scheme)
 
-        if(.not. use_storage_today) then
+        if(use_storage_today) then
+            store_scheme_in = 0
+            store_scheme_in_loss = 0
+        else
             call storage_refil_from_scheme(MAX_IRR, irrig_scheme)
         end if
         call storage_full_refil(doy)
