@@ -1203,7 +1203,7 @@ def test_store_refill_from_scheme(update_data=False):
 
 
 if __name__ == '__main__':
-    # H2O storage tests # todo in process of checking
+    # H2O storage tests
     test_full_refill()
     test_runoff_from_rain()
     test_external_rainfall_runoff()
@@ -1211,8 +1211,8 @@ if __name__ == '__main__':
     test_store_irr_org_demand()
     test_store_irr_ind_demand()
 
-    test_store_irr_org_demand_paw(True)  # todo have not checked these
-    test_store_irr_ind_demand_paw(True)  # todo have not checked these
+    test_store_irr_org_demand_paw()
+    test_store_irr_ind_demand_paw()
     test_store_refill_from_scheme()
 
     # input types tests
