@@ -20,4 +20,6 @@ def get_output_metadata(return_dict=True):
         return data
 
 if __name__ == '__main__':
-    get_output_metadata()
+    t = get_output_metadata()
+
+    pass

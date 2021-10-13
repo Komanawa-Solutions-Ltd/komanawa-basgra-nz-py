@@ -343,6 +343,8 @@ out_cols = (
     'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
     'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
 
+    # remember to add new ones to output describtion.csv
+
 )
 
 site_param_keys = (

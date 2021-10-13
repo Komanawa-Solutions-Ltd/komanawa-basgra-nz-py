@@ -71,3 +71,16 @@ WCLM,%,Soil Moisture
 WEED_YIELD,tDM ha-1,PRG Yield from weed other species note that this is the actual amount of material that has been removed
 year,y,Year
 YIELD,tDM ha-1,PRG Yield sum of YIELD_RYE and YIELD_WEED
+irrig_dem_store,mm, irrigation demand from storage (mm)
+irrig_store,mm, irrigation applied from storage (mm)
+irrig_scheme,mm, irrigation applied from the scheme (mm)
+h2o_store_vol,m3, volume of water in storage (m3)
+h2o_store_per_area,mm, h2o storage per irrigated area (mm)
+IRR_TRIG_store,fraction paw/FC, irrigation trigger for storage (fraction paw/FC) input only relevant if calc_ind_store_demand
+IRR_TARG_store,fraction paw/FC, irrigation target for storage (fraction paw/FC) input only relevant if calc_ind_store_demand
+store_runoff_in,m3, storage budget in from runoff or external model (m3)
+store_leak_out,m3, storage budget out from leakage (m3)
+store_irr_loss,m3, storage budget out from losses incurred with irrigation (m3)
+store_evap_out,m3, storage budget out from evaporation (NOTIMPLEMENTED) (m3)
+store_scheme_in,m3, storage budget in from the irrigation scheme (m3)
+store_scheme_in_loss,m3, storage budget out losses from the scheme to the storage basin (m3)
