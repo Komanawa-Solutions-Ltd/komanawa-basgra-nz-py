@@ -19,6 +19,7 @@ contains
         end if
         if (h2o_store_vol > h2o_store_max_vol) then
             store_runoff_in = store_runoff_in - (h2o_store_vol - h2o_store_max_vol)
+            store_overflow =  store_overflow + (h2o_store_vol - h2o_store_max_vol)
             h2o_store_vol = min(h2o_store_max_vol, h2o_store_vol)
         end if
     End Subroutine storage_runoff
@@ -29,12 +30,14 @@ contains
 
         if ((MAX_IRR - irrig_scheme) >= stor_refill_min) then
             store_scheme_in = (MAX_IRR - irrig_scheme) / 1000 * (1 - stor_refill_losses) * (irrigated_area * 10000)
-            store_scheme_in_loss = (MAX_IRR - irrig_scheme) / 1000 * (stor_refill_losses) * (irrigated_area * 10000)
             h2o_store_vol = h2o_store_vol + store_scheme_in
             if (h2o_store_vol > h2o_store_max_vol) then
-                store_scheme_in_loss = store_scheme_in - (h2o_store_vol - h2o_store_max_vol)
+                store_scheme_in = store_scheme_in - (h2o_store_vol - h2o_store_max_vol)
+                store_overflow =  store_overflow + (h2o_store_vol - h2o_store_max_vol)
+
                 h2o_store_vol = min(h2o_store_max_vol, h2o_store_vol)
             end if
+            store_scheme_in_loss = store_scheme_in / (1 - stor_refill_losses) * stor_refill_losses
         else
             store_scheme_in = 0
             store_scheme_in_loss = 0
@@ -208,6 +211,7 @@ contains
 
 
         ! storage in (non irrigation scheme)
+        store_overflow =  0
         call storage_runoff()
 
         ! storage out (non irrigation scheme)

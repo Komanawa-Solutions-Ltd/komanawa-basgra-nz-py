@@ -51,8 +51,12 @@ drop_keys = [  # newly added keys that must be dropped initially to manage tests
     'store_evap_out',  # storage budget out from evaporation (NOTIMPLEMENTED) (m3)
     'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
     'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
+    'external_inflow',
+    'store_overflow',
 
 ]
+
+drop_internal = False  # shortcut make the droppable testing established tests # todo change to True to drop new columns
 
 
 def test_trans_manual_harv(update_data=False):
@@ -91,22 +95,7 @@ def _output_checks(out, correct_out, dropable=True):
     """
     if dropable:
         # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
-        drop_keys_int = [  # todo remove and re-save everything once done!
-            'irrig_dem_store',  # irrigation demand from storage (mm)
-            'irrig_store',  # irrigation applied from storage (mm)
-            'irrig_scheme',  # irrigation applied from the scheme (mm)
-            'h2o_store_vol',  # volume of water in storage (m3)
-            'h2o_store_per_area',  # h2o storage per irrigated area (mm)
-            'IRR_TRIG_store',
-            # irrigation trigger for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
-            'IRR_TARG_store',
-            # irrigation target for storage (fraction paw/FC), input, only relevant if calc_ind_store_demand
-            'store_runoff_in',  # storage budget in from runoff or external model (m3)
-            'store_leak_out',  # storage budget out from leakage (m3)
-            'store_irr_loss',  # storage budget out from losses incurred with irrigation (m3)
-            'store_evap_out',  # storage budget out from evaporation (NOTIMPLEMENTED) (m3)
-            'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
-            'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
+        drop_keys_int = [
 
         ]
         out2 = out.drop(columns=drop_keys_int, errors='ignore')
@@ -115,18 +104,26 @@ def _output_checks(out, correct_out, dropable=True):
         out2 = out.copy(True)
         correct_out2 = correct_out.copy(True)
     # check shapes
-    assert out2.shape == correct_out2.shape, 'something is wrong with the output shapes'
+    assert out2.shape == correct_out2.shape, (
+        f'something is wrong with the output shapes, '
+        f'mismatched columns:{set(out2.keys()).symmetric_difference(correct_out2.keys())}')
 
     # check datatypes
-    assert issubclass(out.values.dtype.type, np.float), 'outputs of the model should all be floats'
+    assert issubclass(out.values.dtype.type, float), 'outputs of the model should all be floats'
 
     out2 = out2.values
     out2[np.isnan(out2)] = -9999.99999
-    correct_out2[np.isnan(correct_out2)] = -9999.99999
+    correct_out3 = correct_out2.values
+    correct_out3[np.isnan(correct_out2)] = -9999.99999
     # check values match for sample run
-    isclose = np.isclose(out2, correct_out2)
-    asmess = '{} values do not match between the output and correct output with rtol=1e-05, atol=1e-08'.format(
-        (~isclose).sum())
+    isclose = np.isclose(out2, correct_out3)
+    max_print = 20
+    asmess = (f'{(~isclose).sum()} values do not match between the output and correct output '
+              f'with rtol=1e-05, atol=1e-08'
+              f'for columns: {correct_out2.columns[(~isclose).any(axis=0)]}\n' +
+              f'{"correct": <16} | {"got": <16}\n'
+              '{}'.format("\n".join([f"{e: <16} | {f: <16}" for e, f in zip(correct_out3[~isclose],
+                                                                            out2[~isclose])][0:max_print])))
     assert isclose.all(), asmess
 
     print('    model passed test\n')
@@ -824,7 +821,7 @@ def test_full_refill(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
 def test_runoff_from_rain(update_data=False):
@@ -858,7 +855,7 @@ def test_runoff_from_rain(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
 def test_external_rainfall_runoff(update_data=False):
@@ -897,7 +894,7 @@ def test_external_rainfall_runoff(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
 def test_leakage_prescribed_outflow(update_data=False):
@@ -937,7 +934,7 @@ def test_leakage_prescribed_outflow(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
 def test_store_irr_org_demand(update_data=False):
@@ -975,7 +972,7 @@ def test_store_irr_org_demand(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
     # re-run without storage
     params['use_storage'] = 0
@@ -988,7 +985,7 @@ def test_store_irr_org_demand(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
 def test_store_irr_ind_demand(update_data=False):
@@ -1028,7 +1025,7 @@ def test_store_irr_ind_demand(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
     np.random.seed(1)
     matrix_weather.loc[:, 'max_irr'] = 5 + np.random.random_integers(-5, 5, len(matrix_weather))
@@ -1046,7 +1043,7 @@ def test_store_irr_ind_demand(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
 def test_store_irr_org_demand_paw(update_data=False):
@@ -1085,7 +1082,7 @@ def test_store_irr_org_demand_paw(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
     # re-run without storage
     params['use_storage'] = 0
@@ -1097,7 +1094,7 @@ def test_store_irr_org_demand_paw(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
 def test_store_irr_ind_demand_paw(update_data=False):
@@ -1138,7 +1135,7 @@ def test_store_irr_ind_demand_paw(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
     np.random.seed(1)
     matrix_weather.loc[:, 'max_irr'] = 5 + np.random.random_integers(-5, 5, len(matrix_weather))
@@ -1156,7 +1153,7 @@ def test_store_irr_ind_demand_paw(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
 def test_store_refill_from_scheme(update_data=False):
@@ -1196,25 +1193,13 @@ def test_store_refill_from_scheme(update_data=False):
         out.to_csv(data_path)
 
     correct_out = pd.read_csv(data_path, index_col=0)
-    _output_checks(out, correct_out, dropable=False)  # todo undo once all passed
+    _output_checks(out, correct_out)
 
 
-# todo make new version
+# todo pull request and make new version
 
 
 if __name__ == '__main__':
-    # H2O storage tests
-    test_full_refill()
-    test_runoff_from_rain()
-    test_external_rainfall_runoff()
-    test_leakage_prescribed_outflow()
-    test_store_irr_org_demand()
-    test_store_irr_ind_demand()
-
-    test_store_irr_org_demand_paw()
-    test_store_irr_ind_demand_paw()
-    test_store_refill_from_scheme()
-
     # input types tests
     test_org_basgra_nz()
     test_pet_calculation()
@@ -1247,5 +1232,17 @@ if __name__ == '__main__':
 
     # input data for manual harvest check
     test_trans_manual_harv()
+
+    # H2O storage tests
+    test_full_refill()
+    test_runoff_from_rain()
+    test_external_rainfall_runoff()
+    test_leakage_prescribed_outflow()
+    test_store_irr_org_demand()
+    test_store_irr_ind_demand()
+
+    test_store_irr_org_demand_paw()
+    test_store_irr_ind_demand_paw()
+    test_store_refill_from_scheme()
 
     print('\n\nall established tests passed')

@@ -446,6 +446,8 @@ do day = 1, NDAYS
    y(day,83) = store_evap_out
    y(day,84) = store_scheme_in
    y(day,85) = store_scheme_in_loss
+  y(day, 86) = external_inflow
+  y(day, 87) = store_overflow
 
 
 

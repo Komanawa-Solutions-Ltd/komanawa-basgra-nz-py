@@ -60,6 +60,7 @@ integer, parameter                                  :: NPAR     = 141
   real      :: irr_trig_store ! the irrigation trigger value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
   real      :: irr_targ_store ! the irrigation target value (if calc_ind_store_demand) for the storage based irrigation either fraction of PAW or field capacity
   real      :: external_inflow ! only used if not runoff_from_rain, the volume (m3) of water to add to storage (allows external rainfall runoff model for storage managment)
+  real      :: store_overflow ! water that could be used to fill storage, but ends up not being used as storage is full
   real      :: h2o_store_vol ! h2o storage volume (m3)
   real      :: I_h2o_store_vol ! inital h2o storage volume (m3)
   real      :: h2o_store_max_vol ! h2o storage maximum volume (m3)

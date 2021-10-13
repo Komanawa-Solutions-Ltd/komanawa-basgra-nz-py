@@ -517,6 +517,8 @@ all components of the storage water budget is saved to the output.
 'store_evap_out'| m<sup>3</sup> | storage budget out from evaporation (NOTIMPLEMENTED) (m3)
 'store_scheme_in'| m<sup>3</sup> | storage budget in from the irrigation scheme (m3)
 'store_scheme_in_loss'| m<sup>3</sup> | storage budget out losses from the scheme to the storage basin (m3)
+'external_inflow',| m<sup>3</sup> | input value external inflow (m3) kept for full water budget of storage
+'store_overflow', | m<sup>3</sup> |water that could have been added to storage (including losses), but was not as storage was full (m3)
 
 
 #### How to run so that the results are backwards compatible with versions V5.0.0 -
@@ -797,6 +799,7 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'DRAIN'|(mm d-1)|Drainage
 'DTILV'|(till m-2 d-1)|Till. Death
 'EVAP'|(mm d-1)|Evap.
+'external_inflow',| m<sup>3</sup> | input value external inflow (m3) kept for full water budget of storage
 'FS'|(till leaf-1)|Site Filling
 'GRT'|(gC m-2 d-1)|Root Growth
 'GTILV'|(till m-2 d-1)|Till. Birth
@@ -840,6 +843,7 @@ the test_basgra_python.py will run all of the testing functions. These functions
 'store_evap_out'| m<sup>3</sup> | storage budget out from evaporation (NOTIMPLEMENTED) (m3)
 'store_irr_loss'| m<sup>3</sup> | storage budget out from losses incurred with irrigation (m3)
 'store_leak_out'| m<sup>3</sup> | storage budget out from leakage (m3)
+'store_overflow', | m<sup>3</sup> |water that could have been added to storage (including losses), but was not as storage was full (m3)
 'store_runoff_in'| m<sup>3</sup>| storage budget in from runoff or external model (m3)
 'store_scheme_in_loss'| m<sup>3</sup> | storage budget out losses from the scheme to the storage basin (m3)
 'store_scheme_in'| m<sup>3</sup> | storage budget in from the irrigation scheme (m3)
