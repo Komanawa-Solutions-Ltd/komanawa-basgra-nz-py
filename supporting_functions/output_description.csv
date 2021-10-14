@@ -84,3 +84,5 @@ store_irr_loss,m3, storage budget out from losses incurred with irrigation (m3)
 store_evap_out,m3, storage budget out from evaporation (NOTIMPLEMENTED) (m3)
 store_scheme_in,m3, storage budget in from the irrigation scheme (m3)
 store_scheme_in_loss,m3, storage budget out losses from the scheme to the storage basin (m3)
+external_inflow, m3, input value external inflow (m3) kept for full water budget of storage
+store_overflow, m3, water that could have been added to storage (including losses), but was not as storage was full (m3)
