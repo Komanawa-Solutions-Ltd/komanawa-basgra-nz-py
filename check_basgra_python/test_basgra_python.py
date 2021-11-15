@@ -56,7 +56,7 @@ drop_keys = [  # newly added keys that must be dropped initially to manage tests
 
 ]
 
-drop_internal = False  # shortcut make the droppable testing established tests # todo change to True to drop new columns
+drop_internal = False  # shortcut make the droppable testing established tests change to True to drop new columns
 
 
 def test_trans_manual_harv(update_data=False):
@@ -1194,9 +1194,6 @@ def test_store_refill_from_scheme(update_data=False):
 
     correct_out = pd.read_csv(data_path, index_col=0)
     _output_checks(out, correct_out)
-
-
-# todo pull request and make new version
 
 
 if __name__ == '__main__':
