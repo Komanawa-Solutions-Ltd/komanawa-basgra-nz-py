@@ -167,5 +167,32 @@ else
     pass_soil_moist = .TRUE.
 end if
 
+! boolean
+ use_storage = (pa(126)> 0.9) ! whether or not to include storage in the model
+ runoff_from_rain = (pa(127)> 0.9)  ! if True then use a fraction of rainfall, otherwise proscrived refill data from an external model
+ calc_ind_store_demand = (pa(128)> 0.9) ! if true then calculate storage demand after scheme irrigation from triggers, targets,
+                       ! =  if false then calcuate storage demeand as the remaining demand after scheme irrigation
+
+! integer
+ stor_full_refil_doy = INT(pa(129)) ! the day of the year when storage will be set to full.
+
+! float
+ abs_max_irr  = pa(130)
+ irrigated_area = pa(131)  ! the area irrigated (ha)
+ I_h2o_store_vol = pa(132)  ! inital h2o storage volume (m3)
+ h2o_store_max_vol = pa(133)  ! h2o storage maximum volume (m3)
+ h2o_store_SA = pa(134)   ! h2o storage surface area (m2)
+ runoff_area = pa(135)    ! the area that can provide runoff to the storage (ha)
+ runoff_frac = pa(136)    ! the fraction of precipitation that becomes runoff to recharge storage (0-1, unitless)
+ stor_refill_min = pa(137)  ! the minimum amount of excess irrigation water that is needed to refill storage (mm/day)
+ stor_refill_losses = pa(138)  ! the losses incured from re-filling storage from irrigation scheme (0-1)
+ stor_leakage = pa(139)  ! the losses from storage to leakage static (m3/day)
+ stor_irr_ineff = pa(140)  ! the fraction of irrigation water that is lost when storage is used for irrigation
+                              ! (e.g. 0 means a perfectly effcient system,
+                              ! 1 means that 2x the storage volume is needed to irrigate x volume)
+                              ! unitless
+stor_reserve_vol = pa(141)
+h2o_store_vol = I_h2o_store_vol * h2o_store_max_vol ! set inital storage volume
+
 return
 end

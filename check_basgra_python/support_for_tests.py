@@ -73,11 +73,14 @@ def establish_peyman_input(return_pet=False):
     matrix_weather.loc[:, 'max_irr'] = 10.
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
+    matrix_weather.loc[:, 'irr_trig_store'] = 0
+    matrix_weather.loc[:, 'irr_targ_store'] = 1
+    matrix_weather.loc[:, 'external_inflow'] = 0
+
     matrix_weather.reset_index(inplace=True)
 
     # load harvest data from Simon woodward's paper
     harvest_nm = 'harvest_Scott_0.txt'
-    col = 1 + 8 * (1)
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,
@@ -104,7 +107,6 @@ def establish_peyman_input(return_pet=False):
 def _compair_pet():
     """just to compaire the pet and peyman results, the are slightly differnt,
     but I think that is due to different methods of calculating PET,"""
-    from supporting_functions.plotting import plot_multiple_results
     from basgra_python import run_basgra_nz
     verbose = False
     params, matrix_weather, days_harvest, doy_irr = establish_peyman_input(False)
@@ -123,11 +125,11 @@ def establish_org_input(site='scott'):
     if site == 'scott':
         harvest_nm = 'harvest_Scott_0.txt'
         weather_nm = 'weather_Scott.txt'
-        col = 1 + 8 * (1)
+        # col = 1 + 8 * (1)
     elif site == 'lincoln':
         harvest_nm = 'harvest_Lincoln_0.txt'
         weather_nm = 'weather_Lincoln.txt'
-        col = 1 + 8 * (3 - 1)
+        # col = 1 + 8 * (3 - 1)
     else:
         raise ValueError('unexpected site')
     params = get_woodward_mean_full_params(site)
@@ -152,6 +154,9 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'max_irr'] = 10.
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
+    matrix_weather.loc[:, 'irr_trig_store'] = 0
+    matrix_weather.loc[:, 'irr_targ_store'] = 1
+    matrix_weather.loc[:, 'external_inflow'] = 0
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
                                delim_whitespace=True,
@@ -167,15 +172,11 @@ def establish_org_input(site='scott'):
 
     days_harvest.drop(columns=['percent_harvest'], inplace=True)
 
-    ndays = matrix_weather.shape[0]
     doy_irr = [0]
     return params, matrix_weather, days_harvest, doy_irr
 
 
-def _clean_harvest(days_harvest, matrix_weather):
-    start_year = matrix_weather['year'].min()
-    start_day = matrix_weather.loc[matrix_weather.year == start_year, 'doy'].min()
-
+def clean_harvest(days_harvest, matrix_weather):
     stop_year = matrix_weather['year'].max()
     stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
     days_harvest.loc[(days_harvest.year == stop_year) & (days_harvest.doy > stop_day),
@@ -214,6 +215,9 @@ def get_woodward_weather():
     matrix_weather.loc[:, 'max_irr'] = 10.
     matrix_weather.loc[:, 'irr_trig'] = 0
     matrix_weather.loc[:, 'irr_targ'] = 1
+    matrix_weather.loc[:, 'irr_trig_store'] = 0
+    matrix_weather.loc[:, 'irr_targ_store'] = 1
+    matrix_weather.loc[:, 'external_inflow'] = 0
 
     return matrix_weather
 
@@ -261,13 +265,20 @@ def get_lincoln_broadfield():
     outdata.set_index('date', inplace=True)
     outdata = outdata.loc[outdata.index > '2011-08-01']
 
+    outdata.loc[:, 'max_irr'] = 10.
+    outdata.loc[:, 'irr_trig'] = 0
+    outdata.loc[:, 'irr_targ'] = 1
+    outdata.loc[:, 'irr_trig_store'] = 0
+    outdata.loc[:, 'irr_targ_store'] = 1
+    outdata.loc[:, 'external_inflow'] = 0
+
     return outdata
 
 
 def base_manual_harvest_data():
     params, matrix_weather, days_harvest, doy_irr = establish_org_input()
 
-    days_harvest = _clean_harvest(days_harvest, matrix_weather)
+    days_harvest = clean_harvest(days_harvest, matrix_weather)
     days_harvest.loc[:, 'frac_harv'] = 1
     days_harvest.loc[:, 'harv_trig'] = 3000
     days_harvest.loc[:, 'harv_targ'] = 1000
@@ -297,6 +308,35 @@ def base_auto_harvest_data(matrix_weather):
     return days_harvest_out
 
 
-if __name__ == '__main__':
-    params, matrix_weather, days_harvest, doy_irr = establish_peyman_input(True)
-    matrix_weather.to_csv(r"C:\Users\Matt Hanson\Downloads\lincoln_weather.csv")
+def get_input_for_storage_tests():
+    params, matrix_weather, days_harvest, doy_irr = establish_org_input('lincoln')
+
+    matrix_weather = get_lincoln_broadfield()
+    matrix_weather.loc[:, 'max_irr'] = 5
+    matrix_weather.loc[matrix_weather.index > '2015-08-01', 'max_irr'] = 15
+    matrix_weather.loc[:, 'irr_trig'] = 0.75
+    matrix_weather.loc[:, 'irr_targ'] = 0.9
+
+    params['IRRIGF'] = 1  # irrigation to 90% of field capacity
+    doy_irr = list(range(305, 367)) + list(range(1, 91))
+
+    params['use_storage'] = 1
+    params['irrigated_area'] = 10
+    params['h2o_store_max_vol'] = 10000  # 100 mm storage
+    params['h2o_store_SA'] = 0 # this is needed for evap, but not implemented currently
+
+    # place holders, these need to be defined for each set
+    params['runoff_from_rain'] = 1
+    params['calc_ind_store_demand'] = 0
+    params['stor_full_refil_doy'] = 240
+    params['abs_max_irr'] = 1000  # non-sensically high
+    params['I_h2o_store_vol'] = 1
+    params['runoff_area'] = 0
+    params['runoff_frac'] = 0
+    params['stor_refill_min'] = 0
+    params['stor_refill_losses'] = 0
+    params['stor_leakage'] = 0
+    params['stor_irr_ineff'] = 0
+    params['stor_reserve_vol'] = 0
+
+    return params, matrix_weather, days_harvest, doy_irr

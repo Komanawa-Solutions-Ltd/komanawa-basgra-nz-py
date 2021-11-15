@@ -2,6 +2,7 @@ module soil
 
     use parameters_site
     use parameters_plant
+    use h2o_storage_system
 
     implicit none
 
@@ -75,12 +76,69 @@ contains
         end if
     end Subroutine FrozenSoil
 
+    subroutine irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR)
+        integer :: doy, nirr
+        integer, dimension(nirr)              :: doy_irr
+        real :: IRRIG
+        real :: MAX_IRR, IRRIG_DEM
+
+        real :: EVAP, TRAN, WAL
+        real :: DRAIN, FREEZEL, RUNOFF, THAWS
+        real :: IRR_TRIG, IRR_TARG
+        real :: INFILTOT, WAFC, WAWP, MXPAW, PAW
+        logical :: irrigate
+
+        if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from PAW
+            irrigate = (PAW <= irr_trig * MXPAW)
+
+            IRRIG_DEM = ((MXPAW * IRR_TARG + WAWP - WAL) / DELT - &
+                (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation demand to IRR_TARG
+
+        else ! calculate irrigation demand and trigger from field capacity
+            irrigate = (((WAL + (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF) * DELT) / WAFC) <= irr_trig)
+
+            IRRIG_DEM = ((WAFC * IRR_TARG - WAL) / DELT - &
+                (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation demand to IRR_TARG
+
+        end if
+
+        IRRIG_DEM = MAX(0.,IRRIG_DEM) ! do not allow irrigation demand to become negative
+
+        ! irrigate if irrigation is allowed
+        if (any(doy==doy_irr)) then
+
+            ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
+            if (irrigate) then
+                IRRIG = IRRIGF * IRRIG_DEM  ! = mm d-1 Irrigation
+                IRRIG = min(IRRIG, MAX_IRR, abs_max_irr)
+                IRRIG = max(0.0, IRRIG)
+            else
+                IRRIG = 0.0
+            end if
+
+        else
+            IRRIG = 0.0 ! if the day of year is not
+        end if
+
+        ! set storage values to 0
+        store_runoff_in = 0.0
+        store_leak_out = 0.0
+        store_irr_loss = 0.0
+        store_evap_out = 0.0
+        store_scheme_in = 0.0
+        store_scheme_in_loss = 0.0
+    end subroutine irrigate_no_storage
+
+
     ! Calculate DRAIN,FREEZEL,IRRIG,RUNOFF,THAWS
     ! FIXME Why would ROOTD affect soil freezing? Uncouple Fdepth from ROOTD.
     Subroutine FRDRUNIR(EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS, &
             DRAIN, FREEZEL, IRRIG, IRRIG_DEM, RUNOFF, THAWS, &
-            MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW)
+            MAX_IRR, doy, doy_irr, nirr, IRR_TRIG, IRR_TARG, WAFC, WAWP, MXPAW, PAW, &
+            irrig_store, irrig_scheme)
 
+        real :: irrig_store, irrig_scheme
         real :: EVAP, Fdepth, Frate, INFIL, poolDRAIN, ROOTD, TRAN, WAL, WAS
         real :: DRAIN, FREEZEL, IRRIG, RUNOFF, THAWS
         real :: MAX_IRR, IRR_TRIG, IRR_TARG, IRRIG_DEM
@@ -111,51 +169,23 @@ contains
         RUNOFF = max(0., (WAL - WAST) / DELT + &
                 (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN))          ! = mm d-1 Runoff, runs off to WAST !todo why is this always zero
 
-        if (pass_soil_moist) then ! no soil moisture calculated here
+        if (pass_soil_moist) then ! no soil moisture calculated here instead use user passed soil moisture
             PAW = WAL - WAWP
         else
             PAW = max(0., ((WAL + (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF) * DELT) - WAWP))
         end if
 
-
-        if (Irr_frm_PAW) then ! calculate irrigation demand and trigger from field capacity
-            irrigate = (PAW <= irr_trig * MXPAW)
-
-            IRRIG_DEM = ((MXPAW * IRR_TARG + WAWP - WAL) / DELT - &
-                (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation demand to IRR_TARG
-
-        else ! calculate irrigation demand and trigger from field capacity
-            irrigate = (((WAL + (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF) * DELT) / WAFC) <= irr_trig)
-
-            IRRIG_DEM = ((WAFC * IRR_TARG - WAL) / DELT - &
-                (INFILTOT - EVAP - TRAN - FREEZEL + THAWS - DRAIN - RUNOFF))  ! = mm d-1 Irrigation demand to IRR_TARG
-
-        end if
-
-        IRRIG_DEM = MAX(0.,IRRIG_DEM) ! do not allow irrigation demand to become negative
-
-        if (any(doy==doy_irr)) then
-
-            ! if after time step changes the fraction of water holding capcaity is below trigger then apply irrigation
-            if (irrigate) then
-
-                IRRIG = IRRIGF * IRRIG_DEM  ! = mm d-1 Irrigation
-
-                if (IRRIG>MAX_IRR) then
-                    IRRIG = MAX_IRR
-                end if
-
-                if (IRRIG<0) then
-                    IRRIG = 0
-                end if
-
-            else
-                IRRIG = 0
-            end if
-
+        if (use_storage) then
+            call calc_storage_volume_use (doy, PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, nirr, doy_irr, IRRIG, MAX_IRR, irrig_store, irrig_scheme)
         else
-            IRRIG = 0 ! if the day of year is not
+            call irrigate_no_storage(PAW, irr_trig, irr_targ, irrig_dem, INFILTOT, WAFC, WAWP, MXPAW, EVAP, TRAN, &
+            WAL, irrigate, DRAIN, FREEZEL, RUNOFF, THAWS, doy, nirr, doy_irr, IRRIG, MAX_IRR)
+            irrig_store = 0
+            irrig_dem_store = 0
+            irrig_scheme = IRRIG
         end if
+
     end Subroutine FRDRUNIR
 
     ! Calculate FO2 = mol O2 mol-1 gas	Soil oxygen as a fraction of total gas
