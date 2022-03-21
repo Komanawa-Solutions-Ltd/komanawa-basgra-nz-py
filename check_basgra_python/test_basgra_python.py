@@ -96,7 +96,6 @@ def _output_checks(out, correct_out, dropable=True):
     if dropable:
         # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
         drop_keys_int = [
-
         ]
         out2 = out.drop(columns=drop_keys_int, errors='ignore')
         correct_out2 = correct_out.drop(columns=drop_keys_int, errors='ignore')
@@ -121,7 +120,7 @@ def _output_checks(out, correct_out, dropable=True):
     asmess = (f'{(~isclose).sum()} values do not match between the output and correct output '
               f'with rtol=1e-05, atol=1e-08'
               f'for columns: {correct_out2.columns[(~isclose).any(axis=0)]}\n' +
-              f'{"correct": <16} | {"got": <16}\n'
+              f'{"correct": <16} | {"got": <16}\n' +
               '{}'.format("\n".join([f"{e: <16} | {f: <16}" for e, f in zip(correct_out3[~isclose],
                                                                             out2[~isclose])][0:max_print])))
     assert isclose.all(), asmess
