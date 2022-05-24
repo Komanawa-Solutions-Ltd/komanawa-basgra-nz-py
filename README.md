@@ -543,9 +543,9 @@ You will also need to pass dummy values to:
  parameter| 'stor_refill_losses'| 0
  parameter| 'stor_leakage'| 0
  parameter| 'stor_irr_ineff'| 0
- matrix_weather|values| 'irr_trig_store'|0
- matrix_weather|values| 'irr_targ_store'|1
- matrix_weather|values| 'external_inflow'|0
+ matrix_weather|'irr_trig_store'|0
+ matrix_weather|'irr_targ_store'|1
+ matrix_weather|'external_inflow'|0
 
 ## python developments
 
