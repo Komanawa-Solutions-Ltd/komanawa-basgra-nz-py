@@ -13,6 +13,8 @@ from copy import deepcopy
 from input_output_keys import param_keys, out_cols, days_harvest_keys, matrix_weather_keys_pet, \
     matrix_weather_keys_penman
 from warnings import warn
+from pathlib import Path
+from get_fortran_module import get_fortran_basgra
 
 # compiled with gfortran 64,
 # https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download
@@ -28,7 +30,7 @@ _max_weather_size = 36600
 
 
 def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
-                  dll_path='default', supply_pet=True, auto_harvest=False, run_365_calendar=False):
+                  supply_pet=True, auto_harvest=False, run_365_calendar=False):
     """
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
@@ -45,8 +47,6 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     :param doy_irr: a list of the days of year to irrigate on, must be integers acceptable values: (0-366)
     :param verbose: boolean, if True the fortran function prints a number of statements for debugging purposes
                    (depreciated)
-    :param dll_path: path to the compiled fortran DLL to use, default was made on windows 10 64 bit, if the path does
-                     not exist, this function will try to run the bat file to re-make the dll.
     :param supply_pet: boolean, if True BASGRA expects pet to be supplied, if False the parameters required to
                        calculate pet from the peyman equation are expected,
                        the version must match the DLL if dll_path != 'default'
@@ -73,30 +73,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     assert isinstance(run_365_calendar, bool), 'expect_no_leap_days must be boolean'
 
     # define DLL library path
-    use_default_lib = False
-    if dll_path == 'default':
-        use_default_lib = True
-        if supply_pet:
-            dll_path = _libpath_pet
-
-        else:
-            dll_path = _libpath_peyman
-
-    # check that library path exists
-    if not os.path.exists(dll_path):
-        if use_default_lib:
-            # try to run the bat file
-            print('dll not found, trying to run bat to create DLL:\n{}'.format(_bat_path))
-            p = Popen(os.path.basename(_bat_path), cwd=os.path.dirname(_bat_path), shell=True)
-            stdout, stderr = p.communicate()
-            print('output of bat:\n{}\n{}'.format(stdout, stderr))
-            if not os.path.exists(dll_path):
-                raise EnvironmentError('default DLL path not found:\n'
-                                       '{}\n'
-                                       'see readme for more details:\n'
-                                       '{}'.format(dll_path, os.path.dirname(__file__) + 'README.md'))
-        else:
-            raise EnvironmentError('DLL path not found:\n{}'.format(dll_path))
+    fortran_basgra = get_fortran_basgra(supply_pet)
 
     # define expected weather keys
     if supply_pet:
@@ -136,45 +113,27 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     if weather_size < _max_weather_size:
         temp = np.zeros((_max_weather_size - weather_size, matrix_weather.shape[1]), float)
         matrix_weather = np.concatenate((matrix_weather, temp), 0)
+    elif weather_size > _max_weather_size:
+        raise ValueError(f'weather data is too long, maximum is {_max_weather_size} days, '
+                         f'though this value can be modified in the fortran code: '
+                         f'fortran_BASGRA_NZ/environment.f95 line 9 and {__file__} line 29')
 
     y = np.zeros((ndays, nout), float)  # cannot set these to nan's or it breaks fortran
-
-    # make pointers
-    # arrays # 99% sure this works
-    params_p = np.asfortranarray(params).ctypes.data_as(ct.POINTER(ct.c_double))  # 1d array, float
-    matrix_weather_p = np.asfortranarray(matrix_weather).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
-    days_harvest_p = np.asfortranarray(days_harvest).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
-    y_p = np.asfortranarray(y).ctypes.data_as(ct.POINTER(ct.c_double))  # 2d array, float
-    doy_irr_p = np.asfortranarray(doy_irr).ctypes.data_as(ct.POINTER(ct.c_long))
-
-    # integers
-    ndays_p = ct.pointer(ct.c_int(ndays))
-    nirr_p = ct.pointer(ct.c_int(nirr))
-    nout_p = ct.pointer(ct.c_int(nout))
-    verb_p = ct.pointer(ct.c_bool(verbose))
-
-    # load DLL
-    for_basgra = ct.CDLL(dll_path)
-
-    # run BASGRA
-    for_basgra.BASGRA_(params_p, matrix_weather_p, days_harvest_p, ndays_p, nout_p, nirr_p, doy_irr_p, y_p, verb_p)
-
-    # format results
-    y_p = np.ctypeslib.as_array(y_p, (ndays, nout))
-    y_p = y_p.flatten(order='C').reshape((ndays, nout), order='F')
-    y_p = pd.DataFrame(y_p, out_index, out_cols)
+    y = fortran_basgra.basgramodule.basgra(params, matrix_weather, days_harvest, ndays, nout, nirr, doy_irr,
+                                           verbose, y=y)
+    out = pd.DataFrame(y, out_index, out_cols)
     if run_365_calendar:
         mapper = get_month_day_to_nonleap_doy(key_doy=True)
-        strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(y_p.year.values.astype(int),
-                                                                                   y_p.doy.values.astype(int))]
-        y_p.loc[:, 'date'] = pd.to_datetime(strs)
+        strs = [f'{y}-{mapper[doy][0]:02d}-{mapper[doy][1]:02d}' for y, doy in zip(out.year.values.astype(int),
+                                                                                   out.doy.values.astype(int))]
+        out.loc[:, 'date'] = pd.to_datetime(strs)
     else:
-        strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in y_p[['year', 'doy']].itertuples(False, None)]
-        y_p.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
+        strs = ['{}-{:03d}'.format(int(e), int(f)) for e, f in out[['year', 'doy']].itertuples(False, None)]
+        out.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
 
-    y_p.set_index('date', inplace=True)
+    out.set_index('date', inplace=True)
 
-    return y_p
+    return out
 
 
 def _trans_manual_harv(days_harvest, matrix_weather):
