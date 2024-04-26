@@ -1,4 +1,4 @@
-[build-system]  # todo update to this project
+[build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
@@ -48,6 +48,4 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py"
 Issues = "https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py/issues"
-Documentation = "" # todo
-
-# todo include all files in source
+Documentation = "https://komanawa-solutions-ltd.github.io/komanawa-basgra-nz-py/"
