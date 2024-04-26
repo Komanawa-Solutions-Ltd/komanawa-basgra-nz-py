@@ -1,0 +1,53 @@
+[build-system]  # todo update to this project
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src/"]
+
+[tool.setuptools.package-data]
+"*" = ["*"]
+
+[project]
+name = "komanawa-basgra-nz-py"
+version = "v7.0.0"
+authors = [
+    { name = "Matt Dumont", email = "Matt@komanawa.com" },
+]
+description = """BASGRA or The BASic GRAssland model is a simple pasture growth model. This version, BASGRA_NZ has been specifically modified for use within New Zealand.
+
+BASGRA_NZ_PY is a python wrapper for the BASGRA_NZ fortran code, contains several new features and is the first version of BASGRA to have purpose built tests to ensure that all changes can be made in a backwards compatible fashion (with some argument changes).
+
+The BASGRA NZ project tracks modifications to BASGRA for application to perennial ryegrass in New Zealand conditions. The test data comes from the Seed Rate Trial 2011-2017. Modifications to BASGRA were necessary to represent this data.
+
+see outstanding_issues.txt for original info on the model see docs for information on the changes made by Simon Woodward, in Woodward, 2020
+
+BASGRA_NZ_PY is modified from Simon Woodward's BASGRA_NZ which is in turn modified from BASGRA
+
+This repo diverged from Simon Woodward's BASGRA_NZ as of August 2020, efforts will be made to incorporate further updates, but no assurances
+"""
+readme = "README.rst"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "fmodpy",
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py"
+Issues = "https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py/issues"
+Documentation = "" # todo
+
+# todo include all files in source

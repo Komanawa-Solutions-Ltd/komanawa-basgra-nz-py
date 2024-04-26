@@ -4,26 +4,14 @@ This is a place to create a python wrapper for the BASGRA fortran model in forta
  Author: Matt Hanson
  Created: 12/08/2020 9:32 AM
  """
-import os
-import ctypes as ct
 import numpy as np
 import pandas as pd
-from subprocess import Popen
 from copy import deepcopy
-from input_output_keys import param_keys, out_cols, days_harvest_keys, matrix_weather_keys_pet, \
+from komanawa.basgra_nz_py.input_output_keys import param_keys, out_cols, days_harvest_keys, matrix_weather_keys_pet, \
     matrix_weather_keys_penman
 from warnings import warn
-from pathlib import Path
-from get_fortran_module import get_fortran_basgra
+from komanawa.basgra_nz_py.get_fortran_module import get_fortran_basgra
 
-# compiled with gfortran 64,
-# https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download
-# compilation code: compile_basgra_gfortran.bat
-
-# define the dll library path
-_libpath_pet = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA_pet.DLL')
-_libpath_peyman = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ/BASGRA_peyman.DLL')
-_bat_path = os.path.join(os.path.dirname(__file__), 'fortran_BASGRA_NZ\\compile_BASGRA_gfortran.bat')
 # this is the maximum number of weather days,
 # it is hard coded into fortran_BASGRA_NZ/environment.f95 line 9
 _max_weather_size = 36600
@@ -35,15 +23,15 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
     python wrapper for the fortran BASGRA code
     changes to the fortran code may require changes to this function
     runs the model for the period of the weather data
-    :param params: dictionary, see input_output_keys.py, README.md, or
-                   https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PYfor more details
+    :param params: dictionary, see input_output_keys.py,
+                   https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY for more details
     :param matrix_weather: pandas dataframe of weather data, maximum entries set in _max_weather_size in line 24
                           of this file (currently 36600)
                           see documentation for input columns at https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY
-                          or README.md, note expected DOY will change depending on expect_no_leap_days
+                        , note expected DOY will change depending on expect_no_leap_days
     :param days_harvest: days harvest dataframe must be same length as matrix_weather entries
                         see documentation for input columns at https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY
-                        or README.md, note expected DOY will change depending on expect_no_leap_days
+                        , note expected DOY will change depending on expect_no_leap_days
     :param doy_irr: a list of the days of year to irrigate on, must be integers acceptable values: (0-366)
     :param verbose: boolean, if True the fortran function prints a number of statements for debugging purposes
                    (depreciated)
@@ -119,7 +107,7 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
                          f'fortran_BASGRA_NZ/environment.f95 line 9 and {__file__} line 29')
 
     y = np.zeros((ndays, nout), float)  # cannot set these to nan's or it breaks fortran
-    y = fortran_basgra.basgramodule.basgra(params, matrix_weather, days_harvest, ndays, nout, nirr, doy_irr,
+    y = fortran_basgra.basgra(params, matrix_weather, days_harvest, ndays, nout, nirr, doy_irr,
                                            verbose, y=y)
     out = pd.DataFrame(y, out_index, out_cols)
     if run_365_calendar:

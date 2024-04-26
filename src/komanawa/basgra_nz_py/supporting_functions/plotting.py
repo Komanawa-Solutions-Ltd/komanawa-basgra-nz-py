@@ -8,7 +8,7 @@ from matplotlib.cm import get_cmap
 from matplotlib.patches import Patch
 import pandas as pd
 import os
-from supporting_functions.output_metadata import get_output_metadata
+from komanawa.basgra_nz_py.supporting_functions.output_metadata import get_output_metadata
 
 _outvars = (
     'WAL',

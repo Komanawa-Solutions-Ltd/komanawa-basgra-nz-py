@@ -5,8 +5,8 @@
 import pandas as pd
 import os
 import numpy as np
-from supporting_functions.conversions import convert_RH_vpa
-from supporting_functions.woodward_2020_params import get_woodward_mean_full_params
+from komanawa.basgra_nz_py.supporting_functions.conversions import convert_RH_vpa
+from komanawa.basgra_nz_py.supporting_functions.woodward_2020_params import get_woodward_mean_full_params
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 
@@ -107,7 +107,7 @@ def establish_peyman_input(return_pet=False):
 def _compair_pet():
     """just to compaire the pet and peyman results, the are slightly differnt,
     but I think that is due to different methods of calculating PET,"""
-    from basgra_python import run_basgra_nz
+    from komanawa.basgra_nz_py.basgra_python import run_basgra_nz
     verbose = False
     params, matrix_weather, days_harvest, doy_irr = establish_peyman_input(False)
     peyman_out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default',
@@ -117,7 +117,7 @@ def _compair_pet():
     pet_out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, dll_path='default',
                             supply_pet=True)
 
-    from supporting_functions.plotting import plot_multiple_results
+    from komanawa.basgra_nz_py.supporting_functions.plotting import plot_multiple_results
     plot_multiple_results({'pet': pet_out, 'peyman': peyman_out})
 
 

@@ -2,19 +2,15 @@
  Author: Matt Hanson
  Created: 14/08/2020 11:04 AM
  """
-import os
-import numpy as np
-import pandas as pd
-from basgra_python import run_basgra_nz, _trans_manual_harv, get_month_day_to_nonleap_doy, _bat_path
-from input_output_keys import matrix_weather_keys_pet
-from check_basgra_python.support_for_tests import *
+from komanawa.basgra_nz_py.basgra_python import run_basgra_nz, _trans_manual_harv, get_month_day_to_nonleap_doy
+from komanawa.basgra_nz_py.input_output_keys import matrix_weather_keys_pet
+from support_for_tests import *
 import inspect
-from subprocess import Popen
 
-from supporting_functions.plotting import plot_multiple_results  # used in test development and debugging
+from komanawa.basgra_nz_py.supporting_functions.plotting import \
+    plot_multiple_results  # used in test development and debugging
 
 verbose = False
-
 
 drop_keys = [  # newly added keys that must be dropped initially to manage tests, datasets are subsequently re-created
     'WAFC',
@@ -92,7 +88,7 @@ def _output_checks(out, correct_out, dropable=True):
     if dropable:
         # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
         drop_keys_int = [
-            'store_overflow', 'external_inflow' # todo remove these when the tests are updated
+            'store_overflow', 'external_inflow'  # todo remove these when the tests are updated
         ]
         out2 = out.drop(columns=drop_keys_int, errors='ignore')
         correct_out2 = correct_out.drop(columns=drop_keys_int, errors='ignore')
@@ -319,7 +315,7 @@ def test_irr_paw(update_data=False):
 
 
 def test_pet_calculation(update_data=False):
-    # note this test was not as throughrougly investigated as it was not needed for my work stream
+    # keynote this test was not as well investigated as it was not needed for my work stream
     test_nm = inspect.currentframe().f_code.co_name
     print('testing: ' + test_nm)
 
@@ -624,7 +620,7 @@ def test_reseed(update_data=False):
     params['reseed_CSTUB'] = 0.5
 
     doy_irr = list(range(305, 367)) + list(range(1, 91))
-    temp = pd.DataFrame(columns=days_harvest.keys(),dtype=float)
+    temp = pd.DataFrame(columns=days_harvest.keys(), dtype=float)
     for i, y in enumerate(days_harvest.year.unique()):
         if y == 2011:
             continue
@@ -1198,7 +1194,7 @@ def test_store_refill_from_scheme(update_data=False):
 if __name__ == '__main__':
     # input types tests
     test_org_basgra_nz()
-    #todo problem! test_pet_calculation()
+    test_pet_calculation()
 
     # irrigation tests
     test_irrigation_trigger()

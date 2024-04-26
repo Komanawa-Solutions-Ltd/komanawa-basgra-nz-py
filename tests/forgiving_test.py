@@ -3,7 +3,7 @@
  Created: 14/10/2021 10:52 AM
  """
 
-from check_basgra_python.test_basgra_python import *
+from test_basgra_python import *
 
 all_checks = [
     'test_org_basgra_nz',

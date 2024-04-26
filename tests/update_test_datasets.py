@@ -2,7 +2,7 @@
  Author: Matt Hanson
  Created: 17/11/2020 11:35 AM
  """
-from check_basgra_python.test_basgra_python import *
+from test_basgra_python import *
 
 if __name__ == '__main__':
     t = input('are you really sure you want to update all of the test data? y/n').lower()

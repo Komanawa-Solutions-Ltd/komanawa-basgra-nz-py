@@ -5,7 +5,7 @@
 
 import pandas as pd
 import os
-from input_output_keys import plant_param_keys, site_param_keys
+from komanawa.basgra_nz_py.input_output_keys import plant_param_keys, site_param_keys
 
 
 def get_woodward_mean_site_param(site):
