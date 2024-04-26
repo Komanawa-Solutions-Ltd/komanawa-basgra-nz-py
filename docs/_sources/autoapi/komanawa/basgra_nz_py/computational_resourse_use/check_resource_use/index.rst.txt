@@ -1,0 +1,35 @@
+:py:mod:`komanawa.basgra_nz_py.computational_resourse_use.check_resource_use`
+=============================================================================
+
+.. py:module:: komanawa.basgra_nz_py.computational_resourse_use.check_resource_use
+
+.. autoapi-nested-parse::
+
+   Author: Matt Hanson
+   Created: 23/11/2020 9:50 AM
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   komanawa.basgra_nz_py.computational_resourse_use.check_resource_use.timeit_test
+
+
+
+.. py:function:: timeit_test(py_file_path, function_names=('test_function', 'test_function2'), n=10)
+
+   run an automated timeit test, must be outside of the function definition, prints results in scientific notation units are seconds
+
+   :param py_file_path: path to the python file that holds the functions, if the functions are in the same script as call then  __file__ is sufficient. in this case the function call should be protected by: if __name__ == '__main__':
+   :param function_names: the names of the functions to test (iterable), functions must not have arguments
+   :param n: number of times to test
+   :return:
+
+

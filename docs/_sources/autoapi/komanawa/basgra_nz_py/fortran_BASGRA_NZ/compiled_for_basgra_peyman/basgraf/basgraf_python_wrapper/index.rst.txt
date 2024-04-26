@@ -1,0 +1,14 @@
+:py:mod:`komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_peyman.basgraf.basgraf_python_wrapper`
+===========================================================================================================
+
+.. py:module:: komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_peyman.basgraf.basgraf_python_wrapper
+
+.. autoapi-nested-parse::
+
+   This Python code is an automatically generated wrapper
+   for Fortran code made by 'fmodpy'. The original documentation
+   for the Fortran source code follows.
+
+
+
+

@@ -1,0 +1,25 @@
+:py:mod:`komanawa.basgra_nz_py.supporting_functions`
+====================================================
+
+.. py:module:: komanawa.basgra_nz_py.supporting_functions
+
+.. autoapi-nested-parse::
+
+   Author: Matt Hanson
+   Created: 1/09/2020 9:22 AM
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   conversions/index.rst
+   cumulative_annual_data/index.rst
+   output_metadata/index.rst
+   plotting/index.rst
+   woodward_2020_params/index.rst
+
+

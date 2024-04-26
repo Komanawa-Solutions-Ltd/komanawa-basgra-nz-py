@@ -1,0 +1,3385 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Komanawa-basgra-nz-py &#8212; komanawa-basgra-nz-py v7.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="_static/documentation_options.js?v=14515140"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="komanawa.basgra_nz_py" href="autoapi/komanawa/basgra_nz_py/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="_static/ksl_for_latex.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Basgra-NZ-Py overview</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="autoapi/komanawa/basgra_nz_py/index.html">
+                        Code documentation
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="#https://github.com/Komanawa-Solutions-Ltd/komanawa-simple-farm-model#" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">View on GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/company/k%C5%8Dmanawa-solutions-ltd/" title="Follow us on LinkedIn" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Follow us on LinkedIn</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.komanawa.com" title="Komanawa Solutions Ltd." class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="_static/just_symbol.png" class="icon-link-image" alt="Komanawa Solutions Ltd."/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="autoapi/komanawa/basgra_nz_py/index.html">
+                        Code documentation
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="#https://github.com/Komanawa-Solutions-Ltd/komanawa-simple-farm-model#" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">View on GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/company/k%C5%8Dmanawa-solutions-ltd/" title="Follow us on LinkedIn" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Follow us on LinkedIn</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.komanawa.com" title="Komanawa Solutions Ltd." class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="_static/just_symbol.png" class="icon-link-image" alt="Komanawa Solutions Ltd."/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="komanawa-basgra-nz-py">
+<h1>Komanawa-basgra-nz-py<a class="headerlink" href="#komanawa-basgra-nz-py" title="Link to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="about-basgra">
+<h2>About BASGRA<a class="headerlink" href="#about-basgra" title="Link to this heading">#</a></h2>
+<p>BASGRA or The BASic GRAssland model is a simple pasture growth model.
+This version, BASGRA_NZ has been specifically modified for use within
+New Zealand.</p>
+<p>BASGRA_NZ_PY is a python wrapper for the
+<a class="reference external" href="https://github.com/woodwards/basgra_nz/tree/master/model_package/src">BASGRA_NZ</a>
+fortran code, contains several new features and is the first version of
+BASGRA to have purpose built tests to ensure that all changes can be
+made in a backwards compatible fashion (with some argument changes).</p>
+<p>The BASGRA NZ project tracks modifications to BASGRA for application to
+perennial ryegrass in New Zealand conditions. The test data comes from
+the Seed Rate Trial 2011-2017. Modifications to BASGRA were necessary to
+represent this data.</p>
+<p>see outstanding_issues.txt for original info on the model see docs for
+information on the changes made by Simon Woodward, in <a class="reference external" href="https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464">Woodward,
+2020</a></p>
+<p>BASGRA_NZ_PY is modified from Simon Woodward’s
+<a class="reference external" href="https://github.com/woodwards/basgra_nz/tree/master/model_package/src">BASGRA_NZ</a>
+which is in turn modified from
+<a class="reference external" href="https://github.com/davcam/BASGRA">BASGRA</a></p>
+<p>This repo diverged from Simon Woodward’s
+<a class="reference external" href="https://github.com/woodwards/basgra_nz/tree/master/model_package/src">BASGRA_NZ</a>
+as of August 2020, efforts will be made to incorporate further updates,
+but no assurances</p>
+</section>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="#python-implementation">Python Implementation</a></p></li>
+<li><p><a class="reference external" href="#package-installation">package installation</a></p></li>
+<li><p><a class="reference external" href="#fortran-installation">Fortran Installation</a></p></li>
+<li><p><a class="reference external" href="#fortran-compilation">Fortran compilation</a></p></li>
+<li><p><a class="reference external" href="#new-features-implemented-from-simon-woodward-s-basgra">new features implemented from Simon Woodward’s
+BASGRA</a></p>
+<ul>
+<li><p><a class="reference external" href="#model-documentation-resources">model documentation resources</a></p></li>
+<li><p><a class="reference external" href="#maximum-simulation-length">Maximum simulation length</a></p></li>
+<li><p><a class="reference external" href="#Calender">Calender</a></p></li>
+<li><p><a class="reference external" href="#resource-requirements">Resource requirements</a></p></li>
+<li><p><a class="reference external" href="#irrigation-triggering-and-demand-modelling--v200--">irrigation triggering and demand modelling
+(v2.0.0+)</a></p>
+<ul>
+<li><p><a class="reference external" href="#new-irrigation-process">New Irrigation Process</a></p></li>
+<li><p><a class="reference external" href="#new-irrigation-input-outputs">New irrigation
+input/outputs</a></p></li>
+<li><p><a class="reference external" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v200">How to run so that the results are backwards compatible with
+versions before
+V2.0.0</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#harvest-management-and-scheduling--v300--">Harvest management and scheduling
+(v3.0.0+)</a></p>
+<ul>
+<li><p><a class="reference external" href="#new-harvest-processes">New Harvest processes</a></p>
+<ul>
+<li><p><a class="reference external" href="#automatic-harvesting-process">Automatic harvesting
+process</a></p></li>
+<li><p><a class="reference external" href="#manual-harvesting-process">Manual harvesting process</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#new-harvest-inputs-outputs">New Harvest inputs/outputs</a></p></li>
+<li><p><a class="reference external" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v300">How to run so that the results are backwards compatible with
+versions before
+V3.0.0</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#re-seeding-module--v400--">Re-seeding module (V4.0.0+)</a></p>
+<ul>
+<li><p><a class="reference external" href="#reseed-process">Reseed process</a></p></li>
+<li><p><a class="reference external" href="#new-re-seed-inputs-outputs">New re-seed inputs/outputs</a></p></li>
+<li><p><a class="reference external" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v300--">How to run so that the results are backwards compatible with
+versions V3.0.0
+-</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#passing-external-soil-moisture-to-model--v500--">passing external soil moisture to model
+(V5.0.0+)</a></p>
+<ul>
+<li><p><a class="reference external" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-V400--">How to run so that the results are backwards compatible with
+versions V4.0.0
+-</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Irrigation-water-storage-(V6.0.0+)">Irrigation water storage
+(V6.0.0+)</a></p>
+<ul>
+<li><p><a class="reference external" href="#Irrigation-storage-process">Irrigation storage process</a></p></li>
+<li><p><a class="reference external" href="#new-inputs/outputs">new inputs/outputs</a></p></li>
+<li><p><a class="reference external" href="#How-to-run-so-that-the-results-are-backwards-compatible-with-versions-V5.0.0-">How to run so that the results are backwards compatible with
+versions V5.0.0
+-</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#python-developments">python developments</a></p>
+<ul>
+<li><p><a class="reference external" href="#supporting-functions">supporting functions</a></p></li>
+<li><p><a class="reference external" href="#testing-regime-and-examples">testing regime and examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#input-and-output-parameter-definitions">Input and output parameter
+definitions</a></p>
+<ul>
+<li><p><a class="reference external" href="#days-harvest-keys-description">Days Harvest Keys description</a></p></li>
+<li><p><a class="reference external" href="#matrix-weather-keys-where-pet-is-passed-description">Matrix weather keys where pet is passed
+description</a></p></li>
+<li><p><a class="reference external" href="#matrix-weather-keys-where-pet-is-calculated-via-penman-description">Matrix weather keys where pet is calculated via penman
+description</a></p></li>
+<li><p><a class="reference external" href="#site-parameters-description">Site Parameters description</a></p></li>
+<li><p><a class="reference external" href="#plant-parameters-description">Plant Parameters description</a></p></li>
+<li><p><a class="reference external" href="#output-description">output description</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#References">References</a></p></li>
+</ul>
+<p>Table of contents generated with markdown-toc</p>
+</section>
+<section id="python-implementation">
+<h2>Python Implementation<a class="headerlink" href="#python-implementation" title="Link to this heading">#</a></h2>
+<p>BASGRA_NZ requires python 3.7 or less (3.8 handles DLLs more securely
+but this causes some faults) required packages:</p>
+<ul class="simple">
+<li><p>pandas</p></li>
+<li><p>numpy</p></li>
+<li><p>matplotlib</p></li>
+</ul>
+<p>to install this general environment via conda: conda create –name
+basgranz python=3.7 numpy pandas matplotlib or a fixed anaconda .yml
+library can be found in the environment.yml file</p>
+</section>
+<section id="package-installation">
+<h2>package installation<a class="headerlink" href="#package-installation" title="Link to this heading">#</a></h2>
+<p>BASGRA_NZ_PY can only be installed locally from a github pull and
+addition to your PYTHONPATH</p>
+<p>this installs both the python wrapper and the source fortran code. at
+present a fortran installation is required.</p>
+</section>
+<section id="fortran-installation">
+<h2>Fortran Installation<a class="headerlink" href="#fortran-installation" title="Link to this heading">#</a></h2>
+<p>At present BASGRA_NZ_py requires fortran 64 and assumes the use of
+gfortran64. It is beyond the scope of this readme to detail how to
+install fortran, but general instructions can be found in this <a class="reference external" href="https://www.youtube.com/watch?v=wGv2kGl8OV0">youtube
+video</a> WARNING the
+installation in this video is 32Bit</p>
+<p>This repo was developed and tested with gfortran 64 4.8.1 which can be
+<a class="reference external" href="https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download">downloaded
+here</a></p>
+</section>
+<section id="fortran-compilation">
+<h2>Fortran compilation<a class="headerlink" href="#fortran-compilation" title="Link to this heading">#</a></h2>
+<p>At present BASGRA_NZ_py requires fortran and requires the user to
+compile the fortran code. The compilation code can be found in the
+following .bat file: fortran_BASGRA_NZ/compile_BASGRA_gfortran.bat The
+python wrapper will attempt to run the compilation bat if the DLL it
+required does not exist.</p>
+</section>
+<section id="new-features-implemented-from-simon-woodwards-basgra">
+<h2>new features implemented from Simon Woodward’s BASGRA<a class="headerlink" href="#new-features-implemented-from-simon-woodwards-basgra" title="Link to this heading">#</a></h2>
+<p>A number of new features where necessary for futher modeling work.
+Specially more generalized irrigation and harvest management. This
+required changes to the fortran code, but tests were put in place to
+ensure backwards compatibility ( with some argument changes) to <a class="reference external" href="https://github.com/woodwards/basgra_nz/tree/master/model_package/src">Simon
+Woodward’s
+BASGRA_NZ</a>
+as of August 2020.</p>
+<section id="model-documentation-resources">
+<h3>model documentation resources<a class="headerlink" href="#model-documentation-resources" title="Link to this heading">#</a></h3>
+<p>This readme is the documentation of all new features to basgra_nz_py,
+but the documentation of the previous features are in
+fortran_BASGRA_NZ/docs</p>
+</section>
+<section id="maximum-simulation-length">
+<h3>Maximum simulation length<a class="headerlink" href="#maximum-simulation-length" title="Link to this heading">#</a></h3>
+<div class="line-block">
+<div class="line">At present the maximum simulation length is set explicitly within the
+fortran code in the environment.f95.</div>
+<div class="line">It is set to 100 years (NMAXDAYS = 36600). This was set at this length
+to allow long term climate change simulations, without expending too
+many resources. Note that internally the python code must make the
+weather matrix length to nmaxdays.</div>
+</div>
+</section>
+<section id="calender">
+<h3>Calender<a class="headerlink" href="#calender" title="Link to this heading">#</a></h3>
+<p>BASGRA_NZ_PY can be run with either the standard gregorian calendar
+(e.g. with leap years) or on a 365 day calendar In both cases
+BASGRA_NZ_PY runs checks to ensure that there are no missing or
+additional days in the simulation relative to the expected calender.</p>
+</section>
+<section id="resource-requirements">
+<h3>Resource requirements<a class="headerlink" href="#resource-requirements" title="Link to this heading">#</a></h3>
+<p>BASGRA is fast! The following baseline test are provided in
+supporting_functions/check_resource_use.py:</p>
+<ul class="simple">
+<li><p>BASGRA took 1.585375e-01 seconds to run run_example_basgra which has
+2192 sim days</p></li>
+<li><p>BASGRA took 7.232549e-05 seconds per realisation day to run
+run_example_basgra</p></li>
+<li><p>BASGRA took 7.072114e-01 seconds to run support_for_memory_usage
+which has 36600 sim days</p></li>
+<li><p>BASGRA took 1.932272e-05 seconds per realisation day to run
+support_for_memory_usage</p></li>
+</ul>
+<p>BASGRA is relatively light weight</p>
+<ul class="simple">
+<li><p>run_example_basgra which has 2192 sim days required a max of c. 9 mb
+of memory</p></li>
+<li><p>run support_for_memory_usage which has 36600 sim days required a max
+of c. 45 mb of memory</p></li>
+<li><p>memory tests were run with <a class="reference external" href="https://pypi.org/project/memory-profiler/">memory_profiler
+0.58.0</a> to rerun these
+tests (supporting_functions/test_memory_use.py) requires installation
+of the memory profiler</p></li>
+</ul>
+</section>
+<section id="irrigation-triggering-and-demand-modelling-v2-0-0">
+<h3>irrigation triggering and demand modelling (v2.0.0+)<a class="headerlink" href="#irrigation-triggering-and-demand-modelling-v2-0-0" title="Link to this heading">#</a></h3>
+<section id="new-irrigation-process">
+<h4>New Irrigation Process<a class="headerlink" href="#new-irrigation-process" title="Link to this heading">#</a></h4>
+<p>Irrigation modelling was developed to answer questions about pasture
+growth rates in the face of possible irrigation water restribtions;
+therefore the irrigation has been implemented as follows:</p>
+<ul class="simple">
+<li><p>if the day of year is within the irrigation season (doy in doy_irr)</p>
+<ul>
+<li><p>if the fraction of soil water (e.g. WAL/WAFC) including the time
+step modification to the soil water content (e.g. transpiration,
+rainfall, etc) are BELOW the trigger for that day</p>
+<ul>
+<li><p>irrigation is applied at a rate = max(IRRIGF* amount of water
+needed to fill to irrigation target * field capacity, max_irr
+on the day)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>This modification includes bug fixes that allowed irrigation to be
+negative.</p>
+</section>
+<section id="new-irrigation-input-outputs">
+<h4>New irrigation input/outputs<a class="headerlink" href="#new-irrigation-input-outputs" title="Link to this heading">#</a></h4>
+<p>There is a new input variable: doy_irr, which is the days that
+irrigation can occur(1d array)</p>
+<p>a number of inputs have been added to parameters:</p>
+<ul class="simple">
+<li><p>‘IRRIGF’, # fraction # fraction of irrigation to apply to bring water
+content up to field capacity, this was previously set within the
+fortran code</p></li>
+<li><p>‘irr_frm_paw’, # are irrigation trigger/target the fraction of
+profile available water (1/True or # the fraction of field capacity
+(0/False).</p></li>
+</ul>
+<p>new columns has been added to matrix_weather:</p>
+<ul class="simple">
+<li><p>‘max_irr’, # maximum irrigation available (mm/d)</p></li>
+<li><p>‘irr_trig’, # fraction of PAW/field (see irr_frm_paw) capacity at or
+below which irrigation is triggered (fraction 0-1) e.g. 0.5 means
+that irrigation will only be applied when soil water content is at
+1/2 field capacity (e.g. water holding capacity)</p></li>
+<li><p>‘irr_targ’, # fraction of PAW/field (see irr_frm_paw) capacity to
+irrigate to (fraction 0-1)</p></li>
+</ul>
+<p>New outputs have been added:</p>
+<ul class="simple">
+<li><p>‘IRRIG’: # mm d-1 Irrigation,</p></li>
+<li><p>‘WAFC’: #mm # Water in non-frozen root zone at field capacity</p></li>
+<li><p>‘IRR_TARG’, # irrigation Target (fraction of field capacity) to fill
+to, also an input variable</p></li>
+<li><p>‘IRR_TRIG’, # irrigation trigger (fraction of field capacity at which
+to start irrigating</p></li>
+<li><p>‘IRRIG_DEM’, # irrigation irrigation demand to field capacity *
+IRR_TARG # mm</p></li>
+</ul>
+</section>
+<section id="how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v2-0-0">
+<h4>How to run so that the results are backwards compatible with versions before V2.0.0<a class="headerlink" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v2-0-0" title="Link to this heading">#</a></h4>
+<p>To run the model in the original (no irrigation fashion) set both
+max_irr and irr_trig to zero, also set doy_irr = [0]</p>
+</section>
+</section>
+<section id="harvest-management-and-scheduling-v3-0-0">
+<h3>Harvest management and scheduling (v3.0.0+)<a class="headerlink" href="#harvest-management-and-scheduling-v3-0-0" title="Link to this heading">#</a></h3>
+<p>As of version v3.0.0 harvest management has changed significantly to
+allow many more options for harvest management</p>
+<p>Importantly days_harvest is now a float array instead of an integer
+array as was the case in v.2.0.0</p>
+<section id="new-harvest-processes">
+<h4>New Harvest processes<a class="headerlink" href="#new-harvest-processes" title="Link to this heading">#</a></h4>
+<p>harvesting has been changed to allow:</p>
+<ul class="simple">
+<li><p>automatic harvesting</p></li>
+<li><p>time varient harvestable dry matter triggers</p></li>
+<li><p>time varient harvestable dry matter target (e.g. dry matter is
+harvested to the target)</p></li>
+<li><p>time varient fixed weight harvesting</p></li>
+<li><p>time varient allowing weed species to provide some fraction of the
+rye grass production</p></li>
+</ul>
+<section id="automatic-harvesting-process">
+<h5>Automatic harvesting process<a class="headerlink" href="#automatic-harvesting-process" title="Link to this heading">#</a></h5>
+<p>In the automatic harvesting process</p>
+<ol class="arabic simple">
+<li><p>a harvest trigger is set for each time step</p></li>
+<li><p>at each time step harvestable Rye grass dry matter is calculated and
+reported by DMH_RYE = ((CLV+CST+CSTUB)/0.45 + CRES/0.40 + (CLVD *
+HARVFRD / 0.45)) * 10.0</p></li>
+<li><p>at each time step harvestable weed species dry matter is calculated
+and reported by DMH_WEED = WEED_DM_FRAC <em>DMH_RYE/BASAL</em> (1-BASAL)</p></li>
+<li><p>total harvestable dry matter is calculated and reported by DMH_RYE +
+DMH_WEED</p></li>
+<li><p>if the total harvestable dry matter is &gt;= the dry matter target for
+that time step then harveting occurs</p></li>
+<li><p>the amount of Dry matter to remove is calculated</p>
+<ol class="arabic simple">
+<li><p>if fixed_removal flag then the amount to remove is defined by
+DM_RM = HARV_TARG * FRAC_HARV</p></li>
+<li><p>if not fixed_removal then the amount to remove is defined by
+DM_RM = ((DMH_RYE + DMH_WEED) - HARV_TARG) * FRAC_HARV</p></li>
+</ol>
+</li>
+<li><p>An initial fraction of dry mater to remove is calculated, HARVFRIN =
+DM_RYE_RM/DMH_RYE Note that this means that the weed species dry
+matter harvested is not removed from the rye grass model</p></li>
+<li><p>iff ‘opt_harvfrin’= True, the harvest fraction to remove is estimated
+by brent zero optimisation. This step is recommended as the harvest
+fraction is non-linearly related to the harvest as the stem and
+reserve harvest fraction is related to a power function. In some test
+runs without estimation, target 500kg removal has actually removed c.
+1000kg</p></li>
+<li><p>harvesting then progresses as per V2.0.0</p></li>
+</ol>
+</section>
+<section id="manual-harvesting-process">
+<h5>Manual harvesting process<a class="headerlink" href="#manual-harvesting-process" title="Link to this heading">#</a></h5>
+<p>As per automatic harvesting, however the data frame is reshaped within
+the python code so that the row count is equal to n days. all indexes
+where manual harvesting will not occur have the ‘harv_trig’ set to -1 so
+that no harvesting will occur</p>
+<p>DMH_WEED or the harvestable dry matter from weed species is calculated
+at every time step. as such ‘weed_dm_frac’ must be defined sensibly for
+every day of the simulation. Internally the python wrapper to
+BASGRA_NZ_PY uses pd.Series.fillna(method=‘ffill’) or fills the missing
+values with the last valid values. if ‘weed_dm_frac’ is not set for the
+first day of the series a warning is issued and the first valid value is
+used to fill the values before the first valid value.</p>
+<p>Note that if the dry matter value is below the trigger value for a given
+manual time step no harvesting will occur.</p>
+</section>
+</section>
+<section id="new-harvest-inputs-outputs">
+<h4>New Harvest inputs/outputs<a class="headerlink" href="#new-harvest-inputs-outputs" title="Link to this heading">#</a></h4>
+<p>New input parameters</p>
+<ul class="simple">
+<li><p>‘fixed_removal’, # float boolean(1.0=True, 0.0=False) defines if
+auto_harv_targ is fixed amount or amount to harvest to</p></li>
+<li><p>‘opt_harvfrin’, # float boolean(1.0=True, 0.0=False) if True, harvest
+fraction is estimated by brent zero optimisation if false, HARVFRIN =
+DM_RYE_RM/DMH_RYE. As the harvest fraction is non-linearly related to
+the harvest, the amount harvested may be significantly greater than
+expected depending on CST. We would suggest always setting
+‘opt_harvfrin’ to True unless trying to duplicate a previous run done
+under v2.0.0-</p></li>
+</ul>
+<p>New outputs</p>
+<ul class="simple">
+<li><p>‘RYE_YIELD’, # PRG Yield from rye grass species, # (tDM ha-1) note
+that this is the actual amount of material that has been removed</p></li>
+<li><p>‘WEED_YIELD’, # PRG Yield from weed (other) species, # (tDM ha-1)
+note that this is the actual amount of material that has been removed</p></li>
+<li><p>‘DM_RYE_RM’, # dry matter of Rye species harvested in this time step
+(kg DM ha-1) Note that this is the calculated removal but if
+‘opt_harvfrin’ = False then it may be significantly different to the
+actual removal, which is show by the appropriate yield variable</p></li>
+<li><p>‘DM_WEED_RM’, # dry matter of weed species harvested in this time
+step (kg DM ha-1) Note that this is the calculated removal but if
+‘opt_harvfrin’ = False then it may be significantly different to the
+actual removal, which is show by the appropriate yield variable</p></li>
+<li><p>‘DMH_RYE’, # harvestable dry matter of # species, includes
+harvestable fraction of dead (HARVFRD) (kg DM ha-1)</p></li>
+<li><p>‘DMH_WEED’, # harvestable dry matter of # specie, includes
+harvestable fraction of dead (HARVFRD) (kg DM ha-1)</p></li>
+<li><p>‘DMH’, # harvestable dry matter = DMH_RYE + DMH_WEED (kg DM ha-1)</p></li>
+</ul>
+<p>New format for harvest data frame,</p>
+<ul class="simple">
+<li><p>Datatype transition from int(v2.0.0-) to float(v3.0.0)</p></li>
+<li><p>Two allowable data frame lengths:</p>
+<ul>
+<li><p>Manual harvest (n x 6 data frame, where n=number of harvest
+events), python auto_harvest=False</p></li>
+<li><p>Automatic harvest (m x 6 data frame, where m=ndays), python
+auto_harvest=True</p></li>
+</ul>
+</li>
+<li><p>Note the fixed harvest size requirements of 100 days were fixed in
+V1.0.0</p></li>
+<li><p>Data frame columns</p>
+<ul>
+<li><p>‘year’, # e.g. 2002</p></li>
+<li><p>‘doy’, # day of year 1 - 356 (366 for leap year)</p></li>
+<li><p>‘frac_harv’, # fraction (0-1) of material above target to harvest
+to maintain ‘backward capabilities’ with v2.0.0</p></li>
+<li><p>‘harv_trig’, # dm above which to initiate harvest, if trigger is
+less than zero no harvest will take place</p></li>
+<li><p>‘harv_targ’, # dm to harvest to or to remove depending on
+‘fixed_removal’</p></li>
+<li><p>‘weed_dm_frac’, # fraction of dm of ryegrass to attribute to weeds</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v3-0-0">
+<h4>How to run so that the results are backwards compatible with versions before V3.0.0<a class="headerlink" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v3-0-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>‘fixed_removal’ = 0</p></li>
+<li><p>‘opt_harvfrin’ = 0</p></li>
+<li><p>manual harvest (python auto_harvest=False)</p></li>
+<li><p>set harvest data frame as follows:</p>
+<ul>
+<li><p>‘year’, as per v2.0.0-</p></li>
+<li><p>‘doy’, as per v2.0.0-</p></li>
+<li><p>‘frac_harv’, as per v2.0.0- percent_harvest/100, note that
+fraction harvest is now a float value</p></li>
+<li><p>‘harv_trig’, as 0</p></li>
+<li><p>‘harv_targ’, as 0</p></li>
+<li><p>‘weed_dm_frac’ as 0</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="re-seeding-module-v4-0-0">
+<h3>Re-seeding module (V4.0.0+)<a class="headerlink" href="#re-seeding-module-v4-0-0" title="Link to this heading">#</a></h3>
+<p>At times during a long term simulations weather events can push the
+BASAL coverage of the rye grass to well below the normal amount for the
+simulation. The BASGRA model will slowly increase BASAL coverage,
+however this may not very realistic. Farmers may choose to re-seed
+pasture following an infrequent event.</p>
+<section id="reseed-process">
+<h4>Reseed process<a class="headerlink" href="#reseed-process" title="Link to this heading">#</a></h4>
+<p>The process very simplistic and does not model the physiological
+processes of seed germination and young plant growth. it simply allows
+the following parameters to be re-set and initiates a delay for
+harvesting:</p>
+<ul class="simple">
+<li><p>BASAL</p></li>
+<li><p>LAI</p></li>
+<li><p>TILG2</p></li>
+<li><p>TILG1</p></li>
+<li><p>TILV</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>on each day check the internal BASAL parameter against the
+appropriate daily value for ‘reseed_trig’ (the reseed trigger), if
+BASAL is &lt;= ‘reseed_trig’, then reseed otherwise simply pass. if
+reseed_trig &lt;0 then passes (flag for no reseed)</p></li>
+<li><p>set BASAL to ‘reseed_basal’</p></li>
+<li><p>set the Phenological stage (PHEN) to 0</p></li>
+<li><p>set [LAI, TILG2, TILG1, TILV, CLV, CRES, CST, CSTUB] to either the
+user defined parameter ‘reseed_{var}’ or keep at current state value
+when the user defined parameter ‘reseed_{var}’ &lt;0.</p></li>
+<li><p>set a user defined delay in harvesting (‘reseed_harv_delay’), by
+setting the next n days harv_trig to -1</p></li>
+</ol>
+</section>
+<section id="new-re-seed-inputs-outputs">
+<h4>New re-seed inputs/outputs<a class="headerlink" href="#new-re-seed-inputs-outputs" title="Link to this heading">#</a></h4>
+<p>In order to very simply model this behaviour a new re-seed module was
+added. This module requires 5 new parameters and 2 new inputs in the
+harvest matrix, and produces 1 new output</p>
+<p>the parameters are:</p>
+<ul class="simple">
+<li><p>‘reseed_harv_delay’: number of days to delay harvest after reseed,
+must be &gt;=1 and an integer (value not type, within 1e-5)</p></li>
+<li><p>‘reseed_LAI’: &gt;=0 the leaf area index to set after reseeding, if &lt; 0
+then simply use the current LAI</p></li>
+<li><p>‘reseed_TILG2’: Non-elongating generative tiller density after reseed
+if &gt;=0 otherwise use current state of variable</p></li>
+<li><p>‘reseed_TILG1’: Elongating generative tiller density after reseed if
+&gt;=0 otherwise use current state of variable</p></li>
+<li><p>‘reseed_TILV’: Non-elongating tiller density after reseed if &gt;=0
+otherwise use current state of variable</p></li>
+<li><p>‘reseed_CLV’, # Weight of leaves after reseed if &gt;= 0 otherwise use
+current state of variable</p></li>
+<li><p>‘reseed_CRES’, # Weight of reserves after reseed if &gt;= 0 otherwise
+use current state of variable</p></li>
+<li><p>‘reseed_CST’, # Weight of stems after reseed if &gt;= 0 otherwise use
+current state of variable</p></li>
+<li><p>‘reseed_CSTUB’, # Weight of stubble after reseed if &gt;= 0 otherwise
+use current state of variable</p></li>
+</ul>
+<p>The new columns in the harvest matrix are:</p>
+<ul class="simple">
+<li><p>‘reseed_trig’: (-1 or 0 to 1) when BASAL &lt;= reseed_trig, trigger a
+reseeding. if &lt;0 then do not reseed</p></li>
+<li><p>‘reseed_basal’: (0 to 1) set BASAL = reseed_basal when reseeding.</p></li>
+</ul>
+<p>The new output is:</p>
+<ul class="simple">
+<li><p>‘RESEEDED’: reseeded flag, if ==1 then the simulation was reseeded on
+this day, if 0 then not reseeded</p></li>
+</ul>
+</section>
+<section id="how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v3-0-0">
+<h4>How to run so that the results are backwards compatible with versions V3.0.0 -<a class="headerlink" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v3-0-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>set all ‘reseed_trig’ in the harvest matrix to -1.</p></li>
+<li><p>set all ‘reseed_basal’ to 0 (can be set to anything between 0-1 as it
+will not be used)</p></li>
+<li><p>set ‘reseed_harv_delay’ to 1 (to avoid python assertion error)</p></li>
+<li><p>all other reseed parameters (reseed_{var}) must be set, but they can
+all be safely set to -1</p></li>
+</ul>
+</section>
+</section>
+<section id="passing-external-soil-moisture-to-model-v5-0-0">
+<h3>passing external soil moisture to model (V5.0.0+)<a class="headerlink" href="#passing-external-soil-moisture-to-model-v5-0-0" title="Link to this heading">#</a></h3>
+<p>As of V5.0.0 it is possible to pass time series external soil moisture
+data into BASGRA to use rather than the internal soil moisture model.
+Soil moisture can be passed as a fraction (0-1) of either profile
+available water (PAW) or field capacity</p>
+<p>Note V5.0.0 + has a slight change to fix an off by one error that occurs
+with PAW. Now PAW will match WAL</p>
+<p>To do this:</p>
+<ul class="simple">
+<li><p>set ‘pass_soil_moist’ to 1</p></li>
+<li><p>set matrix_weather.max_irr to the soil moisture fraction</p></li>
+<li><p>set ‘irr_frm_paw’ to 1 if soil moisture is fraction of PAW or 0 is
+soil moisture is a fraction of field capacity</p></li>
+</ul>
+<section id="how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v4-0-0">
+<h4>How to run so that the results are backwards compatible with versions V4.0.0 -<a class="headerlink" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v4-0-0" title="Link to this heading">#</a></h4>
+<p>Note PAW will not be identical with previous versions as Note V5.0.0 +
+has a slight change to fix an off by one error that occurs with PAW. Now
+PAW will match WAL Otherwise:</p>
+<ul class="simple">
+<li><p>set ‘pass_soil_moist’ to 0</p></li>
+<li><p>set max_irr as normal</p></li>
+</ul>
+</section>
+</section>
+<section id="irrigation-water-storage-v6-0-0">
+<h3>Irrigation water storage (V6.0.0+)<a class="headerlink" href="#irrigation-water-storage-v6-0-0" title="Link to this heading">#</a></h3>
+<p>As of V6.0.0 it is possible to model local storage of water for
+irrigation in addition to a larger scheme irrigation system. We define a
+scheme irrigation as something which is not volume limited, but may be
+limited based on other factors (e.g. restrictions in a river). Storage
+irrigation in contrast is irrigation that is only limited by volume.
+Storage is turned on by setting parameter <em>‘use_storage’</em> to 1.</p>
+<section id="irrigation-storage-process">
+<h4>Irrigation storage process<a class="headerlink" href="#irrigation-storage-process" title="Link to this heading">#</a></h4>
+<p>The storage water balance and irrigation process occurs in the following
+order</p>
+<ol class="arabic">
+<li><p>Calculate non-scheme inflows to storage</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Non</span><span class="o">-</span><span class="n">scheme</span> <span class="n">inflows</span> <span class="n">are</span> <span class="n">defined</span> <span class="k">as</span> <span class="n">runoff</span> <span class="ow">and</span> <span class="n">a</span> <span class="n">full</span> <span class="n">refill</span> <span class="n">at</span> <span class="n">a</span> <span class="p">(</span><span class="n">one</span><span class="p">)</span> <span class="n">certain</span> <span class="n">day</span> <span class="n">of</span> <span class="n">the</span> <span class="n">year</span><span class="o">.</span>  <span class="n">The</span> <span class="n">latter</span> <span class="ow">is</span>
+<span class="n">provided</span> <span class="k">for</span> <span class="n">convenience</span> <span class="k">if</span> <span class="n">the</span> <span class="n">modeller</span> <span class="n">wishes</span> <span class="n">to</span> <span class="n">assume</span> <span class="n">that</span> <span class="n">the</span> <span class="n">storage</span> <span class="ow">is</span> <span class="n">always</span> <span class="n">full</span> <span class="n">at</span> <span class="n">a</span> <span class="n">certain</span> <span class="n">time</span> <span class="n">of</span>
+<span class="n">the</span> <span class="n">year</span><span class="o">.</span> <span class="n">The</span> <span class="n">runoff</span> <span class="n">component</span> <span class="n">can</span> <span class="n">either</span> <span class="n">be</span> <span class="n">calculated</span> <span class="n">internally</span> <span class="p">(</span><span class="n">when</span> <span class="s1">&#39;runoff_from_rain&#39;</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">can</span> <span class="n">be</span>
+<span class="n">specified</span> <span class="n">by</span> <span class="n">the</span> <span class="n">modeller</span> <span class="p">(</span><span class="n">when</span> <span class="s1">&#39;runoff_from_rain&#39;</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">external</span> <span class="n">rainfall</span> <span class="n">runoff</span> <span class="n">model</span><span class="p">)</span><span class="o">.</span>  <span class="n">If</span>
+<span class="n">The</span> <span class="n">runoff</span> <span class="ow">is</span> <span class="n">specified</span> <span class="n">by</span> <span class="n">the</span> <span class="n">modeller</span> <span class="n">then</span> <span class="n">the</span> <span class="n">daily</span> <span class="n">values</span> <span class="n">are</span> <span class="n">passed</span> <span class="n">via</span> <span class="n">the</span> <span class="n">matrix_weather</span> <span class="n">parameter</span>
+<span class="s1">&#39;external_inflow&#39;</span><span class="o">.</span>
+
+<span class="n">The</span> <span class="n">internal</span> <span class="n">calculation</span> <span class="n">of</span> <span class="n">rainfall</span> <span class="n">runoff</span> <span class="ow">is</span> <span class="n">very</span> <span class="n">simplistic</span> <span class="n">the</span> <span class="n">user</span> <span class="n">specified</span> <span class="n">a</span> <span class="n">catchment</span> <span class="n">area</span>
+<span class="p">(</span><span class="n">parameter</span> <span class="s1">&#39;runoff_area&#39;</span><span class="p">)</span> <span class="n">of</span> <span class="n">which</span> <span class="n">a</span> <span class="n">user</span> <span class="n">specified</span> <span class="n">fraction</span> <span class="n">of</span> <span class="n">the</span> <span class="n">rainfall</span> <span class="p">(</span><span class="n">parameter</span> <span class="s1">&#39;runoff_frac&#39;</span><span class="p">)</span>
+<span class="n">runs</span> <span class="n">off</span> <span class="n">to</span> <span class="n">storage</span><span class="o">.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Calculate non-irrigation outflows from storage</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">non</span><span class="o">-</span><span class="n">irrigation</span> <span class="n">outflows</span> <span class="n">include</span> <span class="n">a</span> <span class="n">user</span> <span class="n">defined</span> <span class="n">leakage</span> <span class="n">rate</span><span class="p">,</span> <span class="n">fixed</span> <span class="n">removal</span> <span class="n">of</span> <span class="n">storage</span> <span class="n">water</span> <span class="k">for</span> <span class="n">other</span>
+<span class="n">purposes</span> <span class="ow">and</span> <span class="k">finally</span> <span class="n">evaporation</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">storage</span> <span class="n">body</span> <span class="p">(</span><span class="n">NOT</span> <span class="n">IMPLMENTED</span><span class="p">)</span><span class="o">.</span>
+
+<span class="n">Leakage</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">storage</span> <span class="n">body</span> <span class="ow">is</span> <span class="n">defined</span> <span class="k">as</span> <span class="n">a</span> <span class="n">fixed</span> <span class="n">user</span> <span class="n">specified</span> <span class="n">rate</span> <span class="p">(</span><span class="s1">&#39;stor_leakage&#39;</span><span class="p">)</span> <span class="n">which</span> <span class="n">will</span> <span class="n">be</span>
+<span class="n">removed</span> <span class="n">daily</span><span class="o">.</span>  <span class="n">There</span> <span class="ow">is</span> <span class="n">no</span> <span class="n">head</span> <span class="n">leakage</span> <span class="n">relationship</span> <span class="n">defined</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">model</span>
+
+<span class="n">A</span> <span class="nb">set</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">water</span> <span class="n">can</span> <span class="n">be</span> <span class="n">removed</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">storage</span> <span class="n">on</span> <span class="nb">any</span> <span class="n">given</span> <span class="n">day</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="k">for</span> <span class="n">stock</span> <span class="n">water</span> <span class="n">use</span><span class="p">)</span><span class="o">.</span>
+<span class="n">This</span> <span class="ow">is</span> <span class="n">achieved</span> <span class="n">by</span> <span class="n">setting</span> <span class="n">the</span> <span class="n">matrix_weather</span> <span class="n">parameter</span> <span class="s1">&#39;external_inflow&#39;</span> <span class="n">to</span> <span class="n">a</span> <span class="n">negative</span> <span class="n">value</span><span class="o">.</span>  <span class="n">This</span> <span class="n">feature</span>
+<span class="ow">is</span> <span class="ow">not</span> <span class="n">avalible</span> <span class="k">if</span> <span class="n">runoff</span> <span class="ow">is</span> <span class="n">calculated</span> <span class="n">internally</span> <span class="p">(</span><span class="n">when</span> <span class="o">*</span><span class="s1">&#39;runoff_from_rain&#39;</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">Finally</span><span class="p">,</span> <span class="n">evaporation</span> <span class="ow">is</span> <span class="n">planned</span> <span class="n">to</span> <span class="n">be</span> <span class="n">implmented</span><span class="p">;</span> <span class="n">however</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">currently</span> <span class="nb">set</span> <span class="n">to</span> <span class="mi">0</span> <span class="k">as</span> <span class="n">a</span> <span class="n">place</span> <span class="n">holder</span> <span class="k">for</span>
+<span class="n">further</span> <span class="n">development</span><span class="o">.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Calculate irrigation and irrigate from scheme</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Irrigation</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">scheme</span> <span class="ow">is</span> <span class="n">handled</span> <span class="k">as</span> <span class="n">per</span> <span class="n">version</span> <span class="n">V2</span><span class="mf">.0.0</span><span class="o">+</span>  <span class="p">(</span><span class="k">if</span> <span class="n">soil</span> <span class="n">water</span> <span class="ow">is</span> <span class="n">below</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">calculate</span>
+<span class="n">irrigation</span> <span class="n">demand</span><span class="p">,</span> <span class="n">check</span> <span class="n">water</span> <span class="n">avalibility</span> <span class="ow">and</span> <span class="n">then</span> <span class="n">irrigate</span> <span class="n">up</span> <span class="n">to</span> <span class="n">the</span> <span class="n">target</span><span class="p">)</span> <span class="k">with</span> <span class="n">one</span> <span class="n">minor</span> <span class="n">modification</span><span class="o">.</span>
+<span class="n">The</span> <span class="n">maximum</span> <span class="n">irrigation</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">applied</span> <span class="n">on</span> <span class="nb">any</span> <span class="n">given</span> <span class="n">day</span> <span class="ow">is</span> <span class="n">controlled</span> <span class="n">by</span> <span class="n">the</span> <span class="n">new</span> <span class="n">parameter</span> <span class="s1">&#39;abs_max_irr&#39;</span>
+<span class="n">this</span> <span class="ow">is</span> <span class="n">envisioned</span> <span class="k">as</span> <span class="n">a</span> <span class="n">limitation</span> <span class="n">of</span> <span class="n">equipment</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">water</span> <span class="n">that</span> <span class="n">of</span> <span class="n">water</span> <span class="n">availability</span><span class="o">.</span> <span class="n">The</span> <span class="n">amount</span>
+<span class="n">of</span> <span class="n">water</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">irrigate</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">scheme</span> <span class="n">on</span> <span class="nb">any</span> <span class="n">given</span> <span class="n">day</span> <span class="ow">is</span> <span class="n">defined</span> <span class="n">by</span> <span class="n">the</span> <span class="n">matrix_weather</span>
+<span class="n">parameter</span> <span class="s1">&#39;max_irr&#39;</span><span class="o">.</span>  <span class="n">Note</span> <span class="n">that</span> <span class="k">if</span> <span class="s1">&#39;max_irr&#39;</span> <span class="ow">is</span> <span class="nb">set</span> <span class="n">higher</span> <span class="n">than</span> <span class="s1">&#39;abs_max_irr&#39;</span> <span class="n">then</span> <span class="n">the</span> <span class="n">water</span> <span class="ow">is</span>
+<span class="ow">not</span> <span class="n">available</span> <span class="k">for</span> <span class="n">irrigation</span><span class="p">,</span> <span class="n">but</span> <span class="n">depending</span> <span class="n">on</span> <span class="n">the</span> <span class="n">parameterisation</span> <span class="n">of</span> <span class="n">the</span> <span class="n">model</span> <span class="n">may</span> <span class="n">be</span> <span class="n">available</span> <span class="n">to</span>
+<span class="n">re</span><span class="o">-</span><span class="n">fill</span> <span class="n">storage</span><span class="o">.</span> <span class="n">If</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">no</span> <span class="n">scheme</span> <span class="n">available</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">isolated</span> <span class="n">storage</span> <span class="kn">from</span> <span class="nn">runoff</span><span class="p">),</span> <span class="n">scheme</span> <span class="n">based</span>
+<span class="n">irrigation</span> <span class="n">can</span> <span class="n">be</span> <span class="n">effectively</span> <span class="n">turned</span> <span class="n">off</span> <span class="n">by</span> <span class="n">setting</span> <span class="n">the</span> <span class="n">matrix_weather</span> <span class="n">parameter</span> <span class="s1">&#39;max_irr&#39;</span> <span class="n">to</span> <span class="n">zero</span> <span class="ow">and</span>
+<span class="n">passing</span> <span class="n">dummy</span> <span class="n">values</span> <span class="n">to</span> <span class="n">matrix_weather</span> <span class="n">parameters</span> <span class="s1">&#39;irr_trig&#39;</span><span class="p">,</span> <span class="s1">&#39;irr_targ&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Calculate irrigation and irrigate from storage</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">If</span> <span class="n">storage</span> <span class="ow">is</span> <span class="n">implemented</span> <span class="p">(</span><span class="s1">&#39;use_storage&#39;</span> <span class="o">=</span> <span class="mi">1</span><span class="p">),</span> <span class="n">storage</span> <span class="n">can</span> <span class="n">either</span> <span class="n">be</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">one</span> <span class="n">of</span> <span class="n">two</span> <span class="n">modes</span><span class="p">:</span>
+  <span class="mf">1.</span> <span class="n">to</span> <span class="n">make</span> <span class="n">up</span> <span class="n">the</span> <span class="n">difference</span> <span class="n">between</span> <span class="n">the</span> <span class="n">weather_matrix</span> <span class="n">parameter</span> <span class="s1">&#39;max_irr&#39;</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">irrigation</span> <span class="n">demand</span>
+     <span class="n">to</span> <span class="n">the</span> <span class="n">target</span> <span class="p">(</span><span class="n">calculated</span> <span class="ow">in</span> <span class="n">step</span> <span class="mi">3</span><span class="p">)</span> <span class="n">to</span> <span class="n">the</span> <span class="n">extent</span> <span class="n">possible</span> <span class="n">depending</span> <span class="n">on</span> <span class="n">storage</span> <span class="n">water</span> <span class="n">avalibility</span><span class="o">.</span>
+  <span class="mf">2.</span> <span class="n">calculating</span> <span class="n">a</span> <span class="n">novel</span> <span class="n">storage</span> <span class="n">demand</span> <span class="n">AFTER</span> <span class="n">SHEME</span> <span class="n">IRRIGATION</span> <span class="n">IS</span> <span class="n">APPLIED</span><span class="o">.</span> <span class="n">This</span> <span class="n">demand</span> <span class="ow">is</span> <span class="n">calculated</span> <span class="k">as</span>
+     <span class="n">per</span> <span class="n">the</span> <span class="n">scheme</span> <span class="n">demand</span><span class="p">,</span> <span class="n">but</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">matrix_weather</span> <span class="n">parameters</span> <span class="s1">&#39;irr_trig_store&#39;</span> <span class="ow">and</span> <span class="s1">&#39;irr_targ_store&#39;</span>
+     <span class="n">it</span> <span class="ow">is</span> <span class="n">important</span> <span class="n">to</span> <span class="n">recall</span> <span class="n">that</span> <span class="n">this</span> <span class="n">demand</span> <span class="ow">is</span> <span class="n">calculated</span> <span class="n">after</span> <span class="n">scheme</span> <span class="n">based</span> <span class="n">irrigation</span> <span class="n">has</span> <span class="n">been</span> <span class="n">applied</span>
+     <span class="n">which</span> <span class="n">means</span> <span class="n">that</span> <span class="n">the</span> <span class="n">soil</span> <span class="n">moisture</span> <span class="n">may</span> <span class="n">be</span> <span class="n">below</span> <span class="n">the</span> <span class="n">storage</span> <span class="n">trigger</span> <span class="n">value</span> <span class="n">before</span> <span class="n">scheme</span> <span class="n">irrigation</span><span class="p">,</span> <span class="n">but</span>
+     <span class="n">no</span> <span class="n">storage</span> <span class="n">irrigation</span> <span class="ow">is</span> <span class="n">applied</span> <span class="n">because</span> <span class="n">the</span> <span class="n">scheme</span> <span class="n">irrigation</span> <span class="n">increased</span> <span class="n">the</span> <span class="n">soil</span> <span class="n">water</span> <span class="n">content</span> <span class="n">above</span>
+     <span class="n">the</span> <span class="n">trigger</span><span class="o">.</span>
+<span class="n">To</span> <span class="n">implment</span> <span class="n">mode</span> <span class="mi">1</span> <span class="n">the</span> <span class="n">parameter</span> <span class="s1">&#39;calc_ind_store_demand&#39;</span> <span class="ow">is</span> <span class="nb">set</span> <span class="n">to</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mode</span> <span class="mi">2</span> <span class="ow">is</span> <span class="n">implemented</span>
+<span class="n">when</span> <span class="s1">&#39;calc_ind_store_demand&#39;</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">if</span> <span class="n">storage</span> <span class="n">irrigation</span> <span class="n">occurs</span><span class="p">,</span> <span class="n">then</span> <span class="k">as</span> <span class="n">much</span> <span class="n">storage</span> <span class="k">as</span> <span class="ow">is</span> <span class="n">avalible</span> <span class="ow">is</span> <span class="n">applied</span> <span class="n">to</span> <span class="n">reach</span> <span class="n">the</span> <span class="n">soil</span> <span class="n">moisture</span> <span class="n">target</span>
+<span class="ow">or</span> <span class="n">the</span> <span class="n">maximum</span> <span class="n">irrigation</span> <span class="n">rate</span> <span class="p">(</span><span class="s1">&#39;abs_max_irr&#39;</span><span class="p">),</span> <span class="n">whichever</span> <span class="ow">is</span> <span class="n">less</span><span class="o">.</span> <span class="n">Note</span> <span class="n">that</span> <span class="n">a</span> <span class="n">volume</span> <span class="n">of</span> <span class="n">storage</span> <span class="n">can</span> <span class="n">be</span>
+<span class="n">held</span> <span class="ow">in</span> <span class="n">reserve</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="k">for</span> <span class="n">stock</span> <span class="n">water</span><span class="p">)</span><span class="o">.</span>  <span class="n">This</span> <span class="n">volume</span> <span class="ow">is</span> <span class="nb">set</span> <span class="ow">in</span> <span class="n">parameter</span> <span class="s1">&#39;stor_reserve_vol&#39;</span><span class="o">.</span>
+
+<span class="n">Finally</span> <span class="n">storage</span> <span class="n">irrigation</span> <span class="n">scheme</span> <span class="n">ineffciency</span> <span class="n">can</span> <span class="n">be</span> <span class="n">implmented</span> <span class="k">with</span> <span class="n">parameter</span> <span class="s1">&#39;stor_irr_ineff&#39;</span><span class="p">,</span> <span class="n">which</span>
+<span class="n">defines</span> <span class="n">the</span> <span class="n">fraction</span> <span class="n">of</span> <span class="n">the</span> <span class="n">applied</span> <span class="n">irrigation</span> <span class="n">volume</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">needed</span> <span class="n">to</span> <span class="n">compensate</span> <span class="k">for</span> <span class="n">losses</span> <span class="ow">in</span> <span class="n">the</span>
+<span class="n">process</span> <span class="n">of</span> <span class="n">irrigation</span><span class="o">.</span>  <span class="n">a</span> <span class="n">value</span> <span class="n">of</span> <span class="mi">0</span> <span class="n">means</span> <span class="n">a</span> <span class="n">perfecly</span> <span class="n">effcient</span> <span class="n">system</span><span class="p">,</span> <span class="k">while</span> <span class="n">a</span> <span class="n">value</span> <span class="n">of</span> <span class="mi">1</span> <span class="n">means</span> <span class="n">that</span> <span class="k">for</span>
+<span class="n">every</span> <span class="n">m3</span> <span class="n">of</span> <span class="n">water</span> <span class="n">applied</span> <span class="ow">in</span> <span class="n">irrigation</span> <span class="kn">from</span> <span class="nn">storage</span><span class="p">,</span> <span class="mi">2</span> <span class="n">m3</span> <span class="ow">is</span> <span class="n">removed</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">storage</span> <span class="n">resevouir</span><span class="o">.</span>
+</pre></div>
+</div>
+</li>
+<li><p>refill storage from scheme (if allowed)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">storage</span> <span class="n">resevouir</span> <span class="n">can</span> <span class="n">implmented</span> <span class="n">to</span> <span class="n">be</span> <span class="n">refilled</span> <span class="n">by</span> <span class="n">the</span> <span class="n">excess</span> <span class="n">water</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">scheme</span><span class="o">.</span>  <span class="n">This</span> <span class="n">process</span> <span class="ow">is</span>
+<span class="n">implmented</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">simple</span> <span class="n">way</span><span class="p">:</span>
+    <span class="mf">1.</span> <span class="n">calculate</span> <span class="n">the</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">excess</span> <span class="n">water</span>
+    <span class="mf">2.</span> <span class="k">if</span> <span class="n">the</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">water</span> <span class="ow">is</span> <span class="n">greater</span> <span class="n">than</span> <span class="n">the</span> <span class="n">minimum</span> <span class="n">refill</span> <span class="n">parameter</span> <span class="p">(</span><span class="s1">&#39;stor_refill_min&#39;</span><span class="p">)</span>
+    <span class="mf">3.</span> <span class="n">then</span> <span class="n">refill</span> <span class="n">the</span> <span class="n">storage</span> <span class="k">with</span> <span class="n">the</span> <span class="n">remaining</span> <span class="n">water</span><span class="o">.</span>
+    <span class="mf">4.</span> <span class="n">ineffciencies</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">refilling</span> <span class="n">process</span> <span class="n">can</span> <span class="n">be</span> <span class="n">implmented</span> <span class="k">with</span> <span class="n">parameter</span> <span class="s1">&#39;stor_refill_losses&#39;</span> <span class="n">where</span>
+       <span class="n">the</span> <span class="n">volume</span> <span class="n">that</span> <span class="n">enters</span> <span class="n">the</span> <span class="n">storage</span> <span class="n">resevouir</span> <span class="ow">is</span> <span class="n">equal</span> <span class="n">to</span> <span class="s1">&#39;stor_refill_losses&#39;</span> <span class="o">*</span> <span class="n">the</span> <span class="n">excess</span> <span class="n">water</span><span class="o">.</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>all components of the storage water budget is saved to the output.</p>
+</section>
+<section id="new-inputs-outputs">
+<h4>new inputs/outputs<a class="headerlink" href="#new-inputs-outputs" title="Link to this heading">#</a></h4>
+<p><em>parameter additions</em></p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Key</strong></p></th>
+<th class="head"><p><strong>Unit</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘use_storage’</p></td>
+<td><p>sudo boolean 1=True,
+0=False</p></td>
+<td><p>whether or not to
+include storage in
+the model</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘runoff_from_rain’</p></td>
+<td><p>sudo boolean 1=True,
+0=False</p></td>
+<td><p>if True then use a
+fraction of rainfall,
+otherwise proscribed
+refill data from an
+external model</p></td>
+</tr>
+<tr class="row-even"><td><p>‘c
+alc_ind_store_demand’</p></td>
+<td><p>sudo boolean 1=True,
+0=False</p></td>
+<td><p>if true then
+calculate storage
+demand after scheme
+irrigation from
+triggers, targets, if
+false then calculate
+storage demand as the
+remaining demand
+after scheme
+irrigation,</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘stor_full_refil_doy’</p></td>
+<td><p>day of year (1-366)</p></td>
+<td><p>the day of the year
+(0-366) when storage
+will be set to full.
+set to -1 to never
+fully refill storage</p></td>
+</tr>
+<tr class="row-even"><td><p>‘abs_max_irr’</p></td>
+<td><p>mm</p></td>
+<td><p>the maximum
+irrigation that can
+be applied per day
+(e.g. equipment
+limits) mm/day note
+that if matrix
+weather prescribed
+max_irr for a given
+day is larger then
+abs_max_irr, that
+water may still be
+avalible to refill
+storage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irrigated_area’</p></td>
+<td><p>ha</p></td>
+<td><p>the area irrigated
+(ha)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘I_h2o_store_vol’</p></td>
+<td><p>fraction</p></td>
+<td><p>initial h2o storage
+fraction</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘h2o_store_max_vol’</p></td>
+<td><p>m3</p></td>
+<td><p>h2o storage maximum
+volume (m3)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘h2o_store_SA’</p></td>
+<td><p>m2</p></td>
+<td><p>h2o storage surface
+area (m2)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘runoff_area’</p></td>
+<td><p>m2</p></td>
+<td><p>the area that can
+provide runoff to the
+storage (ha)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘runoff_frac’</p></td>
+<td><p>fraction</p></td>
+<td><p>the fraction of
+precipitation that
+becomes runoff to
+recharge storage
+(0-1, unit less)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘stor_refill_min’</p></td>
+<td><p>mm</p></td>
+<td><p>the minimum amount of
+excess irrigation
+water that is needed
+to refill storage
+(mm/day)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘stor_refill_losses’</p></td>
+<td><p>fraction</p></td>
+<td><p>the losses incurred
+from re-filling
+storage from
+irrigation scheme
+(0-1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘stor_leakage’</p></td>
+<td><p>m3</p></td>
+<td><p>the losses from
+storage to leakage
+static (m3/day)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘stor_irr_ineff’</p></td>
+<td><p>fraction</p></td>
+<td><p>the fraction of
+irrigation water that
+is lost when storage
+is used for
+irrigation (e.g. 0
+means a perfectly
+efficient system, 1
+means that 2x the
+storage volume is
+needed to irrigate x
+volume) unit less</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘stor_reserve_vol’</p></td>
+<td><p>m3</p></td>
+<td><p>the volume of storage
+to reserve
+(e.g. irrigation is
+cutoff at this
+volume)</p></td>
+</tr>
+</tbody>
+</table>
+<p><em>matrix_weather additions</em></p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Key</strong></p></th>
+<th class="head"><p><strong>Unit</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘irr_trig_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>the irrigation
+trigger value (if
+c
+alc_ind_store_demand)
+for the storage based
+irrigation either
+fraction of PAW or
+field capacity</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irr_targ_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>the irrigation target
+value (if
+c
+alc_ind_store_demand)
+for the storage based
+irrigation either
+fraction of PAW or
+field capacity</p></td>
+</tr>
+<tr class="row-even"><td><p>‘external_inflow’</p></td>
+<td><p>m3</p></td>
+<td><p>only used if not
+runoff_from_rain, the
+volume (m3) of water
+to add to storage
+(allows external
+rainfall runoff model
+for storage
+management) can be
+negative</p></td>
+</tr>
+</tbody>
+</table>
+<p><em>output additions</em></p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Key</strong></p></th>
+<th class="head"><p><strong>Unit</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘irrig_dem_store’</p></td>
+<td><p>mm</p></td>
+<td><p>irrigation demand
+from storage (mm)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irrig_store’</p></td>
+<td><p>mm</p></td>
+<td><p>irrigation applied
+from storage (mm)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘irrig_scheme’</p></td>
+<td><p>mm</p></td>
+<td><p>irrigation applied
+from the scheme (mm)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘h2o_store_vol’</p></td>
+<td><p>m3</p></td>
+<td><p>volume of water in
+storage (m3)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘h2o_store_per_area’</p></td>
+<td><p>mm</p></td>
+<td><p>h2o storage per
+irrigated area (mm)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘IRR_TRIG_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>irrigation trigger
+for storage (fraction
+paw/FC), input, only
+relevant if
+calc_ind_store_demand</p></td>
+</tr>
+<tr class="row-even"><td><p>‘IRR_TARG_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>irrigation target for
+storage (fraction
+paw/FC), input, only
+relevant if
+calc_ind_store_demand</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘store_runoff_in’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget in
+from runoff or
+external model (m3)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘store_leak_out’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget out
+from leakage (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘store_irr_loss’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget out
+from losses incurred
+with irrigation (m3)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘store_evap_out’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget out
+from evaporation
+(NOTIMPLEMENTED) (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘store_scheme_in’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget in
+from the irrigation
+scheme (m3)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘
+store_scheme_in_loss’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget out
+losses from the
+scheme to the storage
+basin (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘external_inflow’,</p></td>
+<td><p>m3</p></td>
+<td><p>input value external
+inflow (m3) kept for
+full water budget of
+storage</p></td>
+</tr>
+<tr class="row-even"><td><p>‘store_overflow’,</p></td>
+<td><p>m3</p></td>
+<td><p>water that could have
+been added to storage
+(including losses),
+but was not as
+storage was full (m3)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v5-0-0">
+<h4>How to run so that the results are backwards compatible with versions V5.0.0 -<a class="headerlink" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v5-0-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>set parameter ‘use_storage’ to 0, which turns off storage</p></li>
+<li><p>set parameter ‘abs_max_irr’ to the max(matrix_weather[‘max_irr’]) or
+greater</p></li>
+</ul>
+<p>You will also need to pass dummy values to:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Parameter location</strong></p></th>
+<th class="head"><p><strong>Parameter name</strong></p></th>
+<th class="head"><p><strong>Suggested dummy value</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>parameter</p></td>
+<td><p>‘runoff_from_rain’</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter</p></td>
+<td><p>‘calc_ind_store_demand’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter</p></td>
+<td><p>‘stor_full_refil_doy’</p></td>
+<td><p>-1</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter</p></td>
+<td><p>‘irrigated_area’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter</p></td>
+<td><p>‘I_h2o_store_vol’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter</p></td>
+<td><p>‘h2o_store_max_vol’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter</p></td>
+<td><p>‘h2o_store_SA’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter</p></td>
+<td><p>‘runoff_area’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter</p></td>
+<td><p>‘runoff_frac’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter</p></td>
+<td><p>‘stor_refill_min’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter</p></td>
+<td><p>‘stor_refill_losses’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>parameter</p></td>
+<td><p>‘stor_leakage’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter</p></td>
+<td><p>‘stor_irr_ineff’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>matrix_weather</p></td>
+<td><p>‘irr_trig_store’</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>matrix_weather</p></td>
+<td><p>‘irr_targ_store’</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>matrix_weather</p></td>
+<td><p>‘external_inflow’</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="python-developments">
+<h2>python developments<a class="headerlink" href="#python-developments" title="Link to this heading">#</a></h2>
+<section id="supporting-functions">
+<h3>supporting functions<a class="headerlink" href="#supporting-functions" title="Link to this heading">#</a></h3>
+<p>there are several supporting functions developed within basgra_nz_py.
+These are not all documented in this readme; however there are decent
+docstrings. these include:</p>
+<ul class="simple">
+<li><p>conversion from RH to vapour pressure and wind speed to wind speed at
+2m (conversions.py)</p></li>
+<li><p>plotting multiple results either on monthly time steps or for the
+duration of the run (plotting.py)</p></li>
+<li><p>access to the mean parameters that resulted from Woodward 2020’s
+inverse calibration (woodward_2020_params.py)</p>
+<ul>
+<li><p>Parameters are available for the Scott Farm in the Waikato, Jordan
+Valley Farm in Northland, and the Lincoln Test Farm in Canterbury.</p></li>
+<li><p>Scott Farm and Jordan Valley Farm are dryland systems, while
+Lincoln Test Farm is irrigated.</p></li>
+<li><p>Plant parameters were calibrated for all three farms, while site
+parameters were calibrated for each specific site.</p></li>
+<li><p><a class="reference external" href="https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464">see woodward,
+2020</a>
+for more details.</p></li>
+<li><p>Note that the parameters provided here provide the correct
+parameters to run the model in a way that is consistent with
+version V1.0.0</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="testing-regime-and-examples">
+<h3>testing regime and examples<a class="headerlink" href="#testing-regime-and-examples" title="Link to this heading">#</a></h3>
+<p>In order to ensure that future changes can be made backwards compatible
+with previous runs there are a suite of test in
+check_basgra_python/test_basgra_python.py. These tests are not yet
+implemented in a framework; however simply running the
+test_basgra_python.py will run all of the testing functions. These
+functions can also be used as examples.</p>
+</section>
+</section>
+<section id="input-and-output-parameter-definitions">
+<h2>Input and output parameter definitions<a class="headerlink" href="#input-and-output-parameter-definitions" title="Link to this heading">#</a></h2>
+<section id="days-harvest-keys-description">
+<h3>Days Harvest Keys description<a class="headerlink" href="#days-harvest-keys-description" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Key</strong></p></th>
+<th class="head"><p><strong>Unit</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘year’</p></td>
+<td></td>
+<td><p>year e.g. 2002</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘doy’</p></td>
+<td></td>
+<td><p>day of year 1 - 356
+(366 for leap year)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘frac_harv’</p></td>
+<td><p>fraction</p></td>
+<td><p>fraction (0-1) of
+material above target
+to harvest to
+maintain ‘backward
+capabilities’ with
+v2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘harv_trig’</p></td>
+<td><p>kgDM/ha</p></td>
+<td><p>dm above which to
+initiate harvest if
+trigger is less than
+zero no harvest will
+take place</p></td>
+</tr>
+<tr class="row-even"><td><p>‘harv_targ’</p></td>
+<td><p>kgDM/ha</p></td>
+<td><p>dm to harvest to or
+to remove depending
+on ‘fixed_removal’</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘weed_dm_frac’</p></td>
+<td><p>fraction</p></td>
+<td><p>fraction of dm of
+ryegrass to attribute
+to weeds</p></td>
+</tr>
+<tr class="row-even"><td><p>‘reseed_trig’</p></td>
+<td><p>fraction</p></td>
+<td><p>when BASAL &lt;=
+reseed_trig trigger a
+reseeding. if &lt;0 then
+do not reseed</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘reseed_basal’</p></td>
+<td><p>fraction</p></td>
+<td><p>set BASAL =
+reseed_basal when
+reseeding.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="matrix-weather-keys-where-pet-is-passed-description">
+<h3>Matrix weather keys where pet is passed description<a class="headerlink" href="#matrix-weather-keys-where-pet-is-passed-description" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Key</strong></p></th>
+<th class="head"><p><strong>Unit</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘year’</p></td>
+<td><p>year</p></td>
+<td><p>e.g. 2002</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘doy’</p></td>
+<td><p>day</p></td>
+<td><p>day of year 1 - 356
+or 366 for leap years</p></td>
+</tr>
+<tr class="row-even"><td><p>‘radn’</p></td>
+<td><p>MJ/m2</p></td>
+<td><p>daily solar radiation</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘tmin’</p></td>
+<td><p>degrees C</p></td>
+<td><p>daily min</p></td>
+</tr>
+<tr class="row-even"><td><p>‘tmax’</p></td>
+<td><p>degrees C</p></td>
+<td><p>daily max</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘rain’</p></td>
+<td><p>mm</p></td>
+<td><p>sum daily rainfall</p></td>
+</tr>
+<tr class="row-even"><td><p>‘pet’</p></td>
+<td><p>mm</p></td>
+<td><p>priestly/penman
+evapotransperation</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘max_irr’</p></td>
+<td><p>mm/d</p></td>
+<td><p>maximum irrigation
+available when
+‘pass_soil_moist’ is
+False or the fraction
+(0-1) PAW/Field
+capacity to be passed
+to the model when
+‘pass_soil_moist’ is
+True, see
+‘pass_soil_moist’ for
+more details</p></td>
+</tr>
+<tr class="row-even"><td><p>‘irr_trig’</p></td>
+<td><p>fraction</p></td>
+<td><p>fraction of PAW/field
+(see irr_frm_paw) at
+or below which
+irrigation is
+triggered e.g. 0.5
+means that irrigation
+will only be applied
+when soil water
+content is at 1/2 of
+the appropriate
+variable</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irr_targ’</p></td>
+<td><p>fraction</p></td>
+<td><p>fraction of PAW/field
+(see irr_frm_paw) to
+irrigate up to.</p></td>
+</tr>
+<tr class="row-even"><td><p>‘irr_trig_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>the irrigation
+trigger value (if
+c
+alc_ind_store_demand)
+for the storage based
+irrigation either
+fraction of PAW or
+field capacity</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irr_targ_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>the irrigation target
+value (if
+c
+alc_ind_store_demand)
+for the storage based
+irrigation either
+fraction of PAW or
+field capacity</p></td>
+</tr>
+<tr class="row-even"><td><p>‘external_inflow’</p></td>
+<td><p>m3</p></td>
+<td><p>only used if not
+runoff_from_rain, the
+volume (m3) of water
+to add to storage
+(allows external
+rainfall runoff model
+for storage
+management) can be
+negative</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="matrix-weather-keys-where-pet-is-calculated-via-penman-description">
+<h3>Matrix weather keys where pet is calculated via penman description<a class="headerlink" href="#matrix-weather-keys-where-pet-is-calculated-via-penman-description" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Key</strong></p></th>
+<th class="head"><p><strong>Unit</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘year’</p></td>
+<td></td>
+<td><p>e.g. 2002</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘doy’</p></td>
+<td></td>
+<td><p>day of year 1 - 356
+or 366 for leap years</p></td>
+</tr>
+<tr class="row-even"><td><p>‘radn’</p></td>
+<td><p>MJ/m2</p></td>
+<td><p>daily solar radiation</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘tmin’</p></td>
+<td><p>degrees C</p></td>
+<td><p>daily min</p></td>
+</tr>
+<tr class="row-even"><td><p>‘tmax’</p></td>
+<td><p>degrees C</p></td>
+<td><p>daily max</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘rain’</p></td>
+<td><p>mm</p></td>
+<td><p>sum daily rainfall</p></td>
+</tr>
+<tr class="row-even"><td><p>‘vpa’</p></td>
+<td><p>kPa</p></td>
+<td><p>vapour pressure</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘wind’</p></td>
+<td><p>m/s</p></td>
+<td><p>mean wind speed at 2m</p></td>
+</tr>
+<tr class="row-even"><td><p>‘max_irr’</p></td>
+<td><p>mm/d</p></td>
+<td><p>maximum irrigation
+available (from
+scheme) when
+‘pass_soil_moist’ is
+False or the fraction
+(0-1) PAW/Field
+capacity to be passed
+to the model when
+‘pass_soil_moist’ is
+True, see
+‘pass_soil_moist’ for
+more details</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irr_trig’</p></td>
+<td><p>fraction</p></td>
+<td><p>fraction of PAW/field
+(see irr_frm_paw) at
+or below which
+irrigation (from
+scheme) is triggered
+e.g. 0.5 means that
+irrigation will only
+be applied when soil
+water content is at
+1/2 of the
+appropriate variable</p></td>
+</tr>
+<tr class="row-even"><td><p>‘irr_targ’</p></td>
+<td><p>fraction</p></td>
+<td><p>fraction of PAW/field
+(see irr_frm_paw) to
+irrigate (from
+scheme) up to.</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irr_trig_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>the irrigation
+trigger value (if
+c
+alc_ind_store_demand)
+for the storage based
+irrigation either
+fraction of PAW or
+field capacity</p></td>
+</tr>
+<tr class="row-even"><td><p>‘irr_targ_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>the irrigation target
+value (if
+c
+alc_ind_store_demand)
+for the storage based
+irrigation either
+fraction of PAW or
+field capacity</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘external_inflow’</p></td>
+<td><p>m3</p></td>
+<td><p>only used if not
+runoff_from_rain, the
+volume (m3) of water
+to add to storage
+(allows external
+rainfall runoff model
+for storage
+management) can be
+negative</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="site-parameters-description">
+<h3>Site Parameters description<a class="headerlink" href="#site-parameters-description" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Key</strong></p></th>
+<th class="head"><p><strong>Unit</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘abs_max_irr’</p></td>
+<td><p>mm</p></td>
+<td><p>the maximum
+irrigation that can
+be applied per day
+(e.g. equipment
+limits) mm/day note
+that if matrix
+weather prescribed
+max_irr for a given
+day is larger then
+abs_max_irr, that
+water may still be
+avalible to refill
+storage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘BD’</p></td>
+<td><p>kg l-1</p></td>
+<td><p>Bulk density of soil</p></td>
+</tr>
+<tr class="row-even"><td><p>‘c
+alc_ind_store_demand’</p></td>
+<td><p>sudo boolean 1=True,
+0=False</p></td>
+<td><p>if true then
+calculate storage
+demand after scheme
+irrigation from
+triggers, targets, if
+false then calculate
+storage demand as the
+remaining demand
+after scheme
+irrigation,</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘CO2A’</p></td>
+<td><p>ppm</p></td>
+<td><p>CO2 concentration in
+atmosphere woodward
+2020 set to 350</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DRATE’</p></td>
+<td><p>mm d-1</p></td>
+<td><p>Maximum soil drainage
+rate woodward 2020
+set to 50</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘FGAS’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Fraction of soil
+volume that is
+gaseous</p></td>
+</tr>
+<tr class="row-even"><td><p>‘fixed_removal’</p></td>
+<td></td>
+<td><p>sudo boolean(1=True
+0=False) defines if
+auto_harv_targ is
+fixed amount or
+amount to harvest to</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘FO2MX’</p></td>
+<td><p>mol O2 mol-1 gas</p></td>
+<td><p>Maximum oxygen
+fraction of soil gas</p></td>
+</tr>
+<tr class="row-even"><td><p>‘FWCAD’</p></td>
+<td><p>m3 m-3</p></td>
+<td><p>Relative saturation
+at air dryness</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘FWCFC’</p></td>
+<td><p>m3 m-3</p></td>
+<td><p>Relative saturation
+at field capacity</p></td>
+</tr>
+<tr class="row-even"><td><p>‘FWCWET’</p></td>
+<td><p>m3 m-3</p></td>
+<td><p>Relative saturation
+above which
+transpiration is
+reduced</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘FWCWP’</p></td>
+<td><p>m3 m-3</p></td>
+<td><p>Relative saturation
+at wilting point</p></td>
+</tr>
+<tr class="row-even"><td><p>‘h2o_store_max_vol’</p></td>
+<td><p>m3</p></td>
+<td><p>h2o storage maximum
+volume (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘h2o_store_SA’</p></td>
+<td><p>m2</p></td>
+<td><p>h2o storage surface
+area (m2)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘I_h2o_store_vol’</p></td>
+<td><p>fraction</p></td>
+<td><p>initial h2o storage
+fraction</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irr_frm_paw’</p></td>
+<td></td>
+<td><p>are irrigation
+trigger/target the
+fraction of profile
+available water
+(1/True or the
+fraction of field
+capacity (0/False)
+also determines
+whether passed soil
+moisture data is from
+PAW or FC, see
+‘pass_soil_moist’.</p></td>
+</tr>
+<tr class="row-even"><td><p>‘irrigated_area’</p></td>
+<td><p>ha</p></td>
+<td><p>the area irrigated
+(ha)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘IRRIGF’</p></td>
+<td><p>fraction</p></td>
+<td><p>fraction of the
+needed irrigation to
+apply to bring water
+content up to field
+capacity</p></td>
+</tr>
+<tr class="row-even"><td><p>‘KRTOTAER’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Ratio of total to
+aerobic respiration</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘KSNOW’</p></td>
+<td><p>mm-1</p></td>
+<td><p>Light extinction
+coefficient of snow</p></td>
+</tr>
+<tr class="row-even"><td><p>‘KTSNOW’</p></td>
+<td><p>m-1</p></td>
+<td><p>Temperature
+extinction
+coefficient of snow</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LAMBDAsoil’</p></td>
+<td><p>J m-1 degC-1 d-1</p></td>
+<td><p>Thermal conductivity
+of soil?</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LAT’</p></td>
+<td><p>degN</p></td>
+<td><p>Latitude</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘opt_harvfrin’</p></td>
+<td></td>
+<td><p>sudo boolean(1=True
+0=False) if True
+harvest fraction is
+estimated by brent
+zero optimisation if
+false harvest
+fraction is estimated
+by brent zero
+optimisation if false
+HARVFRIN =
+DM_RYE_RM/DMH_RYE. As
+the harvest fraction
+is non-linearly
+related to the
+harvest the amount
+harvested may be
+significantly
+greather than
+expected depending on
+CST</p></td>
+</tr>
+<tr class="row-even"><td><p>‘pass_soil_moist’</p></td>
+<td><p>sudo boolean 1=True,
+0=False</p></td>
+<td><p>if True then do not
+calculate soil
+moisture instead soil
+moisture is passed to
+the model through
+max_irr as a fraction
+of either soil
+capacity when
+‘irr_frm_paw’ is
+False, or as a
+fraction (0-1) of PAW
+when ‘irr_frm_paw’ is
+True this prevent any
+irrigation scheduling
+or and soil moisture
+calculation in the
+model.</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘poolInfilLimit’</p></td>
+<td><p>m</p></td>
+<td><p>woodward set to 0.2
+Soil frost depth
+limit for water
+infiltration</p></td>
+</tr>
+<tr class="row-even"><td><p>‘reseed_CLV’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Weight of leaves
+after reseed if &gt;= 0
+otherwise use current
+state of variable</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘reseed_CRES’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Weight of reserves
+after reseed if &gt;= 0
+otherwise use current
+state of variable</p></td>
+</tr>
+<tr class="row-even"><td><p>‘reseed_CST’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Weight of stems after
+reseed if &gt;= 0
+otherwise use current
+state of variable</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘reseed_CSTUB’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Weight of stubble
+after reseed if &gt;= 0
+otherwise use current
+state of variable</p></td>
+</tr>
+<tr class="row-even"><td><p>‘reseed_harv_delay’</p></td>
+<td><p>days</p></td>
+<td><p>number of days to
+delay harvest after
+reseed must be &gt;=1</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘reseed_LAI’</p></td>
+<td><p>(m2 m-2)</p></td>
+<td><p>&gt; =0 the leaf area
+index to set after
+reseeding if &lt; 0 then
+simply use the
+current LAI</p></td>
+</tr>
+<tr class="row-even"><td><p>‘reseed_TILG1’</p></td>
+<td><p>(m-2)</p></td>
+<td><p>Elongating generative
+tiller density after
+reseed if &gt;=0
+otherwise use current
+state of variable</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘reseed_TILG2’</p></td>
+<td><p>(m-2)</p></td>
+<td><p>Non-elongating
+generative tiller
+density after reseed
+if &gt;=0 otherwise use
+current state of
+variable</p></td>
+</tr>
+<tr class="row-even"><td><p>‘reseed_TILV’</p></td>
+<td><p>(m-2)</p></td>
+<td><p>Non-elongating tiller
+density after reseed
+if &gt;=0 otherwise use
+current state of
+variable</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RHOnewSnow’</p></td>
+<td><p>kg SWE m-3</p></td>
+<td><p>Density of newly
+fallen snow</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RHOpack’</p></td>
+<td><p>d-1</p></td>
+<td><p>Relative packing rate
+of snow</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘runoff_area’</p></td>
+<td><p>m2</p></td>
+<td><p>the area that can
+provide runoff to the
+storage (ha)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘runoff_frac’</p></td>
+<td><p>fraction</p></td>
+<td><p>the fraction of
+precipitation that
+becomes runoff to
+recharge storage
+(0-1, unit less)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘runoff_from_rain’</p></td>
+<td><p>sudo boolean 1=True,
+0=False</p></td>
+<td><p>if True then use a
+fraction of rainfall,
+otherwise proscribed
+refill data from an
+external model</p></td>
+</tr>
+<tr class="row-even"><td><p>‘stor_full_refil_doy’</p></td>
+<td><p>day of year (1-366)</p></td>
+<td><p>the day of the year
+(0-366) when storage
+will be set to full.
+set to -1 to never
+fully refill storage</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘stor_irr_ineff’</p></td>
+<td><p>fraction</p></td>
+<td><p>the fraction of
+irrigation water that
+is lost when storage
+is used for
+irrigation (e.g. 0
+means a perfectly
+efficient system, 1
+means that 2x the
+storage volume is
+needed to irrigate x
+volume) unit less</p></td>
+</tr>
+<tr class="row-even"><td><p>‘stor_leakage’</p></td>
+<td><p>m3</p></td>
+<td><p>the losses from
+storage to leakage
+static (m3/day)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘stor_refill_losses’</p></td>
+<td><p>fraction</p></td>
+<td><p>the losses incurred
+from re-filling
+storage from
+irrigation scheme
+(0-1)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘stor_refill_min’</p></td>
+<td><p>mm</p></td>
+<td><p>the minimum amount of
+excess irrigation
+water that is needed
+to refill storage
+(mm/day)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘stor_reserve_vol’</p></td>
+<td><p>m3</p></td>
+<td><p>the volume of storage
+to reserve
+(e.g. irrigation is
+cutoff at this
+volume)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘SWret’</p></td>
+<td><p>mm mm-1 d-1</p></td>
+<td><p>Liquid water storage
+capacity of snow</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘SWrf’</p></td>
+<td><p>mm d-1 °C-1</p></td>
+<td><p>Maximum refreezing
+rate per degree below
+‘TmeltFreeze’</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TmeltFreeze’</p></td>
+<td><p>Â°C</p></td>
+<td><p>Temperature above
+which snow melts</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TrainSnow’</p></td>
+<td><p>Â°C</p></td>
+<td><p>Temperature below
+which precipitation
+is snow</p></td>
+</tr>
+<tr class="row-even"><td><p>‘use_storage’</p></td>
+<td><p>sudo boolean 1=True,
+0=False</p></td>
+<td><p>whether or not to
+include storage in
+the model</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘WCI’</p></td>
+<td><p>m3 m-3</p></td>
+<td><p>Initial value of
+volumetric water
+content</p></td>
+</tr>
+<tr class="row-even"><td><p>‘WCST’</p></td>
+<td><p>m3 m-3</p></td>
+<td><p>Volumetric water
+content at saturation</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘WpoolMax’</p></td>
+<td><p>mm</p></td>
+<td><p>Maximum pool water
+(liquid plus ice)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="plant-parameters-description">
+<h3>Plant Parameters description<a class="headerlink" href="#plant-parameters-description" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>PARAMETER</strong></p></th>
+<th class="head"><p><strong>units</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘ABASAL’</p></td>
+<td><p>d-1</p></td>
+<td><p>Grass basal area
+response rate</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘BASALI’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Grass basal area</p></td>
+</tr>
+<tr class="row-even"><td><p>‘CLAIV’</p></td>
+<td><p>m2 leaf m-2</p></td>
+<td><p>Maximum LAI remaining
+after harvest when no
+tillers elongate</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘COCRESMX’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Maximum concentration
+of reserves in
+aboveground biomass</p></td>
+</tr>
+<tr class="row-even"><td><p>‘CSTAVM’</p></td>
+<td><p>gC tiller-1</p></td>
+<td><p>Maximum stem mass of
+elongating tillers</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘CSTI’</p></td>
+<td><p>gC m-2</p></td>
+<td><p>Initial value of
+stems</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DAYLA’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>DAYL above which
+growth is prioritised
+over storage</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DAYLB’</p></td>
+<td><p>d d-1</p></td>
+<td><p>Day length below
+which DAYLGE becomes
+0 and phenological
+stage is reset to
+zero (must be &lt;
+DLMXGE)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DAYLG1G2’</p></td>
+<td><p>d d-1</p></td>
+<td><p>Minimum day length
+above which
+generative tillers
+can start elongating</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DAYLGEMN’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Minimum daylength
+growth effect</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DAYLP’</p></td>
+<td><p>d d-1</p></td>
+<td><p>Day length below
+which phenological
+development slows
+down</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DAYLRV’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>DAYL at which
+vernalisation is
+reset</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DELD’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Litter disappearance
+due to decomposition</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DELE’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Litter disappearance
+due to earthworms</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DLMXGE’</p></td>
+<td><p>d d-1</p></td>
+<td><p>Day length below
+which DAYLGE becomes
+less than 1 (should
+be &lt; maximum DAYL?)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘Dparam’</p></td>
+<td><p>°C-1 d-1</p></td>
+<td><p>Constant in the
+calculation of
+dehardening rate</p></td>
+</tr>
+<tr class="row-even"><td><p>‘EBIOMAX’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Earthworm biomass max</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘FCOCRESMN’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Minimum concentration
+of reserves in above
+ground biomass as
+fraction of COCRESMX</p></td>
+</tr>
+<tr class="row-even"><td><p>‘FGRESSI’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>CRES sink strength
+factor</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘FRTILGG1I’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Initial fraction of
+generative tillers
+that is still in
+stage 1</p></td>
+</tr>
+<tr class="row-even"><td><p>‘FRTILGI’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Initial value of
+elongating tiller
+fraction</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘FSLAMIN’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Minimum SLA of new
+leaves as a fraction
+of maximum possible
+SLA (must be &lt; 1)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘FSMAX’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Maximum ratio of
+tiller and leaf
+appearance based on
+sward geometry (must
+be &lt; 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘HAGERE’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Parameter for
+proportion of stem
+harvested</p></td>
+</tr>
+<tr class="row-even"><td><p>‘HARVFRD’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Relative harvest
+fraction of CLVD</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘Hparam’</p></td>
+<td><p>°C-1 d-1</p></td>
+<td><p>Hardening parameter</p></td>
+</tr>
+<tr class="row-even"><td><p>‘KBASAL’</p></td>
+<td><p>?</p></td>
+<td><p>Constant at half
+basal area</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘KCRT’</p></td>
+<td><p>gC m-2</p></td>
+<td><p>Root mass at which
+ROOTD is 67% of
+ROOTDM</p></td>
+</tr>
+<tr class="row-even"><td><p>‘KLAI’</p></td>
+<td><p>m2 m-2 leaf</p></td>
+<td><p>PAR extinction
+coefficient</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘KLUETILG’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>LUE-increase with
+increasing fraction
+elongating tillers</p></td>
+</tr>
+<tr class="row-even"><td><p>‘KRDRANAER’</p></td>
+<td><p>d-1</p></td>
+<td><p>Maximum relative
+death rate due to
+anearobic conditions</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘KRESPHARD’</p></td>
+<td><p>gC gC-1 °C-1</p></td>
+<td><p>Carbohydrate
+requirement of
+hardening</p></td>
+</tr>
+<tr class="row-even"><td><p>‘KRSR3H’</p></td>
+<td><p>°C-1</p></td>
+<td><p>Constant in the
+logistic curve for
+frost survival</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LAICR’</p></td>
+<td><p>m2 leaf m-2</p></td>
+<td><p>LAI above which
+shading induces leaf
+senescence</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LAIEFT’</p></td>
+<td><p>m2 m-2 leaf</p></td>
+<td><p>Decrease in tillering
+with leaf area index</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LAITIL’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Maximum ratio of
+tiller and leaf
+apearance at low leaf
+area index</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LDT50A’</p></td>
+<td><p>d</p></td>
+<td><p>Intercept of linear
+dependence of LD50 on
+lT50</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LDT50B’</p></td>
+<td><p>d °C-1</p></td>
+<td><p>Slope of linear
+dependence of LD50 on
+LT50</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LERGA’</p></td>
+<td><p>°C</p></td>
+<td><p>Leaf elongation
+intercept generative</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LERGB’</p></td>
+<td><p>mm d-1 °C-1</p></td>
+<td><p>Leaf elongation slope
+generative</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LERVA’</p></td>
+<td><p>°C</p></td>
+<td><p>Leaf elongation
+intercept vegetative</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LERVB’</p></td>
+<td><p>mm d-1 °C-1</p></td>
+<td><p>Leaf elongation slope
+vegetative</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LFWIDG’</p></td>
+<td><p>m</p></td>
+<td><p>Leaf width on
+elongating tillers</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LFWIDV’</p></td>
+<td><p>m</p></td>
+<td><p>Leaf width on
+non-elongating
+tillers</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LOG10CLVI’</p></td>
+<td><p>gC m-2</p></td>
+<td><p>log10 of Initial
+value of leaves</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LOG10CRESI’</p></td>
+<td><p>gC m-2</p></td>
+<td><p>log10 of Initial
+value of reserves</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LOG10CRTI’</p></td>
+<td><p>gC m-2</p></td>
+<td><p>log10 of Initial
+value of roots</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LOG10LAII’</p></td>
+<td><p>m2 m-2</p></td>
+<td><p>Initial value of leaf
+area index</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LSHAPE’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Area of a leaf
+relative to a
+rectangle of same
+length and width
+(must be &lt; 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LT50I’</p></td>
+<td><p>°C</p></td>
+<td><p>Initial value of LT50</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LT50MN’</p></td>
+<td><p>°C</p></td>
+<td><p>Minimum LT50 (Lethal
+temperature at which
+50% die)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LT50MX’</p></td>
+<td><p>°C</p></td>
+<td><p>Maximum LT50</p></td>
+</tr>
+<tr class="row-even"><td><p>‘NELLVM’</p></td>
+<td><p>tiller-1</p></td>
+<td><p>Number of elongating
+leaves per
+non-elongating tiller</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘PHENCR’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Phenological stage
+above which
+elongation and
+appearance of leaves
+on elongating tillers
+decreases</p></td>
+</tr>
+<tr class="row-even"><td><p>‘PHENI’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Initial value of
+phenological stage</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘PHY’</p></td>
+<td><p>°C d</p></td>
+<td><p>Phyllochron</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RATEDMX’</p></td>
+<td><p>°C d-1</p></td>
+<td><p>Maximum dehardening
+rate</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RDRHARVMAX’</p></td>
+<td><p>d-1</p></td>
+<td><p>Maximum relative
+death rate due to
+harvest</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RDRROOT’</p></td>
+<td><p>d-1</p></td>
+<td><p>Relatuive death rate
+of root mass CRT</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RDRSCO’</p></td>
+<td><p>d-1</p></td>
+<td><p>Increase in relative
+death rate of leaves
+and non-elongating
+tillers due to
+shading per unit of
+LAI above LAICR</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RDRSMX’</p></td>
+<td><p>d-1</p></td>
+<td><p>Maximum relative
+death rate of leaves
+and non-elongating
+tillers due to
+shading</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RDRSTUB’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Relative death rate
+of stubble/pseudostem</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RDRTEM’</p></td>
+<td><p>d-1 °C-1</p></td>
+<td><p>Proportionality of
+leaf senescence with
+temperature</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RDRTILMIN’</p></td>
+<td><p>d-1</p></td>
+<td><p>Background relative
+rate of tiller death</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RDRTMIN’</p></td>
+<td><p>d-1</p></td>
+<td><p>Minimum relative
+death rate of foliage</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RDRWMAX’</p></td>
+<td><p>d-1</p></td>
+<td><p>Maximum death rate
+due to water stress</p></td>
+</tr>
+<tr class="row-even"><td><p>‘reHardRedDay’</p></td>
+<td><p>d</p></td>
+<td><p>Duration of period
+over which
+rehardening
+capability disappears</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RGENMX’</p></td>
+<td><p>d-1</p></td>
+<td><p>Maximum relative rate
+of tillers becoming
+elongating tillers</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RGRTG1G2’</p></td>
+<td><p>d-1</p></td>
+<td><p>Relative rate of
+TILG1 becoming TILG2</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘ROOTDM’</p></td>
+<td><p>m</p></td>
+<td><p>Initial and maximum
+value rooting depth</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RRDMAX’</p></td>
+<td><p>m d-1</p></td>
+<td><p>Maximum root depth
+growth rate</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RUBISC’</p></td>
+<td><p>g m-2 leaf</p></td>
+<td><p>Rubisco content of
+upper leaves</p></td>
+</tr>
+<tr class="row-even"><td><p>‘SIMAX1T’</p></td>
+<td><p>gC tiller-1 d-1</p></td>
+<td><p>Sink strength of
+small elongating
+tillers</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘SLAMAX’</p></td>
+<td><p>m2 leaf gC-1</p></td>
+<td><p>Maximum SLA of new
+leaves (Note unusual
+units)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TBASE’</p></td>
+<td><p>°C</p></td>
+<td><p>Minimum value of
+effective temperature
+for leaf elongation</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TCRES’</p></td>
+<td><p>d</p></td>
+<td><p>Time constant of
+mobilisation of
+reserves</p></td>
+</tr>
+<tr class="row-even"><td><p>‘THARDMX’</p></td>
+<td><p>°C</p></td>
+<td><p>Maximum surface
+temperature at which
+hardening is possible</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TILTOTI’</p></td>
+<td><p>m-2</p></td>
+<td><p>Initial value of
+tiller density</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TOPTGE’</p></td>
+<td><p>°C</p></td>
+<td><p>Optimum temperature
+for vegetative
+tillers to become
+generative (must be &gt;
+TBASE)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TRANCO’</p></td>
+<td><p>mm d-1 g-1 m2</p></td>
+<td><p>Transpiration effect
+of PET</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TRANRFCR’</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Critical water stress
+for tiller death</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TsurfDiff’</p></td>
+<td><p>°C</p></td>
+<td><p>Constant in the
+calculation of
+dehardening rate</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TVERN’</p></td>
+<td><p>°C</p></td>
+<td><p>Temperature below
+which vernalisation
+advances</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TVERND’</p></td>
+<td><p>d</p></td>
+<td><p>Days of cold after
+which vernalisation
+completed</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TVERNDMN’</p></td>
+<td><p>d</p></td>
+<td><p>Minimum vernalisation
+days</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘VERNDI’</p></td>
+<td><p>d</p></td>
+<td><p>Initial value of
+cumulative
+vernalisation days</p></td>
+</tr>
+<tr class="row-even"><td><p>‘YG’</p></td>
+<td><p>gC gC-1</p></td>
+<td><p>Growth yield per unit
+expended carbohydrate
+(must be &lt; 1)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="output-description">
+<h3>output description<a class="headerlink" href="#output-description" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>varname</strong></p></th>
+<th class="head"><p><strong>units</strong></p></th>
+<th class="head"><p><strong>description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘BASAL’</p></td>
+<td><p>(%)</p></td>
+<td><p>Basal Area</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘CLV’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Leaf C</p></td>
+</tr>
+<tr class="row-even"><td><p>‘CLVD’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Dead Leaf C</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘CRES’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Reserve C</p></td>
+</tr>
+<tr class="row-even"><td><p>‘CRT’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Root C</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘CST’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Stem C</p></td>
+</tr>
+<tr class="row-even"><td><p>‘CSTUB’</p></td>
+<td><p>(gC m-2)</p></td>
+<td><p>Stubble C</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DAVTMP’</p></td>
+<td><p>(degC)</p></td>
+<td><p>Av. Temp.</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DAYL’</p></td>
+<td><p>(-)</p></td>
+<td><p>Daylength</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DAYLGE’</p></td>
+<td><p>(-)</p></td>
+<td><p>Daylength Fact.</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DEBUG’</p></td>
+<td><p>(?)</p></td>
+<td><p>Debug</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DM_RYE_RM’</p></td>
+<td><p>(kg DM ha-1)</p></td>
+<td><p>dry matter of Rye
+species harvested in
+this time step Note
+that this is the
+calculated removal
+but if ‘opt_harvfrin’
+= False then it may
+be significantly
+different to the
+actual removal which
+is show by the
+appropriate yield
+variable</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DM_WEED_RM’</p></td>
+<td><p>(kg DM ha-1)</p></td>
+<td><p>dry matter of weed
+species harvested in
+this time step; Note
+that this is the
+calculated removal
+but if ‘opt_harvfrin’
+= False then it may
+be significantly
+different to the
+actual removal which
+is show by the
+appropriate yield
+variable</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DM’</p></td>
+<td><p>(kg DM ha-1)</p></td>
+<td><p>Ryegrass Mass Note
+that this is after
+any harvest (e.g. at
+end of time stamp)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DMH_RYE’</p></td>
+<td><p>(kg DM ha-1)</p></td>
+<td><p>harvestable dry
+matter of rye species
+includes harvestable
+fraction of dead
+(HARVFRD) note that
+this is before any
+removal by harvesting</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DMH_WEED’</p></td>
+<td><p>(kg DM ha-1)</p></td>
+<td><p>harvestable dry
+matter of weed specie
+includes harvestable
+fraction of dead
+(HARVFRD) note that
+this is before any
+removal by harvesting</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DMH’</p></td>
+<td><p>(kg DM ha-1)</p></td>
+<td><p>harvestable dry
+matter = DMH_RYE +
+DMH_WEED note that
+this is before any
+removal by harvesting</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘doy’</p></td>
+<td><ol class="loweralpha simple" start="4">
+<li></li>
+</ol>
+</td>
+<td><p>Day of Year</p></td>
+</tr>
+<tr class="row-even"><td><p>‘DRAIN’</p></td>
+<td><p>(mm d-1)</p></td>
+<td><p>Drainage</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘DTILV’</p></td>
+<td><p>(till m-2 d-1)</p></td>
+<td><p>Till. Death</p></td>
+</tr>
+<tr class="row-even"><td><p>‘EVAP’</p></td>
+<td><p>(mm d-1)</p></td>
+<td><p>Evap.</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘external_inflow’,</p></td>
+<td><p>m3</p></td>
+<td><p>input value external
+inflow (m3) kept for
+full water budget of
+storage</p></td>
+</tr>
+<tr class="row-even"><td><p>‘FS’</p></td>
+<td><p>(till leaf-1)</p></td>
+<td><p>Site Filling</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘GRT’</p></td>
+<td><p>(gC m-2 d-1)</p></td>
+<td><p>Root Growth</p></td>
+</tr>
+<tr class="row-even"><td><p>‘GTILV’</p></td>
+<td><p>(till m-2 d-1)</p></td>
+<td><p>Till. Birth</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘h2o_store_per_area’</p></td>
+<td><p>mm</p></td>
+<td><p>h2o storage per
+irrigated area (mm)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘h2o_store_vol’</p></td>
+<td><p>m3</p></td>
+<td><p>volume of water in
+storage (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘HARVFR’</p></td>
+<td><p>(-)</p></td>
+<td><p>Harvest Frac.</p></td>
+</tr>
+<tr class="row-even"><td><p>‘HARVFRIN’</p></td>
+<td><p>(-)</p></td>
+<td><p>Harvest Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘IRR_TARG’</p></td>
+<td><p>fraction</p></td>
+<td><p>irrigation Target
+(fraction of field
+capacity) to fill to
+also an input
+variable</p></td>
+</tr>
+<tr class="row-even"><td><p>‘IRR_TRIG’</p></td>
+<td><p>fraction</p></td>
+<td><p>irrigation trigger
+(fraction of field
+capacity at which to
+start irrigating</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘IRR_TARG_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>irrigation target for
+storage (fraction
+paw/FC), input, only
+relevant if
+calc_ind_store_demand</p></td>
+</tr>
+<tr class="row-even"><td><p>‘IRR_TRIG_store’</p></td>
+<td><p>fraction</p></td>
+<td><p>irrigation trigger
+for storage (fraction
+paw/FC), input, only
+relevant if
+calc_ind_store_demand</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘IRRIG_DEM’</p></td>
+<td><p>mm</p></td>
+<td><p>irrigation irrigation
+demand to field
+capacity * IRR_TARG</p></td>
+</tr>
+<tr class="row-even"><td><p>‘irrig_dem_store’</p></td>
+<td><p>mm</p></td>
+<td><p>irrigation demand
+from storage (mm)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘irrig_scheme’</p></td>
+<td><p>mm</p></td>
+<td><p>irrigation applied
+from the scheme (mm)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘irrig_store’</p></td>
+<td><p>mm</p></td>
+<td><p>irrigation applied
+from storage (mm)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘IRRIG’</p></td>
+<td><p>mm d-1</p></td>
+<td><p>Irrigation applied</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LAI’</p></td>
+<td><p>(m2 m-2)</p></td>
+<td><p>LAI</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LERG’</p></td>
+<td><p>(m d-1)</p></td>
+<td><p>Gen. Elong. Rate</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LERV’</p></td>
+<td><p>(m d-1)</p></td>
+<td><p>Veg. Elong. Rate</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘LINT’</p></td>
+<td><p>(-)</p></td>
+<td><p>Light Intercep.</p></td>
+</tr>
+<tr class="row-even"><td><p>‘LT50’</p></td>
+<td><p>(degC)</p></td>
+<td><p>Hardening</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘MXPAW’</p></td>
+<td><p>mm</p></td>
+<td><p>maximum Profile
+available water</p></td>
+</tr>
+<tr class="row-even"><td><p>‘PAW’</p></td>
+<td><p>mm</p></td>
+<td><p>Profile available
+water at the time
+step</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘PHEN’</p></td>
+<td><p>(-)</p></td>
+<td><p>Phen. Stage</p></td>
+</tr>
+<tr class="row-even"><td><p>‘PHENRF’</p></td>
+<td><p>(-)</p></td>
+<td><p>Phen. Effect</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘PHOT’</p></td>
+<td><p>(gC m-2 d-1)</p></td>
+<td><p>Photosyn.</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RAIN’</p></td>
+<td><p>(mm d-1)</p></td>
+<td><p>Rain</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RDLVD’</p></td>
+<td><p>(d-1)</p></td>
+<td><p>Decomp. Rate</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RDRL’</p></td>
+<td><p>(d-1)</p></td>
+<td><p>Leaf Death Rate</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RDRTIL’</p></td>
+<td><p>(d-1)</p></td>
+<td><p>Till. Death Rate</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RES’</p></td>
+<td><p>(g g-1)</p></td>
+<td><p>Reserve C</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RESEEDED’</p></td>
+<td></td>
+<td><p>reseeded flag if ==1
+then the simulation
+was reseeded on this
+day</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RESMOB’</p></td>
+<td><p>(gC m-2 d-1)</p></td>
+<td><p>Res. Mobil.</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RGRTV’</p></td>
+<td><p>(d-1)</p></td>
+<td><p>Till. App. Rate</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RLEAF’</p></td>
+<td><p>(d-1)</p></td>
+<td><p>Leaf App. Rate</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘ROOTD’</p></td>
+<td><ol class="loweralpha simple" start="13">
+<li></li>
+</ol>
+</td>
+<td><p>Root Depth</p></td>
+</tr>
+<tr class="row-even"><td><p>‘RUNOFF’</p></td>
+<td><p>(mm d-1)</p></td>
+<td><p>Runoff</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘RYE_YIELD’</p></td>
+<td><p>(tDM ha-1)</p></td>
+<td><p>PRG Yield from rye
+grass species note
+that this is the
+actual amount of
+material that has
+been removed</p></td>
+</tr>
+<tr class="row-even"><td><p>‘SLA’</p></td>
+<td><p>(m2 gC-1)</p></td>
+<td><p>Spec. Leaf Area</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘SLANEW’</p></td>
+<td><p>(m2 gC-1)</p></td>
+<td><p>New SLA</p></td>
+</tr>
+<tr class="row-even"><td><p>‘store_evap_out’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget out
+from evaporation
+(NOTIMPLEMENTED) (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘store_irr_loss’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget out
+from losses incurred
+with irrigation (m3)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘store_leak_out’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget out
+from leakage (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘store_overflow’,</p></td>
+<td><p>m3</p></td>
+<td><p>water that could have
+been added to storage
+(including losses),
+but was not as
+storage was full (m3)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘store_runoff_in’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget in
+from runoff or
+external model (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘
+store_scheme_in_loss’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget out
+losses from the
+scheme to the storage
+basin (m3)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘store_scheme_in’</p></td>
+<td><p>m3</p></td>
+<td><p>storage budget in
+from the irrigation
+scheme (m3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TILG1’</p></td>
+<td><p>(m-2)</p></td>
+<td><p>Gen. Tillers</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TILG2’</p></td>
+<td><p>(m-2)</p></td>
+<td><p>Elong. Tillers</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TILTOT’</p></td>
+<td><p>(m-2)</p></td>
+<td><p>Total Tillers</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TILV’</p></td>
+<td><p>(m-2)</p></td>
+<td><p>Veg. Tillers</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘Time’</p></td>
+<td><ol class="loweralpha simple" start="25">
+<li></li>
+</ol>
+</td>
+<td><p>Time</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TRAN’</p></td>
+<td><p>(mm d-1)</p></td>
+<td><p>Trans.</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘TRANRF’</p></td>
+<td><p>(%)</p></td>
+<td><p>Transpiration</p></td>
+</tr>
+<tr class="row-even"><td><p>‘TSIZE’</p></td>
+<td><p>(gC tiller-1)</p></td>
+<td><p>Tiller Size</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘VERN’</p></td>
+<td><p>(%)</p></td>
+<td><p>Vernalisation</p></td>
+</tr>
+<tr class="row-even"><td><p>‘VERND’</p></td>
+<td><ol class="loweralpha simple" start="4">
+<li></li>
+</ol>
+</td>
+<td><p>Vern. Days</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘WAFC’</p></td>
+<td><p>mm</p></td>
+<td><p>Water in non-frozen
+root zone at field
+capacity</p></td>
+</tr>
+<tr class="row-even"><td><p>‘WAL’</p></td>
+<td><ol class="lowerroman simple" start="2000">
+<li></li>
+</ol>
+</td>
+<td><p>Soil Water</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘WAWP’</p></td>
+<td><p>mm</p></td>
+<td><p>Water in non-frozen
+root zone at wilting
+point</p></td>
+</tr>
+<tr class="row-even"><td><p>‘WCL’</p></td>
+<td><p>(%)</p></td>
+<td><p>Eff. Soil Moisture</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘WCLM’</p></td>
+<td><p>(%)</p></td>
+<td><p>Soil Moisture</p></td>
+</tr>
+<tr class="row-even"><td><p>‘WEED_YIELD’</p></td>
+<td><p>(tDM ha-1)</p></td>
+<td><p>PRG Yield from weed
+(other) species note
+that this is the
+actual amount of
+material that has
+been removed</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘year’</p></td>
+<td><ol class="loweralpha simple" start="25">
+<li></li>
+</ol>
+</td>
+<td><p>Year</p></td>
+</tr>
+<tr class="row-even"><td><p>‘YIELD’</p></td>
+<td><p>(tDM ha-1)</p></td>
+<td><p>PRG Yield sum of
+YIELD_RYE and
+YIELD_WEED</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/davcam/BASGRA">BASGRA_2014</a>: original model
+repository</p></li>
+<li><p><a class="reference external" href="https://github.com/woodwards/basgra_nz">BASGRA_NZ</a>: update of the
+model to NZ conditions repository</p></li>
+<li><p><a class="reference external" href="https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464">Identifying causes of low persistence of perennial ryegrass (Lolium
+perenne) dairy pasture using the Basic Grassland model
+(BASGRA)</a>:
+update from BASGRA to BASGRA NZ</p></li>
+<li><p><a class="reference external" href="https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY/blob/master/fortran_BASGRA_NZ/docs/BASGRA2014_USER_GUIDE.pdf">BASGRA 2014 User
+guide</a>
+or .fortran_BASGRA_NZ/docs/BASGRA2014_USER_GUIDE.pdf</p></li>
+<li><p><a class="reference external" href="https://books.google.co.nz/books?id=YwfZFcWgAAMC&amp;pg=PA34&amp;lpg=PA34&amp;dq=vernalisation+model&amp;source=bl&amp;ots=7euCE4tPBe&amp;sig=za2fBGqFVpoR1jKqkVB2NtBK0nc&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwi4stOBi_rcAhXZzmEKHcK6DE0Q6AEwBXoECAQQAQ#v=onepage&amp;q=vernalisation%20model&amp;f=false">Conceptual Basis, Formalisations and Parameterization of the Stics
+Crop
+Model</a></p></li>
+<li><p><a class="reference external" href="https://www.far.org.nz/assets/files/uploads/Iss_04_Irrigation.pdf">Irrigation Management for Cropping - A Grower’s
+Guide</a>
+or .fortran_BASGRA_NZ/docs/FAR-Irrigation Management.pdf</p></li>
+<li><p><a class="reference external" href="https://www.tandfonline.com/doi/abs/10.1080/01140671.1990.10428101">Estimation of field capacity and wilting point of some New Zealand
+soils from their saturation
+percentages</a></p></li>
+<li><p><a class="reference external" href="https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12335">High perennial ryegrass seeding rates do not negatively impact
+pasture sward
+persistence</a></p></li>
+<li><p><a class="reference external" href="https://www.researchgate.net/profile/C-Matthew/publication/266180775_Seasonal_patterns_of_root_tiller_and_leaf_production_in_a_Grasslands_Ruanui_ryegrass_sward/links/56b2ecd408ae56d7b06cdb89/Seasonal-patterns-of-root-tiller-and-leaf-production-in-a-Grasslands-Ruanui-ryegrass-sward.pdf">Seasonal patterns of root, tiller and leaf production in a
+Grasslands Ruanui ryegrass
+sward</a></p></li>
+<li><p><a class="reference external" href="https://benthamopen.com/ABSTRACT/TOASJ-2-35">Fertiliser Nitrogen and Factors Affecting Pasture
+Responses</a></p></li>
+<li><p><a class="reference external" href="https://mro.massey.ac.nz/handle/10179/842">Differential responses of tillers to floral induction in perennial
+ryegrass (Lolium perenne L.) : implications for
+perenniality</a></p></li>
+<li><p><a class="reference external" href="tandfonline.com/doi/abs/10.1080/00288233.2001.9513464">A practical model for predicting soil water deficit in New Zealand
+pastures</a></p></li>
+<li><p>A mathematical model of perennial grass-clover dairy pasture for
+control of post-reproductive pasture quality using water and grazing
+management by Simon Woodward (unpublished)</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="autoapi/komanawa/basgra_nz_py/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">komanawa.basgra_nz_py</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-basgra">About BASGRA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-implementation">Python Implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#package-installation">package installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fortran-installation">Fortran Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fortran-compilation">Fortran compilation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#new-features-implemented-from-simon-woodwards-basgra">new features implemented from Simon Woodward’s BASGRA</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-documentation-resources">model documentation resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-simulation-length">Maximum simulation length</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calender">Calender</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-requirements">Resource requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#irrigation-triggering-and-demand-modelling-v2-0-0">irrigation triggering and demand modelling (v2.0.0+)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-irrigation-process">New Irrigation Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-irrigation-input-outputs">New irrigation input/outputs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v2-0-0">How to run so that the results are backwards compatible with versions before V2.0.0</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#harvest-management-and-scheduling-v3-0-0">Harvest management and scheduling (v3.0.0+)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-harvest-processes">New Harvest processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-harvesting-process">Automatic harvesting process</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-harvesting-process">Manual harvesting process</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-harvest-inputs-outputs">New Harvest inputs/outputs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v3-0-0">How to run so that the results are backwards compatible with versions before V3.0.0</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#re-seeding-module-v4-0-0">Re-seeding module (V4.0.0+)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reseed-process">Reseed process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-re-seed-inputs-outputs">New re-seed inputs/outputs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v3-0-0">How to run so that the results are backwards compatible with versions V3.0.0 -</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#passing-external-soil-moisture-to-model-v5-0-0">passing external soil moisture to model (V5.0.0+)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v4-0-0">How to run so that the results are backwards compatible with versions V4.0.0 -</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#irrigation-water-storage-v6-0-0">Irrigation water storage (V6.0.0+)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#irrigation-storage-process">Irrigation storage process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-inputs-outputs">new inputs/outputs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-v5-0-0">How to run so that the results are backwards compatible with versions V5.0.0 -</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-developments">python developments</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supporting-functions">supporting functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-regime-and-examples">testing regime and examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#input-and-output-parameter-definitions">Input and output parameter definitions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#days-harvest-keys-description">Days Harvest Keys description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-weather-keys-where-pet-is-passed-description">Matrix weather keys where pet is passed description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-weather-keys-where-pet-is-calculated-via-penman-description">Matrix weather keys where pet is calculated via penman description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#site-parameters-description">Site Parameters description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plant-parameters-description">Plant Parameters description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-description">output description</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Komanawa Solutions Ltd..
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+:py:mod:`komanawa.basgra_nz_py.get_fortran_module`
+==================================================
+
+.. py:module:: komanawa.basgra_nz_py.get_fortran_module
+
+.. autoapi-nested-parse::
+
+   created matt_dumont 
+   on: 26/04/24
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   komanawa.basgra_nz_py.get_fortran_module.get_fortran_basgra
+
+
+
+.. py:function:: get_fortran_basgra(supply_pet, recomplile=False, verbose=False)
+
+   get the callable fortran BASGRA function
+
+   :param supply_pet: bool if True use the PET version, if False use the peyman version
+   :param recomplile: bool if True force recompile the fortran code
+   :param verbose: bool if True print the fortran compilation output
+   :return:
+
+

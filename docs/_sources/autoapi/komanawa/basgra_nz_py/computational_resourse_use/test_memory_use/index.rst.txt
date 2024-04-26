@@ -1,0 +1,16 @@
+:py:mod:`komanawa.basgra_nz_py.computational_resourse_use.test_memory_use`
+==========================================================================
+
+.. py:module:: komanawa.basgra_nz_py.computational_resourse_use.test_memory_use
+
+.. autoapi-nested-parse::
+
+   a test for the memory usage, to use this script the memory profiler must be installed... https://pypi.org/project/memory-profiler/
+
+   $ pip install -U memory_profiler
+
+   Author: Matt Hanson
+   Created: 23/11/2020 9:50 AM
+
+
+
