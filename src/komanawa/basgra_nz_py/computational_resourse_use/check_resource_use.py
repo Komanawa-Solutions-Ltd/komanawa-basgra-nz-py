@@ -9,12 +9,9 @@ import os
 
 def timeit_test(py_file_path, function_names=('test_function', 'test_function2'), n=10):
     """
-    run an automated timeit test, must be outside of the function definition, prints results in scientific notation
-    units are seconds
+    run an automated timeit test, must be outside of the function definition, prints results in scientific notation units are seconds
 
-    :param py_file_path: path to the python file that holds the functions,
-                        if the functions are in the same script as call then  __file__ is sufficient.
-                        in this case the function call should be protected by: if __name__ == '__main__':
+    :param py_file_path: path to the python file that holds the functions, if the functions are in the same script as call then  __file__ is sufficient. in this case the function call should be protected by: if __name__ == '__main__':
     :param function_names: the names of the functions to test (iterable), functions must not have arguments
     :param n: number of times to test
     :return:

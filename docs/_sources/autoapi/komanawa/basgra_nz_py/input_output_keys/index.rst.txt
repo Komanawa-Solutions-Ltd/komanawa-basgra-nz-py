@@ -1,0 +1,14 @@
+:py:mod:`komanawa.basgra_nz_py.input_output_keys`
+=================================================
+
+.. py:module:: komanawa.basgra_nz_py.input_output_keys
+
+.. autoapi-nested-parse::
+
+    Author: Matt Hanson
+    Created: 14/08/2020 8:53 AM
+
+   This module contains keys for parameters, days of harvest, weather matrix, output columns, site parameters, and plant parameters. These keys are used throughout the project to access and manipulate data.
+
+
+

@@ -39,12 +39,14 @@ def plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8)
                           rolling=None, main_kwargs={}, rolling_kwargs={}, label_rolling=False, label_main=True,
                           show=True):
     """
-    plot multiple basgra results against eachother
+    plot multiple basgra results against each other
+
     :param data: dictionary of key: outputs of run_basgra()
     :param outdir: none or directory, if not None then makes outdir and saves plots
     :param out_vars: variables to make figures for, default is:
-                     ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD',
-                      'BASAL', 'ROOTD', 'WAFC')
+
+         ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD', 'BASAL', 'ROOTD', 'WAFC')
+
     :param title_str: a string to append to the front of the title
     :param rolling: None or int,  generate a rolling mean of rolling days
     :param main_kwargs: other kwargs passed directly to the plot function for the main plot
@@ -106,11 +108,13 @@ def plot_multiple_monthly_violin_box(data, outdir=None, out_vars=_outvars, fig_s
                                      main_kwargs={}, label_main=True, show=True, violin_plot=False):
     """
     plot multiple basgra results as a violin plot each other shifts january to be in the middle.
+
     :param data: dictionary of key: outputs of run_basgra() grouped by the month, index=range(1,13)
     :param outdir: none or directory, if not None then makes outdir and saves plots
     :param out_vars: variables to make figures for, default is:
-                     ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD',
-                      'BASAL', 'ROOTD', 'WAFC')
+
+         ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD', 'BASAL', 'ROOTD', 'WAFC')
+
     :param title_str: a string to append to the front of the title
     :param main_kwargs: other kwargs passed directly to the plot function for the main plot
     :param label_main: bool if True labels are created for the main plot if either is true then  creates a legend
@@ -206,11 +210,13 @@ def plot_multiple_monthly_results(data, outdir=None, out_vars=_outvars, fig_size
                                   main_kwargs={}, label_main=True, show=True):
     """
     plot multiple basgra results against each other shifts january to be in the middle.
+
     :param data: dictionary of key: outputs of run_basgra() grouped by the month, index=range(1,13)
     :param outdir: none or directory, if not None then makes outdir and saves plots
     :param out_vars: variables to make figures for, default is:
-                     ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD',
-                      'BASAL', 'ROOTD', 'WAFC')
+
+         ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD','BASAL', 'ROOTD', 'WAFC')
+
     :param title_str: a string to append to the front of the title
     :param main_kwargs: other kwargs passed directly to the plot function for the main plot
     :param label_main: bool if True labels are created for the main plot if either is true then  creates a legend
@@ -272,13 +278,15 @@ def plot_multiple_date_range(data, start_date, end_date, outdir=None, out_vars=_
                              show=True):
     """
     as per plot multiple results but for a specific date range.
+
     :param data: dictionary of key: outputs of run_basgra()
     :param start_date: the start date for the range to be plotted
     :param end_date: the end date for the rnage to be plotted
     :param outdir: none or directory, if not None then makes outdir and saves plots
     :param out_vars: variables to make figures for, default is:
-                     ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD',
-                      'BASAL', 'ROOTD', 'WAFC')
+
+         ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD', 'BASAL', 'ROOTD', 'WAFC')
+
     :param title_str: a string to append to the front of the title
     :param rolling: None or int,  generate a rolling mean of rolling days
     :param main_kwargs: other kwargs passed directly to the plot function for the main plot

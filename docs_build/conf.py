@@ -6,10 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'komanawa-simple-farm-model'
+project = 'komanawa-basgra-nz-py'
 copyright = '2024, Komanawa Solutions Ltd.'
 author = 'Matt Dumont'
-release = 'v1.0.0'
+release = 'v7.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -54,7 +54,7 @@ html_theme_options = {
     "navbar_end": ["navbar-icon-links"],
     "logo": {
         "image_light": "_static/ksl_for_latex.png",
-        "text": "Kendall Stats Overview",
+        "text": "Basgra-NZ-Py overview",
     },
     "show_toc_level": 2,
     "secondary_sidebar_items": ["page-toc", ],

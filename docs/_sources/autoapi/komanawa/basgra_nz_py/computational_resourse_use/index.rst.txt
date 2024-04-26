@@ -1,0 +1,23 @@
+:py:mod:`komanawa.basgra_nz_py.computational_resourse_use`
+==========================================================
+
+.. py:module:: komanawa.basgra_nz_py.computational_resourse_use
+
+.. autoapi-nested-parse::
+
+   Author: Matt Hanson
+   Created: 18/01/2021 2:06 PM
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   check_resource_use/index.rst
+   support_for_resource_use/index.rst
+   test_memory_use/index.rst
+
+

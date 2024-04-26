@@ -1,7 +1,9 @@
 """
  Author: Matt Hanson
  Created: 14/08/2020 8:53 AM
- """
+
+This module contains keys for parameters, days of harvest, weather matrix, output columns, site parameters, and plant parameters. These keys are used throughout the project to access and manipulate data.
+"""
 
 param_keys = (
     # PARAMETER   # Name,  # units   #  Description
@@ -342,8 +344,9 @@ out_cols = (
     'store_evap_out',  # storage budget out from evaporation (NOTIMPLEMENTED) (m3)
     'store_scheme_in',  # storage budget in from the irrigation scheme (m3)
     'store_scheme_in_loss',  # storage budget out losses from the scheme to the storage basin (m3)
-    'external_inflow', # input value external inflow (m3) kept for full water budget of storage
-    'store_overflow', # water that could have been added to storage (including losses), but was not as storage was full (m3)
+    'external_inflow',  # input value external inflow (m3) kept for full water budget of storage
+    'store_overflow',
+# water that could have been added to storage (including losses), but was not as storage was full (m3)
 
     # remember to add new ones to output describtion.csv
 

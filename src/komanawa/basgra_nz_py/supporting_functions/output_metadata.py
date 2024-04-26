@@ -8,6 +8,7 @@ import os
 def get_output_metadata(return_dict=True):
     """
     note all keys are have been made uppper for consistancy.
+
     :param return_dict: boolean True return nested dictionary, otherwies returne dataframe
     :return:
     """

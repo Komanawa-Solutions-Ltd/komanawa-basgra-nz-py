@@ -1,0 +1,33 @@
+:py:mod:`komanawa.basgra_nz_py.supporting_functions.cumulative_annual_data`
+===========================================================================
+
+.. py:module:: komanawa.basgra_nz_py.supporting_functions.cumulative_annual_data
+
+.. autoapi-nested-parse::
+
+   Author: Matt Hanson
+   Created: 14/10/2021 8:50 AM
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   komanawa.basgra_nz_py.supporting_functions.cumulative_annual_data.make_cumuliative_annual
+
+
+
+.. py:function:: make_cumuliative_annual(inseries, start_day, start_month)
+
+   :param inseries: pd.Series with
+   :param start_day: int start day of the month (e.g. 1-31 for jan for calendar or 1jun for water year)
+   :param start_month: int start month (e.g. jan for calendar or jun for water year)
+   :return:
+
+

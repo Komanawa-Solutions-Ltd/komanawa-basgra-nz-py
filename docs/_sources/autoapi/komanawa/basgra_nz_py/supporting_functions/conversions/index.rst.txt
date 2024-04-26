@@ -1,0 +1,45 @@
+:py:mod:`komanawa.basgra_nz_py.supporting_functions.conversions`
+================================================================
+
+.. py:module:: komanawa.basgra_nz_py.supporting_functions.conversions
+
+.. autoapi-nested-parse::
+
+   Author: Matt Hanson
+   Created: 23/10/2020 10:06 AM
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   komanawa.basgra_nz_py.supporting_functions.conversions.convert_RH_vpa
+   komanawa.basgra_nz_py.supporting_functions.conversions.convert_wind_to_2m
+
+
+
+.. py:function:: convert_RH_vpa(rh, tmin, tmax)
+
+   calculate vapour pressure from rh tmin/tmax  assumes tmean is tmin+tmax/2 as per https://www.weather.gov/media/epz/wxcalc/vaporPressure.pdf
+
+   :param rh: relative humidity (%, 0-100)
+   :param tmin: min temperature (degrees c)
+   :param tmax: max temperature (degrees c)
+   :return: vapour pressure (kpa)
+
+
+.. py:function:: convert_wind_to_2m(ws, z)
+
+   Convert wind speed measured at different heights above the soil surface to wind speed at 2 m above the surface, assuming a short grass surface. Based on FAO equation 47 in Allen et al (1998).
+
+   :param ws: Measured wind speed [m s-1]
+   :param z: Height of wind measurement above ground surface [m]
+   :return: Wind speed at 2 m above the surface [m s-1]
+
+

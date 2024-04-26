@@ -1,0 +1,12 @@
+:py:mod:`komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use`
+===================================================================================
+
+.. py:module:: komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use
+
+.. autoapi-nested-parse::
+
+   Author: Matt Hanson
+   Created: 23/11/2020 9:50 AM
+
+
+

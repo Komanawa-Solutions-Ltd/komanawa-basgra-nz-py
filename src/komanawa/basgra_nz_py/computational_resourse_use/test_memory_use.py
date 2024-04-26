@@ -1,11 +1,11 @@
 """
- a test for the memory usage, to use this script the memory profiler must be installed...
- https://pypi.org/project/memory-profiler/
+a test for the memory usage, to use this script the memory profiler must be installed... https://pypi.org/project/memory-profiler/
+
 $ pip install -U memory_profiler
 
- Author: Matt Hanson
- Created: 23/11/2020 9:50 AM
- """
+Author: Matt Hanson
+Created: 23/11/2020 9:50 AM
+"""
 from komanawa.basgra_nz_py.basgra_python import run_basgra_nz
 from tests.support_for_tests import establish_org_input, clean_harvest
 import numpy as np

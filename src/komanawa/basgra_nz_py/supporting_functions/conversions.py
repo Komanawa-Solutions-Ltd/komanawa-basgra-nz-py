@@ -8,8 +8,8 @@ import numpy as np
 
 def convert_RH_vpa(rh, tmin, tmax):
     """
-    calculate vapour pressure from rh tmin/tmax  assumes tmean is tmin+tmax/2
-    as per https://www.weather.gov/media/epz/wxcalc/vaporPressure.pdf
+    calculate vapour pressure from rh tmin/tmax  assumes tmean is tmin+tmax/2 as per https://www.weather.gov/media/epz/wxcalc/vaporPressure.pdf
+
     :param rh: relative humidity (%, 0-100)
     :param tmin: min temperature (degrees c)
     :param tmax: max temperature (degrees c)
@@ -26,11 +26,7 @@ def convert_RH_vpa(rh, tmin, tmax):
 
 def convert_wind_to_2m(ws, z):
     """
-    Convert wind speed measured at different heights above the soil
-    surface to wind speed at 2 m above the surface, assuming a short grass
-    surface.
-
-    Based on FAO equation 47 in Allen et al (1998).
+    Convert wind speed measured at different heights above the soil surface to wind speed at 2 m above the surface, assuming a short grass surface. Based on FAO equation 47 in Allen et al (1998).
 
     :param ws: Measured wind speed [m s-1]
     :param z: Height of wind measurement above ground surface [m]
