@@ -471,10 +471,11 @@ library can be found in the environment.yml file</p>
 </section>
 <section id="package-installation">
 <h2>package installation<a class="headerlink" href="#package-installation" title="Link to this heading">#</a></h2>
-<p>BASGRA_NZ_PY can only be installed locally from a github pull and
-addition to your PYTHONPATH</p>
-<p>this installs both the python wrapper and the source fortran code. at
-present a fortran installation is required.</p>
+<p>This package can be installed via pip from the github repo.</p>
+<p>:: code-block:: bash</p>
+<blockquote>
+<div><p>pip install git+https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py</p>
+</div></blockquote>
 </section>
 <section id="fortran-installation">
 <h2>Fortran Installation<a class="headerlink" href="#fortran-installation" title="Link to this heading">#</a></h2>
@@ -489,11 +490,7 @@ here</a></p>
 </section>
 <section id="fortran-compilation">
 <h2>Fortran compilation<a class="headerlink" href="#fortran-compilation" title="Link to this heading">#</a></h2>
-<p>At present BASGRA_NZ_py requires fortran and requires the user to
-compile the fortran code. The compilation code can be found in the
-following .bat file: fortran_BASGRA_NZ/compile_BASGRA_gfortran.bat The
-python wrapper will attempt to run the compilation bat if the DLL it
-required does not exist.</p>
+<p>The fortran compilation is done via gfortran64 and fmodpy.  The package should be platform independent, but this newest approach has only been tested on linux, specifically xubuntu 22.04.</p>
 </section>
 <section id="new-features-implemented-from-simon-woodwards-basgra">
 <h2>new features implemented from Simon Woodward’s BASGRA<a class="headerlink" href="#new-features-implemented-from-simon-woodwards-basgra" title="Link to this heading">#</a></h2>
@@ -3194,15 +3191,15 @@ model to NZ conditions repository</p></li>
 perenne) dairy pasture using the Basic Grassland model
 (BASGRA)</a>:
 update from BASGRA to BASGRA NZ</p></li>
-<li><p><a class="reference external" href="https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY/blob/master/fortran_BASGRA_NZ/docs/BASGRA2014_USER_GUIDE.pdf">BASGRA 2014 User
+<li><p><a class="reference external" href="_static/BASGRA2014_USER_GUIDE.pdf">BASGRA 2014 User
 guide</a>
-or .fortran_BASGRA_NZ/docs/BASGRA2014_USER_GUIDE.pdf</p></li>
+or in the repo: basgra_docs/BASGRA2014_USER_GUIDE.pdf</p></li>
 <li><p><a class="reference external" href="https://books.google.co.nz/books?id=YwfZFcWgAAMC&amp;pg=PA34&amp;lpg=PA34&amp;dq=vernalisation+model&amp;source=bl&amp;ots=7euCE4tPBe&amp;sig=za2fBGqFVpoR1jKqkVB2NtBK0nc&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwi4stOBi_rcAhXZzmEKHcK6DE0Q6AEwBXoECAQQAQ#v=onepage&amp;q=vernalisation%20model&amp;f=false">Conceptual Basis, Formalisations and Parameterization of the Stics
 Crop
 Model</a></p></li>
 <li><p><a class="reference external" href="https://www.far.org.nz/assets/files/uploads/Iss_04_Irrigation.pdf">Irrigation Management for Cropping - A Grower’s
-Guide</a>
-or .fortran_BASGRA_NZ/docs/FAR-Irrigation Management.pdf</p></li>
+Guide</a>, <a class="reference external" href="_static/FAR-IrrigationManagement.pdf">here</a>
+or in the repo: basgra_docs/FAR-Irrigation Management.pdf</p></li>
 <li><p><a class="reference external" href="https://www.tandfonline.com/doi/abs/10.1080/01140671.1990.10428101">Estimation of field capacity and wilting point of some New Zealand
 soils from their saturation
 percentages</a></p></li>

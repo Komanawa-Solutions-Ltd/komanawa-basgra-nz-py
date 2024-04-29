@@ -139,11 +139,12 @@ library can be found in the environment.yml file
 package installation
 --------------------
 
-BASGRA_NZ_PY can only be installed locally from a github pull and
-addition to your PYTHONPATH
+This package can be installed via pip from the github repo.
 
-this installs both the python wrapper and the source fortran code. at
-present a fortran installation is required.
+:: code-block:: bash
+
+    pip install git+https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py
+
 
 Fortran Installation
 --------------------
@@ -161,11 +162,7 @@ here <https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4
 Fortran compilation
 -------------------
 
-At present BASGRA_NZ_py requires fortran and requires the user to
-compile the fortran code. The compilation code can be found in the
-following .bat file: fortran_BASGRA_NZ/compile_BASGRA_gfortran.bat The
-python wrapper will attempt to run the compilation bat if the DLL it
-required does not exist.
+The fortran compilation is done via gfortran64 and fmodpy.  The package should be platform independent, but this newest approach has only been tested on linux, specifically xubuntu 22.04.
 
 new features implemented from Simon Woodward’s BASGRA
 -----------------------------------------------------
@@ -2071,14 +2068,14 @@ References
    (BASGRA) <https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464>`__:
    update from BASGRA to BASGRA NZ
 -  `BASGRA 2014 User
-   guide <https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY/blob/master/fortran_BASGRA_NZ/docs/BASGRA2014_USER_GUIDE.pdf>`__
-   or .fortran_BASGRA_NZ/docs/BASGRA2014_USER_GUIDE.pdf
+   guide <_static/BASGRA2014_USER_GUIDE.pdf>`__
+   or in the repo: basgra_docs/BASGRA2014_USER_GUIDE.pdf
 -  `Conceptual Basis, Formalisations and Parameterization of the Stics
    Crop
    Model <https://books.google.co.nz/books?id=YwfZFcWgAAMC&pg=PA34&lpg=PA34&dq=vernalisation+model&source=bl&ots=7euCE4tPBe&sig=za2fBGqFVpoR1jKqkVB2NtBK0nc&hl=en&sa=X&ved=2ahUKEwi4stOBi_rcAhXZzmEKHcK6DE0Q6AEwBXoECAQQAQ#v=onepage&q=vernalisation%20model&f=false>`__
 -  `Irrigation Management for Cropping - A Grower’s
-   Guide <https://www.far.org.nz/assets/files/uploads/Iss_04_Irrigation.pdf>`__
-   or .fortran_BASGRA_NZ/docs/FAR-Irrigation Management.pdf
+   Guide <https://www.far.org.nz/assets/files/uploads/Iss_04_Irrigation.pdf>`__, `here <_static/FAR-Irrigation Management.pdf>`__
+   or in the repo: basgra_docs/FAR-Irrigation Management.pdf
 -  `Estimation of field capacity and wilting point of some New Zealand
    soils from their saturation
    percentages <https://www.tandfonline.com/doi/abs/10.1080/01140671.1990.10428101>`__
