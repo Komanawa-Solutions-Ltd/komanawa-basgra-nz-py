@@ -164,13 +164,14 @@ def establish_org_input(site='scott'):
                                ).astype(int)  # floor matches what simon did.
 
     days_harvest.loc[:, 'frac_harv'] = days_harvest.loc[:, 'percent_harvest'] / 100
-    days_harvest.loc[:, 'harv_trig'] = 0
-    days_harvest.loc[:, 'harv_targ'] = 0
-    days_harvest.loc[:, 'weed_dm_frac'] = 0
-    days_harvest.loc[:, 'reseed_trig'] = -1
-    days_harvest.loc[:, 'reseed_basal'] = 1
+    days_harvest.loc[:, 'harv_trig'] = 0.
+    days_harvest.loc[:, 'harv_targ'] = 0.
+    days_harvest.loc[:, 'weed_dm_frac'] = 0.
+    days_harvest.loc[:, 'reseed_trig'] = -1.
+    days_harvest.loc[:, 'reseed_basal'] = 1.
 
     days_harvest.drop(columns=['percent_harvest'], inplace=True)
+    days_harvest = days_harvest.loc[days_harvest.year > 0]
 
     doy_irr = [0]
     return params, matrix_weather, days_harvest, doy_irr
@@ -180,7 +181,7 @@ def clean_harvest(days_harvest, matrix_weather):
     stop_year = matrix_weather['year'].max()
     stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
     days_harvest.loc[(days_harvest.year == stop_year) & (days_harvest.doy > stop_day),
-                     'year'] = -1  # cull harvest after end of weather data
+    'year'] = -1  # cull harvest after end of weather data
     days_harvest = days_harvest.loc[days_harvest.year > 0]  # the size matching is handled internally
 
     return days_harvest
@@ -323,7 +324,7 @@ def get_input_for_storage_tests():
     params['use_storage'] = 1
     params['irrigated_area'] = 10
     params['h2o_store_max_vol'] = 10000  # 100 mm storage
-    params['h2o_store_SA'] = 0 # this is needed for evap, but not implemented currently
+    params['h2o_store_SA'] = 0  # this is needed for evap, but not implemented currently
 
     # place holders, these need to be defined for each set
     params['runoff_from_rain'] = 1
