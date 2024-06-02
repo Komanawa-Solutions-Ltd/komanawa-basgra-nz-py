@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.computational_resourse_use`
-==========================================================
+komanawa.basgra_nz_py.computational_resourse_use
+================================================
 
 .. py:module:: komanawa.basgra_nz_py.computational_resourse_use
 
@@ -12,12 +12,12 @@
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   check_resource_use/index.rst
-   support_for_resource_use/index.rst
-   test_memory_use/index.rst
+   /autoapi/komanawa/basgra_nz_py/computational_resourse_use/check_resource_use/index
+   /autoapi/komanawa/basgra_nz_py/computational_resourse_use/support_for_resource_use/index
+   /autoapi/komanawa/basgra_nz_py/computational_resourse_use/test_memory_use/index
 
 

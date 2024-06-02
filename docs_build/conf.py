@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'komanawa-basgra-nz-py'
-copyright = '2024, Komanawa Solutions Ltd.'
+copyright = '2024, Kо̄manawa Solutions Ltd.'
 author = 'Matt Dumont'
 release = 'v7.0.0'
 
@@ -74,7 +74,7 @@ html_theme_options = {
             "type": "fontawesome",
         },
         {
-            "name": "Komanawa Solutions Ltd.",
+            "name": "Kо̄manawa Solutions Ltd.",
             "url": "https://www.komanawa.com",
             "icon": "_static/just_symbol.png",
             "type": "local",

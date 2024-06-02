@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py`
-===============================
+komanawa.basgra_nz_py
+=====================
 
 .. py:module:: komanawa.basgra_nz_py
 
@@ -12,37 +12,35 @@
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   computational_resourse_use/index.rst
-   supporting_functions/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/komanawa/basgra_nz_py/computational_resourse_use/index
+   /autoapi/komanawa/basgra_nz_py/supporting_functions/index
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   basgra_python/index.rst
-   get_fortran_module/index.rst
-   input_output_keys/index.rst
-
-
-Package Contents
-----------------
+   /autoapi/komanawa/basgra_nz_py/basgra_python/index
+   /autoapi/komanawa/basgra_nz_py/get_fortran_module/index
+   /autoapi/komanawa/basgra_nz_py/input_output_keys/index
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    komanawa.basgra_nz_py.run_basgra_nz
 
 
+Package Contents
+----------------
 
 .. py:function:: run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False, supply_pet=True, auto_harvest=False, run_365_calendar=False)
 

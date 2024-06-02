@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.supporting_functions`
-====================================================
+komanawa.basgra_nz_py.supporting_functions
+==========================================
 
 .. py:module:: komanawa.basgra_nz_py.supporting_functions
 
@@ -12,14 +12,14 @@
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   conversions/index.rst
-   cumulative_annual_data/index.rst
-   output_metadata/index.rst
-   plotting/index.rst
-   woodward_2020_params/index.rst
+   /autoapi/komanawa/basgra_nz_py/supporting_functions/conversions/index
+   /autoapi/komanawa/basgra_nz_py/supporting_functions/cumulative_annual_data/index
+   /autoapi/komanawa/basgra_nz_py/supporting_functions/output_metadata/index
+   /autoapi/komanawa/basgra_nz_py/supporting_functions/plotting/index
+   /autoapi/komanawa/basgra_nz_py/supporting_functions/woodward_2020_params/index
 
 

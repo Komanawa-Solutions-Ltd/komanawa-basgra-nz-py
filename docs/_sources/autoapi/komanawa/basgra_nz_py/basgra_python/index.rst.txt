@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.basgra_python`
-=============================================
+komanawa.basgra_nz_py.basgra_python
+===================================
 
 .. py:module:: komanawa.basgra_nz_py.basgra_python
 
@@ -13,18 +13,27 @@
 
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
+   komanawa.basgra_nz_py.basgra_python.get_fortran_basgra
    komanawa.basgra_nz_py.basgra_python.run_basgra_nz
    komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy
 
+
+Module Contents
+---------------
+
+.. py:function:: get_fortran_basgra(supply_pet, recomplile=False, verbose=False)
+
+   get the callable fortran BASGRA function
+
+   :param supply_pet: bool if True use the PET version, if False use the peyman version
+   :param recomplile: bool if True force recompile the fortran code
+   :param verbose: bool if True print the fortran compilation output
+   :return:
 
 
 .. py:function:: run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False, supply_pet=True, auto_harvest=False, run_365_calendar=False)

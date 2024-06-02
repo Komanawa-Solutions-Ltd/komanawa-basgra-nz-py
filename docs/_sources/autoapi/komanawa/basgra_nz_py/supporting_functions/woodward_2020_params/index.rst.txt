@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.supporting_functions.woodward_2020_params`
-=========================================================================
+komanawa.basgra_nz_py.supporting_functions.woodward_2020_params
+===============================================================
 
 .. py:module:: komanawa.basgra_nz_py.supporting_functions.woodward_2020_params
 
@@ -10,12 +10,8 @@
 
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -24,6 +20,8 @@ Functions
    komanawa.basgra_nz_py.supporting_functions.woodward_2020_params.get_woodward_mean_full_params
 
 
+Module Contents
+---------------
 
 .. py:function:: get_woodward_mean_site_param(site)
 
