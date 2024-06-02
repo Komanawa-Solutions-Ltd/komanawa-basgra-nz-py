@@ -4,7 +4,10 @@
  """
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.cm import get_cmap
+try:
+    from matplotlib.cm import get_cmap
+except ImportError:
+    from matplotlib.pyplot import get_cmap
 from matplotlib.patches import Patch
 import pandas as pd
 import os

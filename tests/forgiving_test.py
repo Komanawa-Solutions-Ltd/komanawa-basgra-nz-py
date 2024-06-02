@@ -25,6 +25,15 @@ all_checks = [
     'test_reseed',
     'test_leap',
     'test_pass_soil_mosit',
+    'test_full_refill',
+    'test_runoff_from_rain',
+    'test_external_rainfall_runoff',
+    'test_leakage_prescribed_outflow',
+    'test_store_irr_org_demand',
+    'test_store_irr_ind_demand',
+    'test_store_irr_org_demand_paw',
+    'test_store_irr_ind_demand_paw',
+    'test_store_refill_from_scheme',
 
 ]
 

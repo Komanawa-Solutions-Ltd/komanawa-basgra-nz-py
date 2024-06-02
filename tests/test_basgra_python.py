@@ -2,6 +2,8 @@
  Author: Matt Hanson
  Created: 14/08/2020 11:04 AM
  """
+import os.path
+
 from komanawa.basgra_nz_py.basgra_python import run_basgra_nz, _trans_manual_harv, get_month_day_to_nonleap_doy
 from komanawa.basgra_nz_py.input_output_keys import matrix_weather_keys_pet
 from support_for_tests import *
@@ -76,6 +78,11 @@ def test_trans_manual_harv(update_data=False):
     _output_checks(out, correct_out, dropable=False)
 
 
+def _export_for_visual_debugging(out, correct_out, test_nm, r=2):
+    out.round(r).to_csv(os.path.join(os.path.dirname(test_dir), f'{test_nm}_out.csv'), sep='\t')
+    correct_out.round(r).to_csv(os.path.join(os.path.dirname(test_dir), f'{test_nm}_correct_out.csv'), sep='\t')
+
+
 def _output_checks(out, correct_out, dropable=True):
     """
     base checker
@@ -88,7 +95,6 @@ def _output_checks(out, correct_out, dropable=True):
     if dropable:
         # should normally be empty, but is here to allow easy checking of old tests against versions with a new output
         drop_keys_int = [
-            'store_overflow', 'external_inflow'  # todo remove these when the tests are updated
         ]
         out2 = out.drop(columns=drop_keys_int, errors='ignore')
         correct_out2 = correct_out.drop(columns=drop_keys_int, errors='ignore')
@@ -1214,7 +1220,7 @@ if __name__ == '__main__':
     test_weed_fraction_man()
 
     # test reseed
-    # todo failing test test_reseed()
+    test_reseed()
 
     # test 365 day calender run (no leap years)
     test_leap()
@@ -1235,6 +1241,6 @@ if __name__ == '__main__':
 
     test_store_irr_org_demand_paw()
     test_store_irr_ind_demand_paw()
-    # todo Problem!! test_store_refill_from_scheme()
+    test_store_refill_from_scheme()
 
     print('\n\nall established tests passed')
