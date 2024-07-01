@@ -135,7 +135,7 @@ def establish_org_input(site='scott'):
     params = get_woodward_mean_full_params(site)
 
     matrix_weather = pd.read_csv(os.path.join(test_dir, weather_nm),
-                                 sep='\s+', index_col=0,
+                                 sep='\\s+', index_col=0,
                                  header=0,
                                  names=['year',
                                         'doy',
@@ -159,7 +159,7 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'external_inflow'] = 0
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
-                               sep='\s+',
+                               sep='\\s+',
                                names=['year', 'doy', 'percent_harvest']
                                ).astype(int)  # floor matches what simon did.
 
@@ -259,19 +259,21 @@ def get_lincoln_broadfield():
             outdata.loc[temp.index, k2] = temp.loc[:, k2]
 
     outdata = outdata.reset_index()
-    outdata.loc[:, 'tmax'] = pd.to_numeric(outdata.loc[:, 'tmax'], errors='coerce')
-    outdata.fillna(method='ffill', inplace=True)
+    for k in ['tmax', 'radn', 'pet']:
+        outdata[k] = pd.to_numeric(outdata.loc[:, k], errors='coerce', downcast='float').astype(float)
+
+    outdata.ffill(inplace=True)
     strs = ['{}-{:03d}'.format(e, f) for e, f in outdata[['year', 'doy']].itertuples(False, None)]
     outdata.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
     outdata.set_index('date', inplace=True)
     outdata = outdata.loc[outdata.index > '2011-08-01']
 
     outdata.loc[:, 'max_irr'] = 10.
-    outdata.loc[:, 'irr_trig'] = 0
-    outdata.loc[:, 'irr_targ'] = 1
-    outdata.loc[:, 'irr_trig_store'] = 0
-    outdata.loc[:, 'irr_targ_store'] = 1
-    outdata.loc[:, 'external_inflow'] = 0
+    outdata.loc[:, 'irr_trig'] = 0.
+    outdata.loc[:, 'irr_targ'] = 1.
+    outdata.loc[:, 'irr_trig_store'] = 0.
+    outdata.loc[:, 'irr_targ_store'] = 1.
+    outdata.loc[:, 'external_inflow'] = 0.
 
     return outdata
 

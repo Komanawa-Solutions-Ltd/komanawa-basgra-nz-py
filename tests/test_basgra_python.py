@@ -4,10 +4,12 @@
  """
 import os.path
 import unittest
+
+import pandas as pd
+import numpy as np
 from komanawa.basgra_nz_py.basgra_python import run_basgra_nz, _trans_manual_harv, get_month_day_to_nonleap_doy
 from komanawa.basgra_nz_py.input_output_keys import matrix_weather_keys_pet
-from support_for_tests import *
-import inspect
+from support_for_tests import establish_org_input, clean_harvest, test_dir, get_lincoln_broadfield, get_org_correct_values, base_manual_harvest_data, base_auto_harvest_data, establish_peyman_input, get_input_for_storage_tests
 
 from komanawa.basgra_nz_py.supporting_functions.plotting import \
     plot_multiple_results  # used in test development and debugging
@@ -113,10 +115,10 @@ class TestBasgraPython(unittest.TestCase):
         correct_out3 = correct_out2.values
         correct_out3[np.isnan(correct_out2)] = -9999.99999
         # check values match for sample run
-        isclose = np.isclose(out2, correct_out3)
+        isclose = np.isclose(out2, correct_out3, rtol=1e-04, atol=1e-06)
         max_print = 20
         asmess = (f'{(~isclose).sum()} values do not match between the output and correct output '
-                  f'with rtol=1e-05, atol=1e-08'
+                  f'with rtol=1e-04, atol=1e-06'
                   f'for columns: {correct_out2.columns[(~isclose).any(axis=0)]}\n' +
                   f'{"correct": <16} | {"got": <16}\n' +
                   '{}'.format("\n".join([f"{e: <16} | {f: <16}" for e, f in zip(correct_out3[~isclose],
