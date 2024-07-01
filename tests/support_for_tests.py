@@ -135,7 +135,7 @@ def establish_org_input(site='scott'):
     params = get_woodward_mean_full_params(site)
 
     matrix_weather = pd.read_csv(os.path.join(test_dir, weather_nm),
-                                 delim_whitespace=True, index_col=0,
+                                 sep='\s+', index_col=0,
                                  header=0,
                                  names=['year',
                                         'doy',
@@ -159,7 +159,7 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'external_inflow'] = 0
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
-                               delim_whitespace=True,
+                               sep='\s+',
                                names=['year', 'doy', 'percent_harvest']
                                ).astype(int)  # floor matches what simon did.
 
