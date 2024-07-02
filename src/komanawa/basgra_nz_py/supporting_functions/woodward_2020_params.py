@@ -108,6 +108,6 @@ def get_woodward_mean_full_params(site):
     params.loc['stor_irr_ineff'] = 0
     params.loc['stor_reserve_vol'] = 0
 
-    params = params.to_dict()
+    params = params.copy().to_dict()
 
     return params

@@ -2,6 +2,7 @@
 created matt_dumont 
 on: 26/04/24
 """
+from copy import deepcopy
 import warnings
 import fmodpy
 import sys
@@ -9,7 +10,7 @@ from pathlib import Path
 import subprocess
 
 
-def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfortran-12'):
+def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfortran-11'):
     """
     get the callable fortran BASGRA function
 
@@ -87,7 +88,7 @@ def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfo
     else:
         from komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_peyman.basgraf import basgramodule
 
-    return basgramodule
+    return deepcopy(basgramodule)
 
 
 if __name__ == '__main__':
