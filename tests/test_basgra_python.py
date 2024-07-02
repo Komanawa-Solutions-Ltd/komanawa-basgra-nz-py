@@ -141,7 +141,7 @@ class TestBasgraPython(unittest.TestCase):
 
         # test to the original data provided by Simon Woodward
 
-        out.drop(columns=drop_keys, inplace=True)  # remove all of the newly added keys
+        out = out.drop(columns=list(drop_keys))  # remove all of the newly added keys
 
         correct_out2 = get_org_correct_values()
         self._output_checks(out, correct_out2)
