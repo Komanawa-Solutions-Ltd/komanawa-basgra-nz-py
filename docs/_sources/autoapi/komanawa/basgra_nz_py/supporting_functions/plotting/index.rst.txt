@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.supporting_functions.plotting`
-=============================================================
+komanawa.basgra_nz_py.supporting_functions.plotting
+===================================================
 
 .. py:module:: komanawa.basgra_nz_py.supporting_functions.plotting
 
@@ -10,20 +10,27 @@
 
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
+   komanawa.basgra_nz_py.supporting_functions.plotting.get_output_metadata
    komanawa.basgra_nz_py.supporting_functions.plotting.plot_multiple_results
    komanawa.basgra_nz_py.supporting_functions.plotting.plot_multiple_monthly_violin_box
    komanawa.basgra_nz_py.supporting_functions.plotting.plot_multiple_monthly_results
    komanawa.basgra_nz_py.supporting_functions.plotting.plot_multiple_date_range
 
+
+Module Contents
+---------------
+
+.. py:function:: get_output_metadata(return_dict=True)
+
+   note all keys are have been made uppper for consistancy.
+
+   :param return_dict: boolean True return nested dictionary, otherwies returne dataframe
+   :return:
 
 
 .. py:function:: plot_multiple_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8), title_str='', rolling=None, main_kwargs={}, rolling_kwargs={}, label_rolling=False, label_main=True, show=True)

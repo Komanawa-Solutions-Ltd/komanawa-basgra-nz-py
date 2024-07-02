@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.supporting_functions.cumulative_annual_data`
-===========================================================================
+komanawa.basgra_nz_py.supporting_functions.cumulative_annual_data
+=================================================================
 
 .. py:module:: komanawa.basgra_nz_py.supporting_functions.cumulative_annual_data
 
@@ -10,18 +10,16 @@
 
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    komanawa.basgra_nz_py.supporting_functions.cumulative_annual_data.make_cumuliative_annual
 
 
+Module Contents
+---------------
 
 .. py:function:: make_cumuliative_annual(inseries, start_day, start_month)
 

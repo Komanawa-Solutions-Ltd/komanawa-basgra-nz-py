@@ -1,4 +1,4 @@
-Komanawa-basgra-nz-py
+Kо̄manawa-basgra-nz-py
 #########################################
 
 .. toctree::

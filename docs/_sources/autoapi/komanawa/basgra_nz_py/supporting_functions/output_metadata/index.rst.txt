@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.supporting_functions.output_metadata`
-====================================================================
+komanawa.basgra_nz_py.supporting_functions.output_metadata
+==========================================================
 
 .. py:module:: komanawa.basgra_nz_py.supporting_functions.output_metadata
 
@@ -10,18 +10,16 @@
 
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    komanawa.basgra_nz_py.supporting_functions.output_metadata.get_output_metadata
 
 
+Module Contents
+---------------
 
 .. py:function:: get_output_metadata(return_dict=True)
 

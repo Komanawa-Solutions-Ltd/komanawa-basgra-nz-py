@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.supporting_functions.conversions`
-================================================================
+komanawa.basgra_nz_py.supporting_functions.conversions
+======================================================
 
 .. py:module:: komanawa.basgra_nz_py.supporting_functions.conversions
 
@@ -10,12 +10,8 @@
 
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -23,6 +19,8 @@ Functions
    komanawa.basgra_nz_py.supporting_functions.conversions.convert_wind_to_2m
 
 
+Module Contents
+---------------
 
 .. py:function:: convert_RH_vpa(rh, tmin, tmax)
 

@@ -18,23 +18,23 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../../../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../../../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="../../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=fd3f3429" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../../../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
     <script src="../../../../../_static/documentation_options.js?v=14515140"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
@@ -53,27 +53,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -95,12 +91,17 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class=" navbar-header-items__start">
@@ -136,12 +137,12 @@
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../../index.html">
-                        Code documentation
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Code documentation
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -200,7 +201,7 @@
           
           
           
-          <a href="https://www.komanawa.com" title="Komanawa Solutions Ltd." class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../../../_static/just_symbol.png" class="icon-link-image" alt="Komanawa Solutions Ltd."/></a>
+          <a href="https://www.komanawa.com" title="Kо̄manawa Solutions Ltd." class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../../../_static/just_symbol.png" class="icon-link-image" alt="Kо̄manawa Solutions Ltd."/></a>
         </li>
 </ul></div>
       
@@ -224,6 +225,10 @@
   
 
   
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -243,18 +248,21 @@
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
+          
+          
+            <div class="navbar-item">
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../../index.html">
-                        Code documentation
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Code documentation
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -297,7 +305,7 @@
           
           
           
-          <a href="https://www.komanawa.com" title="Komanawa Solutions Ltd." class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../../../_static/just_symbol.png" class="icon-link-image" alt="Komanawa Solutions Ltd."/></a>
+          <a href="https://www.komanawa.com" title="Kо̄manawa Solutions Ltd." class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../../../_static/just_symbol.png" class="icon-link-image" alt="Kо̄manawa Solutions Ltd."/></a>
         </li>
 </ul></div>
         
@@ -314,13 +322,13 @@
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -329,7 +337,7 @@
 
 
 
-<nav aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
@@ -338,12 +346,12 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link"><code class="xref py py-mod docutils literal notranslate"><span class="pre">komanawa.basgra_nz_py</span></code></a></li>
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">komanawa.basgra_nz_py</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link"><code class="xref py py-mod docutils literal notranslate"><span class="pre">komanawa.basgra_nz_py.computational_resourse_use</span></code></a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">komanawa.basgra_nz_py.computational_resourse_use</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><code...</li>
+    <li class="breadcrumb-item active" aria-current="page">komanawa.bas...</li>
   </ul>
 </nav>
 </div>
@@ -361,9 +369,46 @@
                 <article class="bd-article">
                   
   <section id="module-komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use">
-<span id="komanawa-basgra-nz-py-computational-resourse-use-support-for-resource-use"></span><h1><a class="reference internal" href="#module-komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use" title="komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use"><code class="xref py py-mod docutils literal notranslate"><span class="pre">komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use</span></code></a><a class="headerlink" href="#module-komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use" title="Link to this heading">#</a></h1>
+<span id="komanawa-basgra-nz-py-computational-resourse-use-support-for-resource-use"></span><h1>komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use<a class="headerlink" href="#module-komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use" title="Link to this heading">#</a></h1>
 <p>Author: Matt Hanson
 Created: 23/11/2020 9:50 AM</p>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use.run_basgra_nz" title="komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use.run_basgra_nz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_basgra_nz</span></code></a>(params, matrix_weather, days_harvest, ...)</p></td>
+<td><p>python wrapper for the fortran BASGRA code changes to the fortran code may require changes to this function runs the model for the period of the weather data</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use.run_basgra_nz">
+<span class="sig-name descname"><span class="pre">run_basgra_nz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_weather</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days_harvest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy_irr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supply_pet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_harvest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_365_calendar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/komanawa/basgra_nz_py/basgra_python.html#run_basgra_nz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use.run_basgra_nz" title="Link to this definition">#</a></dt>
+<dd><p>python wrapper for the fortran BASGRA code changes to the fortran code may require changes to this function runs the model for the period of the weather data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> – dictionary, see input_output_keys.py, <a class="github reference external" href="https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY">Komanawa-Solutions-Ltd/BASGRA_NZ_PY</a> for more details</p></li>
+<li><p><strong>matrix_weather</strong> – pandas dataframe of weather data, maximum entries set in _max_weather_size in line 24 of this file (currently 36600) see documentation for input columns at <a class="github reference external" href="https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY">Komanawa-Solutions-Ltd/BASGRA_NZ_PY</a> , note expected DOY will change depending on expect_no_leap_days</p></li>
+<li><p><strong>days_harvest</strong> – days harvest dataframe must be same length as matrix_weather entries see documentation for input columns at <a class="github reference external" href="https://github.com/Komanawa-Solutions-Ltd/BASGRA_NZ_PY">Komanawa-Solutions-Ltd/BASGRA_NZ_PY</a> , note expected DOY will change depending on expect_no_leap_days</p></li>
+<li><p><strong>doy_irr</strong> – a list of the days of year to irrigate on, must be integers acceptable values: (0-366)</p></li>
+<li><p><strong>verbose</strong> – boolean, if True the fortran function prints a number of statements for debugging purposes(depreciated)</p></li>
+<li><p><strong>supply_pet</strong> – boolean, if True BASGRA expects pet to be supplied, if False the parameters required to calculate pet from the peyman equation are expected, the version must match the DLL if dll_path != ‘default’</p></li>
+<li><p><strong>auto_harvest</strong> – boolean, if True then assumes data is formated correctly for auto harvesting, if False, then assumes data is formatted for manual harvesting (e.g. previous version) and re-formats internally</p></li>
+<li><p><strong>run_365_calendar</strong> – boolean, if True then run on a 365 day calender This expects that all leap days will be removed from matrix_weather and days_harvest. DOY is expected to be between 1 and 365.  This means that datetime objects defined by year and doy will be incorrect. instead use get_month_day_to_nonleap_doy to map DOY to datetime via month and day. This is how the index of the returned datetime will be passed.  For example for date 2024-03-01 (2024 is a leap year) the dayofyear via a datetime object will be 61, but if expect_no_leap_days=True basgra expects day of year to be 60. the index of the results will be a datetime object of equivalent to 2024-03-01, so  the output doy will not match the index doy and there will be no value on 2020-02-29. default False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame(index=datetime index, columns = out_cols)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 
 
@@ -373,7 +418,7 @@ Created: 23/11/2020 9:50 AM</p>
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
     <a class="left-prev"
@@ -382,7 +427,7 @@ Created: 23/11/2020 9:50 AM</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">komanawa.basgra_nz_py.computational_resourse_use.check_resource_use</span></code></p>
+        <p class="prev-next-title">komanawa.basgra_nz_py.computational_resourse_use.check_resource_use</p>
       </div>
     </a>
     <a class="right-next"
@@ -390,7 +435,7 @@ Created: 23/11/2020 9:50 AM</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">komanawa.basgra_nz_py.computational_resourse_use.test_memory_use</span></code></p>
+        <p class="prev-next-title">komanawa.basgra_nz_py.computational_resourse_use.test_memory_use</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -401,7 +446,26 @@ Created: 23/11/2020 9:50 AM</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#komanawa.basgra_nz_py.computational_resourse_use.support_for_resource_use.run_basgra_nz"><code class="docutils literal notranslate"><span class="pre">run_basgra_nz()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -414,8 +478,8 @@ Created: 23/11/2020 9:50 AM</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -426,7 +490,7 @@ Created: 23/11/2020 9:50 AM</p>
 
   <p class="copyright">
     
-      © Copyright 2024, Komanawa Solutions Ltd..
+      © Copyright 2024, Kо̄manawa Solutions Ltd..
       <br/>
     
   </p>
@@ -448,7 +512,7 @@ Created: 23/11/2020 9:50 AM</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>

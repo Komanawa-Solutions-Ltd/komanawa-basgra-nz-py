@@ -83,9 +83,17 @@ def run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=False,
                          f'though this value can be modified in the fortran code: '
                          f'fortran_BASGRA_NZ/environment.f95 line 9 and {__file__} line 29')
 
-    y = np.zeros((ndays, nout), float)  # cannot set these to nan's or it breaks fortran
-    y = fortran_basgra.basgra(params, matrix_weather, days_harvest, ndays, nout, nirr, doy_irr,
-                                           verbose, y=y)
+    y = np.asfortranarray(np.zeros((ndays, nout), float))  # cannot set these to nan's or it breaks fortran
+
+    y = fortran_basgra.basgra(params,
+                              np.asfortranarray(matrix_weather),
+                              days_harvest,
+                              ndays,
+                              nout,
+                              nirr,
+                              doy_irr,
+                              verbose,
+                              y=deepcopy(y))
     out = pd.DataFrame(y, out_index, out_cols)
     if run_365_calendar:
         mapper = get_month_day_to_nonleap_doy(key_doy=True)
@@ -135,7 +143,7 @@ def _trans_manual_harv(days_harvest, matrix_weather):
         id_val = pd.Series(days_harvest_out.index).iloc[0]
         days_harvest_out.loc[id_val, 'weed_dm_frac'] = days_harvest_out.loc[:, 'weed_dm_frac'].iloc[idx]
 
-    days_harvest_out.loc[:, 'weed_dm_frac'] = days_harvest_out.loc[:, 'weed_dm_frac'].fillna(method='ffill')
+    days_harvest_out.loc[:, 'weed_dm_frac'] = days_harvest_out.loc[:, 'weed_dm_frac'].ffill()
 
     return days_harvest_out
 

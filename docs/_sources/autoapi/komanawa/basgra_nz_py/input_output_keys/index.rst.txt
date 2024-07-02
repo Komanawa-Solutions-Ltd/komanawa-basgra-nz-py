@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.input_output_keys`
-=================================================
+komanawa.basgra_nz_py.input_output_keys
+=======================================
 
 .. py:module:: komanawa.basgra_nz_py.input_output_keys
 

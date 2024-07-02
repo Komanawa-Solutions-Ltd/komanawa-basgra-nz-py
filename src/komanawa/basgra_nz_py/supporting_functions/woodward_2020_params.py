@@ -70,7 +70,7 @@ def get_woodward_mean_full_params(site):
     else:
         raise ValueError('unexpected site')
     params = pd.read_csv(os.path.join(os.path.dirname(__file__), 'Woodward_2020_BASGRA_parModes.txt'),
-                         delim_whitespace=True, index_col=0).iloc[:, col]
+                         sep='\s+', index_col=0).iloc[:, col]
     params.loc['IRRIGF'] = 0
     params.loc['fixed_removal'] = 0
     params.loc['DRATE'] = 50  # used to be set inside fortran
@@ -108,6 +108,6 @@ def get_woodward_mean_full_params(site):
     params.loc['stor_irr_ineff'] = 0
     params.loc['stor_reserve_vol'] = 0
 
-    params = params.to_dict()
+    params = params.copy().to_dict()
 
     return params
