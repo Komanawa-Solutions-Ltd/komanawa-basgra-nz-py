@@ -26,13 +26,14 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: get_fortran_basgra(supply_pet, recomplile=False, verbose=False)
+.. py:function:: get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfortran-11')
 
    get the callable fortran BASGRA function
 
    :param supply_pet: bool if True use the PET version, if False use the peyman version
    :param recomplile: bool if True force recompile the fortran code
    :param verbose: bool if True print the fortran compilation output
+   :param version: str the version of gfortran to use, only tested on 11.4.0
    :return:
 
 

@@ -376,7 +376,7 @@ Created: 12/08/2020 9:32 AM</p>
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.basgra_python.get_fortran_basgra" title="komanawa.basgra_nz_py.basgra_python.get_fortran_basgra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_fortran_basgra</span></code></a>(supply_pet[, recomplile, verbose])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.basgra_python.get_fortran_basgra" title="komanawa.basgra_nz_py.basgra_python.get_fortran_basgra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_fortran_basgra</span></code></a>(supply_pet[, recomplile, verbose, ...])</p></td>
 <td><p>get the callable fortran BASGRA function</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.basgra_python.run_basgra_nz" title="komanawa.basgra_nz_py.basgra_python.run_basgra_nz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_basgra_nz</span></code></a>(params, matrix_weather, days_harvest, ...)</p></td>
@@ -398,7 +398,7 @@ Created: 12/08/2020 9:32 AM</p>
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="komanawa.basgra_nz_py.basgra_python.get_fortran_basgra">
-<span class="sig-name descname"><span class="pre">get_fortran_basgra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supply_pet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recomplile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/komanawa/basgra_nz_py/get_fortran_module.html#get_fortran_basgra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.basgra_python.get_fortran_basgra" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_fortran_basgra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supply_pet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recomplile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gfortran-11'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/komanawa/basgra_nz_py/get_fortran_module.html#get_fortran_basgra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.basgra_python.get_fortran_basgra" title="Link to this definition">#</a></dt>
 <dd><p>get the callable fortran BASGRA function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -406,6 +406,7 @@ Created: 12/08/2020 9:32 AM</p>
 <li><p><strong>supply_pet</strong> – bool if True use the PET version, if False use the peyman version</p></li>
 <li><p><strong>recomplile</strong> – bool if True force recompile the fortran code</p></li>
 <li><p><strong>verbose</strong> – bool if True print the fortran compilation output</p></li>
+<li><p><strong>version</strong> – str the version of gfortran to use, only tested on 11.4.0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

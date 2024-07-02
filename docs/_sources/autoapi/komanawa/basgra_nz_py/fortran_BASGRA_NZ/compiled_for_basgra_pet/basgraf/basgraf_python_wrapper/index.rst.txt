@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_pet.basgraf.basgraf_python_wrapper`
-========================================================================================================
+komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_pet.basgraf.basgraf_python_wrapper
+==============================================================================================
 
 .. py:module:: komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_pet.basgraf.basgraf_python_wrapper
 
