@@ -142,6 +142,8 @@ real :: Time, DM, RES, SLA, TILTOT, FRTILG, FRTILG1, FRTILG2, LINT, DEBUG, TSIZE
   store_evap_out = 0
   store_scheme_in = 0
   store_scheme_in_loss = 0
+  external_inflow = 0
+  store_overflow = 0
 
 ! Extract calendar and weather data
 YEARI  = MATRIX_WEATHER(:,1)

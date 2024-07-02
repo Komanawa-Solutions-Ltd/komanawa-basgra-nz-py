@@ -7,7 +7,8 @@ contains
 
     ! ##### input sub routines #####
 
-    Subroutine storage_runoff()
+    Subroutine storage_runoff(store_overflow)
+        real :: store_overflow
         if (runoff_from_rain) then
             store_runoff_in = (RAIN / 1000) * (runoff_area * 10000) * runoff_frac
             h2o_store_vol = h2o_store_vol + store_runoff_in
@@ -25,8 +26,8 @@ contains
     End Subroutine storage_runoff
 
 
-    subroutine storage_refil_from_scheme(MAX_IRR, irrig_scheme)
-        real :: MAX_IRR, irrig_scheme
+    subroutine storage_refil_from_scheme(MAX_IRR, irrig_scheme, store_overflow)
+        real :: MAX_IRR, irrig_scheme, store_overflow
 
         if ((MAX_IRR - irrig_scheme) >= stor_refill_min) then
             store_scheme_in = (MAX_IRR - irrig_scheme) / 1000 * (1 - stor_refill_losses) * (irrigated_area * 10000)
@@ -212,7 +213,7 @@ contains
 
         ! storage in (non irrigation scheme)
         store_overflow =  0
-        call storage_runoff()
+        call storage_runoff(store_overflow)
 
         ! storage out (non irrigation scheme)
         call storage_evap() ! TODO this is a holder, storage evaporation is not implmeneted
@@ -226,7 +227,7 @@ contains
             store_scheme_in = 0
             store_scheme_in_loss = 0
         else
-            call storage_refil_from_scheme(MAX_IRR, irrig_scheme)
+            call storage_refil_from_scheme(MAX_IRR, irrig_scheme, store_overflow)
         end if
         call storage_full_refil(doy)
     End Subroutine calc_storage_volume_use
