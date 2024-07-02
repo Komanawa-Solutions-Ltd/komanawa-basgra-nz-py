@@ -7,6 +7,7 @@ import os
 import numpy as np
 from komanawa.basgra_nz_py.supporting_functions.conversions import convert_RH_vpa
 from komanawa.basgra_nz_py.supporting_functions.woodward_2020_params import get_woodward_mean_full_params
+from copy import deepcopy
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
 
@@ -101,7 +102,7 @@ def establish_peyman_input(return_pet=False):
     # load parameters from simon woodward's paper
     params = get_woodward_mean_full_params('scott')
     doy_irr = [0]
-    return params, matrix_weather, days_harvest, doy_irr
+    return deepcopy(params), deepcopy(matrix_weather), deepcopy(days_harvest), deepcopy(doy_irr)
 
 
 def _compair_pet():
@@ -133,9 +134,10 @@ def establish_org_input(site='scott'):
     else:
         raise ValueError('unexpected site')
     params = get_woodward_mean_full_params(site)
+    params = deepcopy(params)
 
     matrix_weather = pd.read_csv(os.path.join(test_dir, weather_nm),
-                                 sep='\s+', index_col=0,
+                                 sep='\\s+', index_col=0,
                                  header=0,
                                  names=['year',
                                         'doy',
@@ -159,7 +161,7 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'external_inflow'] = 0
 
     days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
-                               sep='\s+',
+                               sep='\\s+',
                                names=['year', 'doy', 'percent_harvest']
                                ).astype(int)  # floor matches what simon did.
 
@@ -174,17 +176,18 @@ def establish_org_input(site='scott'):
     days_harvest = days_harvest.loc[days_harvest.year > 0]
 
     doy_irr = [0]
-    return params, matrix_weather, days_harvest, doy_irr
+    return deepcopy(params), deepcopy(matrix_weather), deepcopy(days_harvest), deepcopy(doy_irr)
 
 
 def clean_harvest(days_harvest, matrix_weather):
+    days_harvest = deepcopy(days_harvest)
     stop_year = matrix_weather['year'].max()
     stop_day = matrix_weather.loc[matrix_weather.year == stop_year, 'doy'].max()
     days_harvest.loc[(days_harvest.year == stop_year) & (days_harvest.doy > stop_day),
     'year'] = -1  # cull harvest after end of weather data
     days_harvest = days_harvest.loc[days_harvest.year > 0]  # the size matching is handled internally
 
-    return days_harvest
+    return deepcopy(days_harvest)
 
 
 def get_org_correct_values():
@@ -193,7 +196,7 @@ def get_org_correct_values():
 
     # add in new features of data
     sample_data.loc[:, 'IRRIG'] = 0  # new data, check
-    return sample_data
+    return deepcopy(sample_data)
 
 
 def get_woodward_weather():
@@ -259,21 +262,23 @@ def get_lincoln_broadfield():
             outdata.loc[temp.index, k2] = temp.loc[:, k2]
 
     outdata = outdata.reset_index()
-    outdata.loc[:, 'tmax'] = pd.to_numeric(outdata.loc[:, 'tmax'], errors='coerce')
-    outdata.fillna(method='ffill', inplace=True)
+    for k in ['tmax', 'radn', 'pet']:
+        outdata[k] = pd.to_numeric(outdata.loc[:, k], errors='coerce', downcast='float').astype(float)
+
+    outdata.ffill(inplace=True)
     strs = ['{}-{:03d}'.format(e, f) for e, f in outdata[['year', 'doy']].itertuples(False, None)]
     outdata.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
     outdata.set_index('date', inplace=True)
     outdata = outdata.loc[outdata.index > '2011-08-01']
 
     outdata.loc[:, 'max_irr'] = 10.
-    outdata.loc[:, 'irr_trig'] = 0
-    outdata.loc[:, 'irr_targ'] = 1
-    outdata.loc[:, 'irr_trig_store'] = 0
-    outdata.loc[:, 'irr_targ_store'] = 1
-    outdata.loc[:, 'external_inflow'] = 0
+    outdata.loc[:, 'irr_trig'] = 0.
+    outdata.loc[:, 'irr_targ'] = 1.
+    outdata.loc[:, 'irr_trig_store'] = 0.
+    outdata.loc[:, 'irr_targ_store'] = 1.
+    outdata.loc[:, 'external_inflow'] = 0.
 
-    return outdata
+    return deepcopy(outdata)
 
 
 def base_manual_harvest_data():
@@ -289,7 +294,7 @@ def base_manual_harvest_data():
 
     strs = ['{}-{:03d}'.format(e, f) for e, f in days_harvest[['year', 'doy']].itertuples(False, None)]
     days_harvest.loc[:, 'date'] = pd.to_datetime(strs, format='%Y-%j')
-    return days_harvest
+    return deepcopy(days_harvest)
 
 
 def base_auto_harvest_data(matrix_weather):
@@ -306,7 +311,7 @@ def base_auto_harvest_data(matrix_weather):
     days_harvest_out.loc[:, 'reseed_trig'] = -1
     days_harvest_out.loc[:, 'reseed_basal'] = 1
 
-    return days_harvest_out
+    return deepcopy(days_harvest_out)
 
 
 def get_input_for_storage_tests():
@@ -340,4 +345,4 @@ def get_input_for_storage_tests():
     params['stor_irr_ineff'] = 0
     params['stor_reserve_vol'] = 0
 
-    return params, matrix_weather, days_harvest, doy_irr
+    return deepcopy(params), deepcopy(matrix_weather), deepcopy(days_harvest), deepcopy(doy_irr)
