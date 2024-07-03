@@ -10,7 +10,7 @@ from pathlib import Path
 import subprocess
 
 
-def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfortran-11'):
+def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfortran-12'):
     """
     get the callable fortran BASGRA function
 
@@ -22,6 +22,7 @@ def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfo
     """
     tested_fortran_versions = ['11.4.0', '12.3.0']
     bad_tested_fortran_versions = ['13.2.0']
+    test_path = Path(__file__).parent.joinpath('tests', 'test_basgra_python.py')
 
     if sys.platform.startswith('linux'):
         which = subprocess.run(f'which {binname}', shell=True, check=False, stdout=subprocess.PIPE)
@@ -29,7 +30,7 @@ def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfo
             raise ChildProcessError(f'which {binname} returned non zero... why?')
         if which.stdout is None:
             warnings.warn(
-                'gfortran-11 not found, trying other gfortran instances alternativly please install gfortran: sudo apt install gfortran-11')
+                'gfortran-12 not found, trying other gfortran instances alternatively please install gfortran: sudo apt install gfortran-12')
             binname = 'gfortran'
         try:
             out = subprocess.run(f'{binname} --version', shell=True, check=True, stdout=subprocess.PIPE)
@@ -39,10 +40,10 @@ def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfo
             if version not in tested_fortran_versions:
                 warnings.warn(
                     f'gfortran version {full_version} has not been tested, only versions {tested_fortran_versions} have been tested. '
-                    f'YMMV, You may wish to clone the repo and run the tests yourself to ensure identical behaviour.'
+                    f'YMMV, You may wish to run `python -u {test_path}` to tests the outputs of this compilation yourself to ensure identical behaviour.'
                     f'note the following versions have caused issues {bad_tested_fortran_versions}')
         except subprocess.CalledProcessError:
-            raise ChildProcessError('gfortran not found, please install gfortran: sudo apt install gfortran-11')
+            raise ChildProcessError('gfortran not found, please install gfortran: sudo apt install gfortran-12')
 
     else:
         warnings.warn(
@@ -77,7 +78,7 @@ def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfo
             str(basepath),
             output_dir=str(outputdir),
             dependencies=dependencies,
-            f_compiler = binname,
+            f_compiler=binname,
             f_compiler_args=f_compiler_args,
             verbose=verbose,
             end_is_named=False,
