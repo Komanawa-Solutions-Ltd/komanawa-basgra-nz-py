@@ -1,0 +1,48 @@
+komanawa.basgra_nz_py.example_data
+==================================
+
+.. py:module:: komanawa.basgra_nz_py.example_data
+
+.. autoapi-nested-parse::
+
+   Author: Matt Hanson
+   Created: 27/08/2020 11:13 AM
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   komanawa.basgra_nz_py.example_data.convert_RH_vpa
+   komanawa.basgra_nz_py.example_data.get_woodward_mean_full_params
+
+
+Module Contents
+---------------
+
+.. py:function:: convert_RH_vpa(rh, tmin, tmax)
+
+   calculate vapour pressure from rh tmin/tmax  assumes tmean is tmin+tmax/2 as per https://www.weather.gov/media/epz/wxcalc/vaporPressure.pdf
+
+   :param rh: relative humidity (%, 0-100)
+   :param tmin: min temperature (degrees c)
+   :param tmax: max temperature (degrees c)
+   :return: vapour pressure (kpa)
+
+
+.. py:function:: get_woodward_mean_full_params(site)
+
+   get woodward 2020 site parameters see Woodward, 2020 https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12464 for more details
+
+   :param site: one of
+
+       * 'waikato': scott farm in Waikato,
+       * 'scott': scott farm in Waikato, used for back compatibility
+       * 'northland': Jordan Vally farm in northland,
+       * 'lincoln': Lincoln test farm in Lincoln Canterbury
+
+   :return:
+
+

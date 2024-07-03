@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>komanawa.basgra_nz_py.basgra_python &#8212; komanawa-basgra-nz-py v7.0.0 documentation</title>
+    <title>komanawa.basgra_nz_py.basgra_python &#8212; komanawa-basgra-nz-py v7.0.1 documentation</title>
   
   
   
@@ -36,14 +36,14 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=14515140"></script>
+    <script src="../../../../_static/documentation_options.js?v=b029d559"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/komanawa/basgra_nz_py/basgra_python/index';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="komanawa.basgra_nz_py.get_fortran_module" href="../get_fortran_module/index.html" />
-    <link rel="prev" title="komanawa.basgra_nz_py.supporting_functions.woodward_2020_params" href="../supporting_functions/woodward_2020_params/index.html" />
+    <link rel="next" title="komanawa.basgra_nz_py.example_data" href="../example_data/index.html" />
+    <link rel="prev" title="komanawa.basgra_nz_py.tests" href="../tests/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -123,7 +123,7 @@
     <script>document.write(`<img src="" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">Basgra-NZ-Py overview</p>
+    <p class="title logo__title">Basgra-Nz-Py v7.0.1 Overview</p>
   
 </a></div>
     
@@ -177,7 +177,7 @@
           
           
           
-          <a href="#https://github.com/Komanawa-Solutions-Ltd/komanawa-simple-farm-model#" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">View on GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -281,7 +281,7 @@
           
           
           
-          <a href="#https://github.com/Komanawa-Solutions-Ltd/komanawa-simple-farm-model#" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">View on GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -379,16 +379,16 @@ Created: 12/08/2020 9:32 AM</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.basgra_python.get_fortran_basgra" title="komanawa.basgra_nz_py.basgra_python.get_fortran_basgra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_fortran_basgra</span></code></a>(supply_pet[, recomplile, verbose, ...])</p></td>
 <td><p>get the callable fortran BASGRA function</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.basgra_python.run_basgra_nz" title="komanawa.basgra_nz_py.basgra_python.run_basgra_nz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_basgra_nz</span></code></a>(params, matrix_weather, days_harvest, ...)</p></td>
-<td><p>python wrapper for the fortran BASGRA code changes to the fortran code may require changes to this function runs the model for the period of the weather data</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy" title="komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_month_day_to_nonleap_doy</span></code></a>([key_doy])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy" title="komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_month_day_to_nonleap_doy</span></code></a>([key_doy])</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">param key_doy<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool, if true the keys are doy, else keys are (month, dayofmonth)</p>
 </dd>
 </dl>
 </p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#komanawa.basgra_nz_py.basgra_python.run_basgra_nz" title="komanawa.basgra_nz_py.basgra_python.run_basgra_nz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_basgra_nz</span></code></a>(params, matrix_weather, days_harvest, ...)</p></td>
+<td><p>python wrapper for the fortran BASGRA code changes to the fortran code may require changes to this function runs the model for the period of the weather data</p></td>
 </tr>
 </tbody>
 </table>
@@ -398,7 +398,7 @@ Created: 12/08/2020 9:32 AM</p>
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="komanawa.basgra_nz_py.basgra_python.get_fortran_basgra">
-<span class="sig-name descname"><span class="pre">get_fortran_basgra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supply_pet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recomplile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gfortran-11'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/komanawa/basgra_nz_py/get_fortran_module.html#get_fortran_basgra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.basgra_python.get_fortran_basgra" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_fortran_basgra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supply_pet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recomplile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gfortran-12'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/komanawa/basgra_nz_py/get_fortran_module.html#get_fortran_basgra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.basgra_python.get_fortran_basgra" title="Link to this definition">#</a></dt>
 <dd><p>get the callable fortran BASGRA function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -416,8 +416,21 @@ Created: 12/08/2020 9:32 AM</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy">
+<span class="sig-name descname"><span class="pre">get_month_day_to_nonleap_doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_doy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/komanawa/basgra_nz_py/basgra_python.html#get_month_day_to_nonleap_doy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key_doy</strong> – bool, if true the keys are doy, else keys are (month, dayofmonth)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary if not inverse: {(m,d}:doy} if inverse: {doy: (m,d)}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="komanawa.basgra_nz_py.basgra_python.run_basgra_nz">
-<span class="sig-name descname"><span class="pre">run_basgra_nz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_weather</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days_harvest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy_irr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supply_pet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_harvest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_365_calendar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/komanawa/basgra_nz_py/basgra_python.html#run_basgra_nz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.basgra_python.run_basgra_nz" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run_basgra_nz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_weather</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days_harvest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy_irr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supply_pet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_harvest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_365_calendar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gfortran-12'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/komanawa/basgra_nz_py/basgra_python.html#run_basgra_nz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.basgra_python.run_basgra_nz" title="Link to this definition">#</a></dt>
 <dd><p>python wrapper for the fortran BASGRA code changes to the fortran code may require changes to this function runs the model for the period of the weather data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -430,23 +443,13 @@ Created: 12/08/2020 9:32 AM</p>
 <li><p><strong>supply_pet</strong> – boolean, if True BASGRA expects pet to be supplied, if False the parameters required to calculate pet from the peyman equation are expected, the version must match the DLL if dll_path != ‘default’</p></li>
 <li><p><strong>auto_harvest</strong> – boolean, if True then assumes data is formated correctly for auto harvesting, if False, then assumes data is formatted for manual harvesting (e.g. previous version) and re-formats internally</p></li>
 <li><p><strong>run_365_calendar</strong> – boolean, if True then run on a 365 day calender This expects that all leap days will be removed from matrix_weather and days_harvest. DOY is expected to be between 1 and 365.  This means that datetime objects defined by year and doy will be incorrect. instead use get_month_day_to_nonleap_doy to map DOY to datetime via month and day. This is how the index of the returned datetime will be passed.  For example for date 2024-03-01 (2024 is a leap year) the dayofyear via a datetime object will be 61, but if expect_no_leap_days=True basgra expects day of year to be 60. the index of the results will be a datetime object of equivalent to 2024-03-01, so  the output doy will not match the index doy and there will be no value on 2020-02-29. default False</p></li>
+<li><p><strong>binname</strong> – str, the name of the gfortran compiler to use, default ‘gfortran-12’</p></li>
+<li><p><strong>recompile</strong> – bool, if True force recompile the fortran code</p></li>
+<li><p><strong>compile_verbose</strong> – bool, if True print the fortran compilation output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>pd.DataFrame(index=datetime index, columns = out_cols)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy">
-<span class="sig-name descname"><span class="pre">get_month_day_to_nonleap_doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_doy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/komanawa/basgra_nz_py/basgra_python.html#get_month_day_to_nonleap_doy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key_doy</strong> – bool, if true the keys are doy, else keys are (month, dayofmonth)</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>dictionary if not inverse: {(m,d}:doy} if inverse: {doy: (m,d)}</p>
 </dd>
 </dl>
 </dd></dl>
@@ -465,20 +468,20 @@ Created: 12/08/2020 9:32 AM</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../supporting_functions/woodward_2020_params/index.html"
+       href="../tests/index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">komanawa.basgra_nz_py.supporting_functions.woodward_2020_params</p>
+        <p class="prev-next-title">komanawa.basgra_nz_py.tests</p>
       </div>
     </a>
     <a class="right-next"
-       href="../get_fortran_module/index.html"
+       href="../example_data/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">komanawa.basgra_nz_py.get_fortran_module</p>
+        <p class="prev-next-title">komanawa.basgra_nz_py.example_data</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -503,8 +506,8 @@ Created: 12/08/2020 9:32 AM</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#komanawa.basgra_nz_py.basgra_python.get_fortran_basgra"><code class="docutils literal notranslate"><span class="pre">get_fortran_basgra()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#komanawa.basgra_nz_py.basgra_python.run_basgra_nz"><code class="docutils literal notranslate"><span class="pre">run_basgra_nz()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#komanawa.basgra_nz_py.basgra_python.get_month_day_to_nonleap_doy"><code class="docutils literal notranslate"><span class="pre">get_month_day_to_nonleap_doy()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#komanawa.basgra_nz_py.basgra_python.run_basgra_nz"><code class="docutils literal notranslate"><span class="pre">run_basgra_nz()</span></code></a></li>
 </ul>
 </li>
 </ul>

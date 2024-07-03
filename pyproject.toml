@@ -13,7 +13,7 @@ where = ["src/"]
 
 [project]
 name = "komanawa-basgra-nz-py"
-version = "v7.0.0"
+dynamic = ["version"] # version set in version.py
 authors = [
     { name = "Matt Dumont", email = "Matt@komanawa.com" },
 ]
@@ -44,6 +44,9 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
+[tool.setuptools.dynamic]
+version = {attr = "komanawa.basgra_nz_py.version.__version__"}
 
 [project.urls]
 Homepage = "https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py"

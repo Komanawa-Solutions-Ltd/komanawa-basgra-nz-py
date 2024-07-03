@@ -21,7 +21,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfortran-11')
+.. py:function:: get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfortran-12')
 
    get the callable fortran BASGRA function
 

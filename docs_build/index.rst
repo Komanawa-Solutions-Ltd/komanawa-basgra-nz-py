@@ -1,6 +1,11 @@
 Kо̄manawa-basgra-nz-py
 #########################################
 
+:Author: |author|
+:copyright: |copyright|
+:Version: |release|
+:Date: |today|
+
 .. toctree::
     :maxdepth: 2
     :hidden:
