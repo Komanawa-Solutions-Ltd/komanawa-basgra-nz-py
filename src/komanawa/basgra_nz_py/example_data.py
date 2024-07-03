@@ -9,7 +9,7 @@ from komanawa.basgra_nz_py.supporting_functions.conversions import convert_RH_vp
 from komanawa.basgra_nz_py.supporting_functions.woodward_2020_params import get_woodward_mean_full_params
 from copy import deepcopy
 
-test_dir = os.path.join(os.path.dirname(__file__), 'test_data')
+example_data_dir = os.path.join(os.path.dirname(__file__), 'tests', 'test_data')
 
 
 def establish_peyman_input(return_pet=False):
@@ -17,9 +17,9 @@ def establish_peyman_input(return_pet=False):
     # time period [2010 - 2013)
 
     # load weather data
-    weather_path = os.path.join(test_dir, 'hamilton_ruakura_ews2010-2013_{}.csv')
+    weather_path = os.path.join(example_data_dir, 'hamilton_ruakura_ews2010-2013_{}.csv')
 
-    pressure = pd.read_csv(os.path.join(test_dir, 'hamilton_AWS_pressure.csv'),
+    pressure = pd.read_csv(os.path.join(example_data_dir, 'hamilton_AWS_pressure.csv'),
                            skiprows=8).loc[:, ['year',
                                                'doy',
                                                'pmsl']].set_index(['year', 'doy'])
@@ -83,7 +83,7 @@ def establish_peyman_input(return_pet=False):
     # load harvest data from Simon woodward's paper
     harvest_nm = 'harvest_Scott_0.txt'
 
-    days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
+    days_harvest = pd.read_csv(os.path.join(example_data_dir, harvest_nm),
                                delim_whitespace=True,
                                names=['year', 'doy', 'percent_harvest']
                                ).astype(int)  # floor matches what simon did.
@@ -136,7 +136,7 @@ def establish_org_input(site='scott'):
     params = get_woodward_mean_full_params(site)
     params = deepcopy(params)
 
-    matrix_weather = pd.read_csv(os.path.join(test_dir, weather_nm),
+    matrix_weather = pd.read_csv(os.path.join(example_data_dir, weather_nm),
                                  sep='\\s+', index_col=0,
                                  header=0,
                                  names=['year',
@@ -160,7 +160,7 @@ def establish_org_input(site='scott'):
     matrix_weather.loc[:, 'irr_targ_store'] = 1
     matrix_weather.loc[:, 'external_inflow'] = 0
 
-    days_harvest = pd.read_csv(os.path.join(test_dir, harvest_nm),
+    days_harvest = pd.read_csv(os.path.join(example_data_dir, harvest_nm),
                                sep='\\s+',
                                names=['year', 'doy', 'percent_harvest']
                                ).astype(int)  # floor matches what simon did.
@@ -191,7 +191,7 @@ def clean_harvest(days_harvest, matrix_weather):
 
 
 def get_org_correct_values():
-    sample_output_path = os.path.join(test_dir, 'sample_org_output.csv')
+    sample_output_path = os.path.join(example_data_dir, 'sample_org_output.csv')
     sample_data = pd.read_csv(sample_output_path, index_col=0).astype(float)
 
     # add in new features of data
@@ -200,7 +200,7 @@ def get_org_correct_values():
 
 
 def get_woodward_weather():
-    matrix_weather = pd.read_csv(os.path.join(test_dir, 'weather_Lincoln.txt'),
+    matrix_weather = pd.read_csv(os.path.join(example_data_dir, 'weather_Lincoln.txt'),
                                  delim_whitespace=True, index_col=0,
                                  header=0,
                                  names=['year',
@@ -227,7 +227,7 @@ def get_woodward_weather():
 
 
 def get_lincoln_broadfield():
-    path = os.path.join(test_dir, 'Lincoln_Broadfield_Ews.csv')
+    path = os.path.join(example_data_dir, 'Lincoln_Broadfield_Ews.csv')
 
     line_breaks = {
         'pet': [10, 2916],
