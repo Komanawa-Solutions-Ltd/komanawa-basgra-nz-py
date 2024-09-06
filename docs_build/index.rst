@@ -1,6 +1,11 @@
 Kо̄manawa-basgra-nz-py
 #########################################
 
+:Author: |author|
+:copyright: |copyright|
+:Version: |release|
+:Date: |today|
+
 .. toctree::
     :maxdepth: 2
     :hidden:
@@ -8,7 +13,7 @@ Kо̄manawa-basgra-nz-py
     Code documentation<autoapi/komanawa/basgra_nz_py/index.rst>
 
 About BASGRA
----------------
+===============
 
 BASGRA or The BASic GRAssland model is a simple pasture growth model.
 This version, BASGRA_NZ has been specifically modified for use within
@@ -40,7 +45,7 @@ as of August 2020, efforts will be made to incorporate further updates,
 but no assurances
 
 Table of Contents
------------------
+===================
 
 -  `Python Implementation <#python-implementation>`__
 -  `package installation <#package-installation>`__
@@ -123,7 +128,7 @@ Table of Contents
 Table of contents generated with markdown-toc
 
 Python Implementation
----------------------
+========================
 
 BASGRA_NZ requires python 3.7 or less (3.8 handles DLLs more securely
 but this causes some faults) required packages:
@@ -137,7 +142,7 @@ basgranz python=3.7 numpy pandas matplotlib or a fixed anaconda .yml
 library can be found in the environment.yml file
 
 package installation
---------------------
+=======================
 
 This package can be installed via pip from the github repo.
 
@@ -147,17 +152,17 @@ This package can be installed via pip from the github repo.
 
 
 Fortran Installation
---------------------
+==========================
 
 Fortran installation Linux (Debian based)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------
 
 :: code-block:: bash
 
     sudo apt-get install gfortran-12
 
 Fortran installation Windows
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------
 
 At present BASGRA_NZ_py requires fortran 64 and assumes the use of
 gfortran64. It is beyond the scope of this readme to detail how to
@@ -170,12 +175,12 @@ This repo was developed and tested with gfortran 64 4.8.1 which can be
 here <https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download>`__
 
 Fortran compilation
--------------------
+========================
 
 The fortran compilation is done via gfortran64 and fmodpy.  The package should be platform independent, but this newest approach has only been tested on linux, specifically xubuntu (22.04, 24.04).
 
 new features implemented from Simon Woodward’s BASGRA
------------------------------------------------------
+=========================================================
 
 A number of new features where necessary for futher modeling work.
 Specially more generalized irrigation and harvest management. This
@@ -186,14 +191,14 @@ BASGRA_NZ <https://github.com/woodwards/basgra_nz/tree/master/model_package/src>
 as of August 2020.
 
 model documentation resources
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------
 
 This readme is the documentation of all new features to basgra_nz_py,
 but the documentation of the previous features are in
 fortran_BASGRA_NZ/docs
 
 Maximum simulation length
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 | At present the maximum simulation length is set explicitly within the
   fortran code in the environment.f95.
@@ -203,15 +208,15 @@ Maximum simulation length
   weather matrix length to nmaxdays.
 
 Calender
-~~~~~~~~
+------------
 
 BASGRA_NZ_PY can be run with either the standard gregorian calendar
-(e.g. with leap years) or on a 365 day calendar In both cases
+(e.g. with leap years) or on a 365 day calendar In both cases
 BASGRA_NZ_PY runs checks to ensure that there are no missing or
 additional days in the simulation relative to the expected calender.
 
 Resource requirements
-~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 BASGRA is fast! The following baseline test are provided in
 supporting_functions/check_resource_use.py:
@@ -237,7 +242,7 @@ BASGRA is relatively light weight
    of the memory profiler
 
 irrigation triggering and demand modelling (v2.0.0+)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------------------------
 
 New Irrigation Process
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -302,7 +307,7 @@ To run the model in the original (no irrigation fashion) set both
 max_irr and irr_trig to zero, also set doy_irr = [0]
 
 Harvest management and scheduling (v3.0.0+)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------
 
 As of version v3.0.0 harvest management has changed significantly to
 allow many more options for harvest management
@@ -324,7 +329,7 @@ harvesting has been changed to allow:
    rye grass production
 
 Automatic harvesting process
-''''''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the automatic harvesting process
 
@@ -357,7 +362,7 @@ In the automatic harvesting process
 9. harvesting then progresses as per V2.0.0
 
 Manual harvesting process
-'''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As per automatic harvesting, however the data frame is reshaped within
 the python code so that the row count is equal to n days. all indexes
@@ -451,7 +456,7 @@ How to run so that the results are backwards compatible with versions before V3.
    -  ‘weed_dm_frac’ as 0
 
 Re-seeding module (V4.0.0+)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 At times during a long term simulations weather events can push the
 BASAL coverage of the rye grass to well below the normal amount for the
@@ -535,7 +540,7 @@ How to run so that the results are backwards compatible with versions V3.0.0 -
    all be safely set to -1
 
 passing external soil moisture to model (V5.0.0+)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------------
 
 As of V5.0.0 it is possible to pass time series external soil moisture
 data into BASGRA to use rather than the internal soil moisture model.
@@ -563,7 +568,7 @@ PAW will match WAL Otherwise:
 -  set max_irr as normal
 
 Irrigation water storage (V6.0.0+)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
 As of V6.0.0 it is possible to model local storage of water for
 irrigation in addition to a larger scheme irrigation system. We define a
@@ -665,7 +670,7 @@ order
 all components of the storage water budget is saved to the output.
 
 new inputs/outputs
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
 *parameter additions*
 
@@ -903,10 +908,10 @@ matrix_weather         ‘external_inflow’       0
 ====================== ======================= =========================
 
 python developments
--------------------
+======================
 
 supporting functions
-~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 there are several supporting functions developed within basgra_nz_py.
 These are not all documented in this readme; however there are decent
@@ -933,7 +938,7 @@ docstrings. these include:
       version V1.0.0
 
 testing regime and examples
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------
 
 In order to ensure that future changes can be made backwards compatible
 with previous runs there are a suite of test in
@@ -943,10 +948,10 @@ test_basgra_python.py will run all of the testing functions. These
 functions can also be used as examples.
 
 Input and output parameter definitions
---------------------------------------
+==========================================
 
 Days Harvest Keys description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------
 
 +-----------------------+-----------------------+-----------------------+
 | **Key**               | **Unit**              | **Description**       |
@@ -988,7 +993,7 @@ Days Harvest Keys description
 +-----------------------+-----------------------+-----------------------+
 
 Matrix weather keys where pet is passed description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------------------
 
 +-----------------------+-----------------------+-----------------------+
 | **Key**               | **Unit**              | **Description**       |
@@ -1067,7 +1072,7 @@ Matrix weather keys where pet is passed description
 +-----------------------+-----------------------+-----------------------+
 
 Matrix weather keys where pet is calculated via penman description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------------------------------
 
 +-----------------------+-----------------------+-----------------------+
 | **Key**               | **Unit**              | **Description**       |
@@ -1149,7 +1154,7 @@ Matrix weather keys where pet is calculated via penman description
 +-----------------------+-----------------------+-----------------------+
 
 Site Parameters description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------
 
 +-----------------------+-----------------------+-----------------------+
 | **Key**               | **Unit**              | **Description**       |
@@ -1447,7 +1452,7 @@ Site Parameters description
 +-----------------------+-----------------------+-----------------------+
 
 Plant Parameters description
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------
 
 +-----------------------+-----------------------+-----------------------+
 | **PARAMETER**         | **units**             | **Description**       |
@@ -1780,7 +1785,7 @@ Plant Parameters description
 +-----------------------+-----------------------+-----------------------+
 
 output description
-~~~~~~~~~~~~~~~~~~
+------------------------
 
 +-----------------------+-----------------------+-----------------------+
 | **varname**           | **units**             | **description**       |
@@ -2067,7 +2072,7 @@ output description
 +-----------------------+-----------------------+-----------------------+
 
 References
-----------
+===============
 
 -  `BASGRA_2014 <https://github.com/davcam/BASGRA>`__: original model
    repository

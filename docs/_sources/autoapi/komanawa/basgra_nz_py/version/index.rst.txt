@@ -1,0 +1,12 @@
+komanawa.basgra_nz_py.version
+=============================
+
+.. py:module:: komanawa.basgra_nz_py.version
+
+.. autoapi-nested-parse::
+
+   created matt_dumont 
+   on: 7/4/24
+
+
+

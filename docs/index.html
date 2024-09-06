@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Kо̄manawa-basgra-nz-py &#8212; komanawa-basgra-nz-py v7.0.0 documentation</title>
+    <title>Kо̄manawa-basgra-nz-py &#8212; komanawa-basgra-nz-py v7.0.1 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="_static/documentation_options.js?v=14515140"></script>
+    <script src="_static/documentation_options.js?v=b029d559"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
@@ -122,7 +122,7 @@
     <script>document.write(`<img src="" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">Basgra-NZ-Py overview</p>
+    <p class="title logo__title">Basgra-Nz-Py v7.0.1 Overview</p>
   
 </a></div>
     
@@ -176,7 +176,7 @@
           
           
           
-          <a href="#https://github.com/Komanawa-Solutions-Ltd/komanawa-simple-farm-model#" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">View on GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -282,7 +282,7 @@
           
           
           
-          <a href="#https://github.com/Komanawa-Solutions-Ltd/komanawa-simple-farm-model#" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">View on GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -339,6 +339,20 @@
                   
   <section id="kmanawa-basgra-nz-py">
 <h1>Kо̄manawa-basgra-nz-py<a class="headerlink" href="#kmanawa-basgra-nz-py" title="Link to this heading">#</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Matt Dumont</p>
+</dd>
+<dt class="field-even">copyright<span class="colon">:</span></dt>
+<dd class="field-even"><p>2024, Kо̄manawa Solutions Ltd.</p>
+</dd>
+<dt class="field-odd">Version<span class="colon">:</span></dt>
+<dd class="field-odd"><p>v7.0.1</p>
+</dd>
+<dt class="field-even">Date<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sep 06, 2024</p>
+</dd>
+</dl>
 <div class="toctree-wrapper compound">
 </div>
 <section id="about-basgra">
@@ -483,6 +497,15 @@ library can be found in the environment.yml file</p>
 </section>
 <section id="fortran-installation">
 <h2>Fortran Installation<a class="headerlink" href="#fortran-installation" title="Link to this heading">#</a></h2>
+<section id="fortran-installation-linux-debian-based">
+<h3>Fortran installation Linux (Debian based)<a class="headerlink" href="#fortran-installation-linux-debian-based" title="Link to this heading">#</a></h3>
+<p>:: code-block:: bash</p>
+<blockquote>
+<div><p>sudo apt-get install gfortran-12</p>
+</div></blockquote>
+</section>
+<section id="fortran-installation-windows">
+<h3>Fortran installation Windows<a class="headerlink" href="#fortran-installation-windows" title="Link to this heading">#</a></h3>
 <p>At present BASGRA_NZ_py requires fortran 64 and assumes the use of
 gfortran64. It is beyond the scope of this readme to detail how to
 install fortran, but general instructions can be found in this <a class="reference external" href="https://www.youtube.com/watch?v=wGv2kGl8OV0">youtube
@@ -492,9 +515,10 @@ installation in this video is 32Bit</p>
 <a class="reference external" href="https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4.8.1/64-bit/threads-posix/seh/x64-4.8.1-release-posix-seh-rev5.7z/download">downloaded
 here</a></p>
 </section>
+</section>
 <section id="fortran-compilation">
 <h2>Fortran compilation<a class="headerlink" href="#fortran-compilation" title="Link to this heading">#</a></h2>
-<p>The fortran compilation is done via gfortran64 and fmodpy.  The package should be platform independent, but this newest approach has only been tested on linux, specifically xubuntu 22.04.</p>
+<p>The fortran compilation is done via gfortran64 and fmodpy.  The package should be platform independent, but this newest approach has only been tested on linux, specifically xubuntu (22.04, 24.04).</p>
 </section>
 <section id="new-features-implemented-from-simon-woodwards-basgra">
 <h2>new features implemented from Simon Woodward’s BASGRA<a class="headerlink" href="#new-features-implemented-from-simon-woodwards-basgra" title="Link to this heading">#</a></h2>
@@ -525,7 +549,7 @@ weather matrix length to nmaxdays.</div>
 <section id="calender">
 <h3>Calender<a class="headerlink" href="#calender" title="Link to this heading">#</a></h3>
 <p>BASGRA_NZ_PY can be run with either the standard gregorian calendar
-(e.g. with leap years) or on a 365 day calendar In both cases
+(e.g. with leap years) or on a 365 day calendar In both cases
 BASGRA_NZ_PY runs checks to ensure that there are no missing or
 additional days in the simulation relative to the expected calender.</p>
 </section>
@@ -639,8 +663,9 @@ harvested to the target)</p></li>
 <li><p>time varient allowing weed species to provide some fraction of the
 rye grass production</p></li>
 </ul>
+</section>
 <section id="automatic-harvesting-process">
-<h5>Automatic harvesting process<a class="headerlink" href="#automatic-harvesting-process" title="Link to this heading">#</a></h5>
+<h4>Automatic harvesting process<a class="headerlink" href="#automatic-harvesting-process" title="Link to this heading">#</a></h4>
 <p>In the automatic harvesting process</p>
 <ol class="arabic simple">
 <li><p>a harvest trigger is set for each time step</p></li>
@@ -674,7 +699,7 @@ runs without estimation, target 500kg removal has actually removed c.
 </ol>
 </section>
 <section id="manual-harvesting-process">
-<h5>Manual harvesting process<a class="headerlink" href="#manual-harvesting-process" title="Link to this heading">#</a></h5>
+<h4>Manual harvesting process<a class="headerlink" href="#manual-harvesting-process" title="Link to this heading">#</a></h4>
 <p>As per automatic harvesting, however the data frame is reshaped within
 the python code so that the row count is equal to n days. all indexes
 where manual harvesting will not occur have the ‘harv_trig’ set to -1 so
@@ -688,7 +713,6 @@ first day of the series a warning is issued and the first valid value is
 used to fill the values before the first valid value.</p>
 <p>Note that if the dry matter value is below the trigger value for a given
 manual time step no harvesting will occur.</p>
-</section>
 </section>
 <section id="new-harvest-inputs-outputs">
 <h4>New Harvest inputs/outputs<a class="headerlink" href="#new-harvest-inputs-outputs" title="Link to this heading">#</a></h4>
@@ -3278,7 +3302,11 @@ management by Simon Woodward (unpublished)</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-implementation">Python Implementation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#package-installation">package installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fortran-installation">Fortran Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fortran-installation">Fortran Installation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fortran-installation-linux-debian-based">Fortran installation Linux (Debian based)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fortran-installation-windows">Fortran installation Windows</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fortran-compilation">Fortran compilation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#new-features-implemented-from-simon-woodwards-basgra">new features implemented from Simon Woodward’s BASGRA</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-documentation-resources">model documentation resources</a></li>
@@ -3292,11 +3320,9 @@ management by Simon Woodward (unpublished)</p></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#harvest-management-and-scheduling-v3-0-0">Harvest management and scheduling (v3.0.0+)</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-harvest-processes">New Harvest processes</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-harvesting-process">Automatic harvesting process</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-harvesting-process">Manual harvesting process</a></li>
-</ul>
-</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-harvest-processes">New Harvest processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-harvesting-process">Automatic harvesting process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-harvesting-process">Manual harvesting process</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-harvest-inputs-outputs">New Harvest inputs/outputs</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-run-so-that-the-results-are-backwards-compatible-with-versions-before-v3-0-0">How to run so that the results are backwards compatible with versions before V3.0.0</a></li>
 </ul>

@@ -9,10 +9,7 @@ import pandas as pd
 import numpy as np
 from komanawa.basgra_nz_py.basgra_python import run_basgra_nz, _trans_manual_harv, get_month_day_to_nonleap_doy
 from komanawa.basgra_nz_py.input_output_keys import matrix_weather_keys_pet
-from support_for_tests import establish_org_input, clean_harvest, test_dir, get_lincoln_broadfield, get_org_correct_values, base_manual_harvest_data, base_auto_harvest_data, establish_peyman_input, get_input_for_storage_tests
-
-from komanawa.basgra_nz_py.supporting_functions.plotting import \
-    plot_multiple_results  # used in test development and debugging
+from komanawa.basgra_nz_py.example_data import establish_org_input, clean_harvest, example_data_dir, get_lincoln_broadfield, get_org_correct_values, base_manual_harvest_data, base_auto_harvest_data, establish_peyman_input, get_input_for_storage_tests
 
 verbose = False
 
@@ -72,7 +69,7 @@ class TestBasgraPython(unittest.TestCase):
 
         out = _trans_manual_harv(days_harvest, matrix_weather)
 
-        data_path = os.path.join(test_dir, 'test_trans_manual_harv_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_trans_manual_harv_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -80,8 +77,8 @@ class TestBasgraPython(unittest.TestCase):
         self._output_checks(out, correct_out, dropable=False)
 
     def _export_for_visual_debugging(self, out, correct_out, test_nm, r=2):
-        out.round(r).to_csv(os.path.join(os.path.dirname(test_dir), f'{test_nm}_out.csv'), sep='\t')
-        correct_out.round(r).to_csv(os.path.join(os.path.dirname(test_dir), f'{test_nm}_correct_out.csv'), sep='\t')
+        out.round(r).to_csv(os.path.join(os.path.dirname(example_data_dir), f'{test_nm}_out.csv'), sep='\t')
+        correct_out.round(r).to_csv(os.path.join(os.path.dirname(example_data_dir), f'{test_nm}_correct_out.csv'), sep='\t')
 
     def _output_checks(self, out, correct_out, dropable=True):
         """
@@ -132,7 +129,7 @@ class TestBasgraPython(unittest.TestCase):
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
         # test against my saved version (simply to have all columns
-        data_path = os.path.join(test_dir, 'test_org_basgra.csv')
+        data_path = os.path.join(example_data_dir, 'test_org_basgra.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -165,7 +162,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest = clean_harvest(days_harvest, matrix_weather)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, 'test_irrigation_trigger_output.csv')
+        data_path = os.path.join(example_data_dir, 'test_irrigation_trigger_output.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -188,7 +185,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest = clean_harvest(days_harvest, matrix_weather)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, 'test_irrigation_fraction_output.csv')
+        data_path = os.path.join(example_data_dir, 'test_irrigation_fraction_output.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -213,7 +210,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest = clean_harvest(days_harvest, matrix_weather)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, 'test_water_short_output.csv')
+        data_path = os.path.join(example_data_dir, 'test_water_short_output.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -235,7 +232,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest = clean_harvest(days_harvest, matrix_weather)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, 'test_short_season_output.csv')
+        data_path = os.path.join(example_data_dir, 'test_short_season_output.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -262,7 +259,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest = clean_harvest(days_harvest, matrix_weather)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, 'test_variable_irr_trig_targ.csv')
+        data_path = os.path.join(example_data_dir, 'test_variable_irr_trig_targ.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -285,7 +282,7 @@ class TestBasgraPython(unittest.TestCase):
 
         days_harvest = clean_harvest(days_harvest, matrix_weather)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
-        data_path = os.path.join(test_dir, 'test_irr_paw_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_irr_paw_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -299,7 +296,7 @@ class TestBasgraPython(unittest.TestCase):
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose,
                             supply_pet=False)
 
-        data_path = os.path.join(test_dir, 'test_pet_calculation.csv')
+        data_path = os.path.join(example_data_dir, 'test_pet_calculation.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -338,7 +335,7 @@ class TestBasgraPython(unittest.TestCase):
 
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, 'test_fixed_harvest_man_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_fixed_harvest_man_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -376,7 +373,7 @@ class TestBasgraPython(unittest.TestCase):
 
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, 'test_harv_trig_man_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_harv_trig_man_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -413,7 +410,7 @@ class TestBasgraPython(unittest.TestCase):
 
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, 'test_weed_fraction_man_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_weed_fraction_man_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -445,7 +442,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest.drop(columns=['date'], inplace=True)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, auto_harvest=True)
 
-        data_path = os.path.join(test_dir, 'test_auto_harv_trig_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_auto_harv_trig_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -475,7 +472,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest.drop(columns=['date'], inplace=True)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, auto_harvest=True)
 
-        data_path = os.path.join(test_dir, 'test_auto_harv_fixed_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_auto_harv_fixed_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -506,7 +503,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest.drop(columns=['date'], inplace=True)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, auto_harvest=True)
 
-        data_path = os.path.join(test_dir, 'test_weed_fraction_auto_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_weed_fraction_auto_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -536,7 +533,7 @@ class TestBasgraPython(unittest.TestCase):
         days_harvest.drop(columns=['date'], inplace=True)
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, auto_harvest=True)
 
-        data_path = os.path.join(test_dir, 'test_weed_fixed_harv_auto_data.csv')
+        data_path = os.path.join(example_data_dir, 'test_weed_fixed_harv_auto_data.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -603,7 +600,7 @@ class TestBasgraPython(unittest.TestCase):
             'CST',
             'CSTUB',
         ]
-        data_path = os.path.join(test_dir, 'test_reseed.csv')
+        data_path = os.path.join(example_data_dir, 'test_reseed.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -641,7 +638,7 @@ class TestBasgraPython(unittest.TestCase):
                                         zip(matrix_weather.index.month, matrix_weather.index.day)]
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose, run_365_calendar=True)
 
-        external_data_path = os.path.join(test_dir, 'test_irrigation_trigger_output.csv')
+        external_data_path = os.path.join(example_data_dir, 'test_irrigation_trigger_output.csv')
         # note this is linked to test irrigation trigger
 
         correct_out = pd.read_csv(external_data_path)
@@ -661,7 +658,7 @@ class TestBasgraPython(unittest.TestCase):
                          'should only affect days after 2 month')
         self.assertEqual(idx.sum(), 612, 'there should only be 612 entries 2*(365-31-28)')
 
-        data_path = os.path.join(test_dir, 'test_leap.csv')
+        data_path = os.path.join(example_data_dir, 'test_leap.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -674,7 +671,7 @@ class TestBasgraPython(unittest.TestCase):
         params['irr_frm_paw'] = 1
         params['pass_soil_moist'] = 1
 
-        per_data = pd.read_csv(os.path.join(test_dir, 'per_paw_fc.csv'))
+        per_data = pd.read_csv(os.path.join(example_data_dir, 'per_paw_fc.csv'))
         matrix_weather.loc[:, 'max_irr'] = per_data.loc[:, 'per_paw']
         # decrease soil moisture by 10% in Feb
         month = pd.to_datetime(
@@ -690,7 +687,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'per_paw'] = out.loc[:, 'PAW'] / out.loc[:, 'MXPAW']
 
         # test against my saved version (simply to have all columns
-        data_path = os.path.join(test_dir, 'test_pass_soil_moist_paw.csv')
+        data_path = os.path.join(example_data_dir, 'test_pass_soil_moist_paw.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -707,7 +704,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'in_per_fc'] = matrix_weather.loc[:, 'max_irr'].values
         out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
 
-        data_path = os.path.join(test_dir, 'test_pass_soil_moist_fc.csv')
+        data_path = os.path.join(example_data_dir, 'test_pass_soil_moist_fc.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -739,7 +736,7 @@ class TestBasgraPython(unittest.TestCase):
         matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, f'test_full_refill.csv')
+        data_path = os.path.join(example_data_dir, f'test_full_refill.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -769,7 +766,7 @@ class TestBasgraPython(unittest.TestCase):
         matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, f'test_runoff_from_rain.csv')
+        data_path = os.path.join(example_data_dir, f'test_runoff_from_rain.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -805,7 +802,7 @@ class TestBasgraPython(unittest.TestCase):
         matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, f'test_external_rainfall_runoff.csv')
+        data_path = os.path.join(example_data_dir, f'test_external_rainfall_runoff.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -842,7 +839,7 @@ class TestBasgraPython(unittest.TestCase):
         matrix_weather = matrix_weather.loc[:, matrix_weather_keys_pet]
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
 
-        data_path = os.path.join(test_dir, f'test_leakage_prescribed_outflow.csv')
+        data_path = os.path.join(example_data_dir, f'test_leakage_prescribed_outflow.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -876,7 +873,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
 
-        data_path = os.path.join(test_dir, f'test_store_irr_org_demand.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_irr_org_demand.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -889,7 +886,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'per_fc'] = out.loc[:, 'WAL'] / out.loc[:, 'WAFC']
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
 
-        data_path = os.path.join(test_dir, f'test_store_irr_org_demand_no_store.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_irr_org_demand_no_store.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -925,7 +922,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
         out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
 
-        data_path = os.path.join(test_dir, f'test_store_irr_ind_demand.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_irr_ind_demand.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -943,7 +940,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
         out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
 
-        data_path = os.path.join(test_dir, f'test_store_irr_ind_demand_2.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_irr_ind_demand_2.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -978,7 +975,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'per_paw'] = out.loc[:, 'PAW'] / out.loc[:, 'MXPAW']
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
 
-        data_path = os.path.join(test_dir, f'test_store_irr_org_demand_paw.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_irr_org_demand_paw.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -990,7 +987,7 @@ class TestBasgraPython(unittest.TestCase):
         out = run_basgra_nz(params, matrix_weather, days_harvest, doy_irr, verbose=verbose)
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
 
-        data_path = os.path.join(test_dir, f'test_store_irr_org_demand_paw_no_store.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_irr_org_demand_paw_no_store.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -1028,7 +1025,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
         out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
 
-        data_path = os.path.join(test_dir, f'test_store_irr_ind_demand_paw.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_irr_ind_demand_paw.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -1046,7 +1043,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
         out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
 
-        data_path = os.path.join(test_dir, f'test_store_irr_ind_demand_paw_2.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_irr_ind_demand_paw_2.csv')
         if update_data:
             out.to_csv(data_path)
 
@@ -1082,7 +1079,7 @@ class TestBasgraPython(unittest.TestCase):
         out.loc[:, 'irrig_store_vol'] = out.loc[:, 'irrig_store'] / 1000 * params['irrigated_area'] * 10000
         out.loc[:, 'max_irr'] = matrix_weather.loc[:, 'max_irr']
 
-        data_path = os.path.join(test_dir, f'test_store_refill_from_scheme.csv')
+        data_path = os.path.join(example_data_dir, f'test_store_refill_from_scheme.csv')
         if update_data:
             out.to_csv(data_path)
 

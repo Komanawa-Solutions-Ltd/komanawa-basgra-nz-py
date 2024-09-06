@@ -7,7 +7,7 @@ Author: Matt Hanson
 Created: 23/11/2020 9:50 AM
 """
 from komanawa.basgra_nz_py.basgra_python import run_basgra_nz
-from tests.support_for_tests import establish_org_input, clean_harvest
+from support_for_tests import establish_org_input, clean_harvest
 import numpy as np
 import pandas as pd
 try:

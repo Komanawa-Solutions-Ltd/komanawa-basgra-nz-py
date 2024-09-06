@@ -1,5 +1,5 @@
-:py:mod:`komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_peyman.basgraf`
-====================================================================================
+komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_peyman.basgraf
+==========================================================================
 
 .. py:module:: komanawa.basgra_nz_py.fortran_BASGRA_NZ.compiled_for_basgra_peyman.basgraf
 
@@ -14,10 +14,10 @@
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   basgraf_python_wrapper/index.rst
+   /autoapi/komanawa/basgra_nz_py/fortran_BASGRA_NZ/compiled_for_basgra_peyman/basgraf/basgraf_python_wrapper/index
 
 

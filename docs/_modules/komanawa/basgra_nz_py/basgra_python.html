@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>komanawa.basgra_nz_py.basgra_python &#8212; komanawa-basgra-nz-py v7.0.0 documentation</title>
+    <title>komanawa.basgra_nz_py.basgra_python &#8212; komanawa-basgra-nz-py v7.0.1 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../_static/documentation_options.js?v=14515140"></script>
+    <script src="../../../_static/documentation_options.js?v=b029d559"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/komanawa/basgra_nz_py/basgra_python';</script>
@@ -120,7 +120,7 @@
     <script>document.write(`<img src="" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">Basgra-NZ-Py overview</p>
+    <p class="title logo__title">Basgra-Nz-Py v7.0.1 Overview</p>
   
 </a></div>
     
@@ -174,7 +174,7 @@
           
           
           
-          <a href="#https://github.com/Komanawa-Solutions-Ltd/komanawa-simple-farm-model#" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">View on GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -276,7 +276,7 @@
           
           
           
-          <a href="#https://github.com/Komanawa-Solutions-Ltd/komanawa-simple-farm-model#" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py" title="View on GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">View on GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -383,7 +383,8 @@
 <div class="viewcode-block" id="run_basgra_nz">
 <a class="viewcode-back" href="../../../autoapi/komanawa/basgra_nz_py/index.html#komanawa.basgra_nz_py.basgra_python.run_basgra_nz">[docs]</a>
 <span class="k">def</span> <span class="nf">run_basgra_nz</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">matrix_weather</span><span class="p">,</span> <span class="n">days_harvest</span><span class="p">,</span> <span class="n">doy_irr</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">supply_pet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">auto_harvest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">run_365_calendar</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                  <span class="n">supply_pet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">auto_harvest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">run_365_calendar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">binname</span><span class="o">=</span><span class="s1">&#39;gfortran-12&#39;</span><span class="p">,</span> <span class="n">recompile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">compile_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    python wrapper for the fortran BASGRA code changes to the fortran code may require changes to this function runs the model for the period of the weather data</span>
 
@@ -395,6 +396,9 @@
 <span class="sd">    :param supply_pet: boolean, if True BASGRA expects pet to be supplied, if False the parameters required to calculate pet from the peyman equation are expected, the version must match the DLL if dll_path != &#39;default&#39;</span>
 <span class="sd">    :param auto_harvest: boolean, if True then assumes data is formated correctly for auto harvesting, if False, then assumes data is formatted for manual harvesting (e.g. previous version) and re-formats internally</span>
 <span class="sd">    :param run_365_calendar: boolean, if True then run on a 365 day calender This expects that all leap days will be removed from matrix_weather and days_harvest. DOY is expected to be between 1 and 365.  This means that datetime objects defined by year and doy will be incorrect. instead use get_month_day_to_nonleap_doy to map DOY to datetime via month and day. This is how the index of the returned datetime will be passed.  For example for date 2024-03-01 (2024 is a leap year) the dayofyear via a datetime object will be 61, but if expect_no_leap_days=True basgra expects day of year to be 60. the index of the results will be a datetime object of equivalent to 2024-03-01, so  the output doy will not match the index doy and there will be no value on 2020-02-29. default False</span>
+<span class="sd">    :param binname: str, the name of the gfortran compiler to use, default &#39;gfortran-12&#39;</span>
+<span class="sd">    :param recompile: bool, if True force recompile the fortran code</span>
+<span class="sd">    :param compile_verbose: bool, if True print the fortran compilation output</span>
 <span class="sd">    :return: pd.DataFrame(index=datetime index, columns = out_cols)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -403,7 +407,7 @@
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">run_365_calendar</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;expect_no_leap_days must be boolean&#39;</span>
 
     <span class="c1"># define DLL library path</span>
-    <span class="n">fortran_basgra</span> <span class="o">=</span> <span class="n">get_fortran_basgra</span><span class="p">(</span><span class="n">supply_pet</span><span class="p">)</span>
+    <span class="n">fortran_basgra</span> <span class="o">=</span> <span class="n">get_fortran_basgra</span><span class="p">(</span><span class="n">supply_pet</span><span class="p">,</span> <span class="n">binname</span><span class="o">=</span><span class="n">binname</span><span class="p">,</span> <span class="n">recomplile</span><span class="o">=</span><span class="n">recompile</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">compile_verbose</span><span class="p">)</span>
 
     <span class="c1"># define expected weather keys</span>
     <span class="k">if</span> <span class="n">supply_pet</span><span class="p">:</span>
@@ -448,9 +452,17 @@
                          <span class="sa">f</span><span class="s1">&#39;though this value can be modified in the fortran code: &#39;</span>
                          <span class="sa">f</span><span class="s1">&#39;fortran_BASGRA_NZ/environment.f95 line 9 and </span><span class="si">{</span><span class="vm">__file__</span><span class="si">}</span><span class="s1"> line 29&#39;</span><span class="p">)</span>
 
-    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ndays</span><span class="p">,</span> <span class="n">nout</span><span class="p">),</span> <span class="nb">float</span><span class="p">)</span>  <span class="c1"># cannot set these to nan&#39;s or it breaks fortran</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">fortran_basgra</span><span class="o">.</span><span class="n">basgra</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">matrix_weather</span><span class="p">,</span> <span class="n">days_harvest</span><span class="p">,</span> <span class="n">ndays</span><span class="p">,</span> <span class="n">nout</span><span class="p">,</span> <span class="n">nirr</span><span class="p">,</span> <span class="n">doy_irr</span><span class="p">,</span>
-                                           <span class="n">verbose</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ndays</span><span class="p">,</span> <span class="n">nout</span><span class="p">),</span> <span class="nb">float</span><span class="p">))</span>  <span class="c1"># cannot set these to nan&#39;s or it breaks fortran</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="n">fortran_basgra</span><span class="o">.</span><span class="n">basgra</span><span class="p">(</span><span class="n">params</span><span class="p">,</span>
+                              <span class="n">np</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">matrix_weather</span><span class="p">),</span>
+                              <span class="n">days_harvest</span><span class="p">,</span>
+                              <span class="n">ndays</span><span class="p">,</span>
+                              <span class="n">nout</span><span class="p">,</span>
+                              <span class="n">nirr</span><span class="p">,</span>
+                              <span class="n">doy_irr</span><span class="p">,</span>
+                              <span class="n">verbose</span><span class="p">,</span>
+                              <span class="n">y</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">out_index</span><span class="p">,</span> <span class="n">out_cols</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">run_365_calendar</span><span class="p">:</span>
         <span class="n">mapper</span> <span class="o">=</span> <span class="n">get_month_day_to_nonleap_doy</span><span class="p">(</span><span class="n">key_doy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -501,7 +513,7 @@
         <span class="n">id_val</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">days_harvest_out</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">days_harvest_out</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">id_val</span><span class="p">,</span> <span class="s1">&#39;weed_dm_frac&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">days_harvest_out</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;weed_dm_frac&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 
-    <span class="n">days_harvest_out</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;weed_dm_frac&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">days_harvest_out</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;weed_dm_frac&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span>
+    <span class="n">days_harvest_out</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;weed_dm_frac&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">days_harvest_out</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;weed_dm_frac&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">days_harvest_out</span>
 
