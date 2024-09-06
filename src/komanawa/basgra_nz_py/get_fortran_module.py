@@ -26,8 +26,6 @@ def get_fortran_basgra(supply_pet, recomplile=False, verbose=False, binname='gfo
     if sys.platform.startswith('linux'):
         which = subprocess.run(f'which {binname}', shell=True, check=False, stdout=subprocess.PIPE)
         if which.returncode != 0:
-            raise ChildProcessError(f'which {binname} returned non zero... why?')
-        if which.stdout is None:
             warnings.warn(
                 'gfortran-11 not found, trying other gfortran instances alternativly please install gfortran: sudo apt install gfortran-11')
             binname = 'gfortran'

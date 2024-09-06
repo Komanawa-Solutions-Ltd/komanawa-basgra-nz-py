@@ -149,6 +149,16 @@ This package can be installed via pip from the github repo.
 Fortran Installation
 --------------------
 
+Fortran installation Linux (Debian based)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:: code-block:: bash
+
+    sudo apt-get install gfortran-12
+
+Fortran installation Windows
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 At present BASGRA_NZ_py requires fortran 64 and assumes the use of
 gfortran64. It is beyond the scope of this readme to detail how to
 install fortran, but general instructions can be found in this `youtube
@@ -162,7 +172,7 @@ here <https://sourceforge.net/projects/mingwbuilds/files/host-windows/releases/4
 Fortran compilation
 -------------------
 
-The fortran compilation is done via gfortran64 and fmodpy.  The package should be platform independent, but this newest approach has only been tested on linux, specifically xubuntu 22.04.
+The fortran compilation is done via gfortran64 and fmodpy.  The package should be platform independent, but this newest approach has only been tested on linux, specifically xubuntu (22.04, 24.04).
 
 new features implemented from Simon Woodward’s BASGRA
 -----------------------------------------------------
