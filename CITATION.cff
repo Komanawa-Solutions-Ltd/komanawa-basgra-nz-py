@@ -1,0 +1,28 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Kо̄manawa-basgra-nz-py
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Matt
+    family-names: Dumont
+    email: matt@komanawa.com
+    affiliation: Komanawa Solutions Ltd.
+    orcid: 'https://orcid.org/0009-0007-2974-0335'
+repository-code: >-
+  https://github.com/Komanawa-Solutions-Ltd/komanawa-basgra-nz-py
+url: >-
+  https://komanawa-solutions-ltd.github.io/komanawa-basgra-nz-py/
+abstract: >-
+  BASGRA or The BASic GRAssland model is a simple pasture
+  growth model. This version, BASGRA_NZ has been
+  specifically modified for use within New Zealand.
+keywords:
+  - BASGRA
+  - Pasture Growth Model
+  - Python
+license: LGPL-3.0-or-later
