@@ -210,7 +210,7 @@ def plot_multiple_monthly_violin_box(data, outdir=None, out_vars=_outvars, fig_s
 
 
 def plot_multiple_monthly_results(data, outdir=None, out_vars=_outvars, fig_size=(10, 8), title_str='',
-                                  main_kwargs={}, label_main=True, show=True):
+                                  main_kwargs=None, label_main=True, show=True):
     """
     plot multiple basgra results against each other shifts january to be in the middle.
 
@@ -221,7 +221,7 @@ def plot_multiple_monthly_results(data, outdir=None, out_vars=_outvars, fig_size
          ('WAL', 'WCLM', 'WCL', 'RAIN', 'IRRIG', 'DRAIN', 'RUNOFF', 'EVAP', 'TRAN', 'DM', 'YIELD','BASAL', 'ROOTD', 'WAFC')
 
     :param title_str: a string to append to the front of the title
-    :param main_kwargs: other kwargs passed directly to the plot function for the main plot
+    :param main_kwargs: None (no other kwargs passed) or dictionary (keys is subest of data.keys() other kwargs passed directly to ax.plot()
     :param label_main: bool if True labels are created for the main plot if either is true then  creates a legend
     :param show: bool if true call plt.show before function return
     :return: axs: dict(data.keys():plt.ax)
@@ -229,7 +229,11 @@ def plot_multiple_monthly_results(data, outdir=None, out_vars=_outvars, fig_size
 
     metadata = get_output_metadata()
     assert isinstance(data, dict)
+    if main_kwargs is None:
+        main_kwargs = {k: {} for k in data.keys()}
     for k, v in data.items():
+        if k not in main_kwargs.keys():
+            main_kwargs[k] = {}
         assert isinstance(v, pd.DataFrame), 'data items must be dataframes, instead was {}'.format(type(v))
         assert list(v.index) == list(range(1, 13)), 'data index must be range(1,13), instead was {}'.format(v.index)
         v.index = [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6]
@@ -258,9 +262,9 @@ def plot_multiple_monthly_results(data, outdir=None, out_vars=_outvars, fig_size
         for v in out_vars:
             ax = axs[v]
             if label_main:
-                ax.plot(out.index, out[v], c=colors[i], label=k, **main_kwargs)
+                ax.plot(out.index, out[v], c=colors[i], label=k, **main_kwargs[k])
             else:
-                ax.plot(out.index, out[v], c=colors[i], **main_kwargs)
+                ax.plot(out.index, out[v], c=colors[i], **main_kwargs[k])
 
     for ax in axs.values():
         ax.set_xticks(range(1, 13))
