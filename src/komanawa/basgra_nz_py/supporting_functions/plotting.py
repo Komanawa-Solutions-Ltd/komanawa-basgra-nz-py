@@ -2,6 +2,8 @@
  Author: Matt Hanson
  Created: 1/09/2020 9:22 AM
  """
+from copy import deepcopy
+
 import matplotlib.pyplot as plt
 import numpy as np
 try:
@@ -261,10 +263,12 @@ def plot_multiple_monthly_results(data, outdir=None, out_vars=_outvars, fig_size
     for i, (k, out) in enumerate(data.items()):
         for v in out_vars:
             ax = axs[v]
+            usekwargs = deepcopy(main_kwargs[k])
+            c = usekwargs.pop('c', colors[i])
             if label_main:
-                ax.plot(out.index, out[v], c=colors[i], label=k, **main_kwargs[k])
+                ax.plot(out.index, out[v], c=c, label=k, **usekwargs)
             else:
-                ax.plot(out.index, out[v], c=colors[i], **main_kwargs[k])
+                ax.plot(out.index, out[v], c=c, **usekwargs)
 
     for ax in axs.values():
         ax.set_xticks(range(1, 13))
